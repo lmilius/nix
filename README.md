@@ -1,0 +1,2 @@
+# nix
+Nix related configuration
