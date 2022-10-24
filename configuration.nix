@@ -77,6 +77,7 @@
     tmux
     vscode
     #linuxKernel.kernels.linux_6_0
+    plasma5Packages.plasma-thunderbolt
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -127,6 +128,9 @@
   # KDE Plasma
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
+  
+  # Enable thunderbolt's boltctl - https://nixos.wiki/wiki/Thunderbolt
+  services.hardware.bolt.enable = true;
 
 }
 
