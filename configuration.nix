@@ -76,7 +76,7 @@
     curl
     tmux
     vscode
-    #linuxKernel.kernels.linux_6_0
+    linuxKernel.kernels.linux_5_19
     plasma5Packages.plasma-thunderbolt
   ];
 
