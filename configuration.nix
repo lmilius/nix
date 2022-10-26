@@ -78,6 +78,7 @@
     vscode
     linuxKernel.kernels.linux_5_19
     plasma5Packages.plasma-thunderbolt
+    unzip
   ];
 
   nixpkgs.config.allowUnfree = true;
