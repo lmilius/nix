@@ -174,6 +174,9 @@
     l = "ls -alh";
     ll = "ls -l";
     ls = "ls --color=tty";
+    nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
+    nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
+    nix-optimize = "sudo nix-store --optimize";
   };
 
   # Nix automated garbage collection
