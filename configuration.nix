@@ -19,7 +19,7 @@
   # Kernel
   boot.kernelPackages = pkgs.linuxPackages_6_0;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "x1carbon"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -118,10 +118,40 @@
     unzip
     intel-gpu-tools
     bitwarden
+    moonlight-qt
+    teamviewer
+    tailscale
+    yubico-piv-tool
+    yubikey-agent
+    yubikey-manager
+    yubikey-manager-qt
+    yubikey-personalization
+    yubikey-personalization-gui
+    yubioath-desktop
+    busybox
+    powertop
   ];
+
+  # Yubikey setup for GPG and SSH
+  services.yubikey-agent.enable = true;
+  hardware.gpgSmartcards.enable = true;
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  #environment.shellInit = ''
+  #  export GPG_TTY="$(tty)"
+  #  gpg-connect-agent /bye
+  #  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
+  #'';
 
   # Enable thunderbolt's boltctl - https://nixos.wiki/wiki/Thunderbolt
   services.hardware.bolt.enable = true;
+
+  # Enable the teamviewer service
+  services.teamviewer.enable = true;
+
+  # Enable tailscale service
+  services.tailscale.enable = true;
+  networking.firewall.checkReversePath = "loose";
+
 
   system.copySystemConfiguration = true;
 
@@ -147,15 +177,16 @@
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    pinentryFlavor = "curses";
+  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
