@@ -75,12 +75,10 @@
   users.users.lmilius = {
     isNormalUser = true;
     description = "Luke Milius";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker"];
     packages = with pkgs; [
       firefox
       kate
-      steam
-      moonlight-qt
     #  thunderbird
     ];
   };
@@ -130,7 +128,24 @@
     yubioath-desktop
     busybox
     powertop
+    docker
+    steam
+    moonlight-qt
   ];
+
+  # Docker setup
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+    };
+    enableOnBoot = true;
+    #daemon.settings = {
+    #  log-opts = {
+    #    max-size = "10m";
+    #  };
+    #};
+  };
 
   # Yubikey setup for GPG and SSH
   services.yubikey-agent.enable = true;
