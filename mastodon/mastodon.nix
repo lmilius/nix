@@ -9,17 +9,18 @@
 
   services.mastodon = {
     enable = true;
-    # trustedProxy = "10.10.200.90";
+    trustedProxy = "10.10.200.90";
     smtp = {
-    #   user = "";
-    #   port = "";
-    #   host = "";
-    #   authenticate = true;
+      user = "lmiliusnas@gmail.com";
+      passwordFile = "/home/administrator/smtppass.txt";
+      port = 587;
+      host = "smtp.gmail.com";
+      authenticate = true;
       fromAddress = "lmiliusnas@gmail.com";
     };
-    # localDomain = "social.lukemilius.com";
-    localDomain = "localhost";
-    enableUnixSocket = false;
+    localDomain = "social.lukemilius.com";
+    # localDomain = "localhost";
+    enableUnixSocket = true;
     # elasticsearch.host = "127.0.0.1";
     configureNginx = false;
 
