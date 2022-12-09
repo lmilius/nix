@@ -129,8 +129,10 @@
     busybox
     powertop
     docker
+    docker-compose
     steam
     moonlight-qt
+    # agenix
   ];
 
   # Docker setup
@@ -174,6 +176,9 @@
     l = "ls -alh";
     ll = "ls -l";
     ls = "ls --color=tty";
+    dcp = "docker-compose ";
+    dlog = "docker logs -f ";
+    dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
     nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
     nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
     nix-optimize = "sudo nix-store --optimize";
