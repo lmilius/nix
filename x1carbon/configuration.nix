@@ -17,7 +17,7 @@
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_6_0;
+  # boot.kernelPackages = pkgs.linuxPackages_6_0;
 
   networking.hostName = "x1carbon"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -28,6 +28,9 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
+  # and: https://github.com/NixOS/nixpkgs/issues/180175
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -132,6 +135,11 @@
     docker-compose
     steam
     moonlight-qt
+    nextcloud-client
+    google-chrome
+    chromium
+    arduino
+    ubootTools
     # agenix
   ];
 
