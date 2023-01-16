@@ -89,18 +89,26 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Intel GPU
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
+      intel-compute-runtime
       intel-media-driver
       vaapiIntel
       vaapiVdpau
       libvdpau-va-gl
     ];
   };
+  # hardware.video.hidpi.enable = lib.mkDefault true;
+  services.xserver.videoDrivers = [ "intel" ];
+  services.xserver.deviceSection = ''
+    Option "DRI" "2"
+    Option "TearFree" "true"
+  '';
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
