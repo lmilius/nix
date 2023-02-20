@@ -18,6 +18,7 @@
 
   # Kernel
   # boot.kernelPackages = pkgs.linuxPackages_6_0;
+  boot.kernelParams = [ "nouveau.modeset=0" ];
 
   networking.hostName = "x1carbon"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -41,9 +42,13 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  # Enable the GNOME Desktop Environment
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -104,8 +109,9 @@
     ];
   };
   # hardware.video.hidpi.enable = lib.mkDefault true;
-  services.xserver.videoDrivers = [ "intel" ];
+  # services.xserver.videoDrivers = [ "intel" ];
   services.xserver.deviceSection = ''
+    Driver "i915"
     Option "DRI" "2"
     Option "TearFree" "true"
   '';
@@ -137,7 +143,7 @@
     yubikey-personalization
     yubikey-personalization-gui
     yubioath-desktop
-    busybox
+#    busybox
     powertop
     docker
     docker-compose
@@ -148,6 +154,10 @@
     chromium
     arduino
     ubootTools
+    openscad
+    gparted
+    vlc
+    discord
     # agenix
   ];
 
