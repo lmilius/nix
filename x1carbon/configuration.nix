@@ -18,7 +18,7 @@
 
   # Kernel
   # boot.kernelPackages = pkgs.linuxPackages_6_0;
-  boot.kernelParams = [ "nouveau.modeset=0" ];
+  # boot.kernelParams = [ "nouveau.modeset=0" ];
 
   networking.hostName = "x1carbon"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -37,24 +37,27 @@
   time.timeZone = "America/Chicago";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
+  # i18n.defaultLocale = "en_US.utf8";
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.displayManager.gdm.wayland = false;
+  # services.xserver.desktopManager.gnome.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
+
+  # services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
+  # services.xserver = {
+  #   layout = "us";
+  #   xkbVariant = "";
+  # };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -68,12 +71,12 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+  #   # If you want to use JACK applications, uncomment this
+  #   #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+  #   # use the example session manager (no others are packaged yet so this is enabled by default,
+  #   # no need to redefine it in your config for now)
+  #   #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -108,13 +111,12 @@
       libvdpau-va-gl
     ];
   };
-  # hardware.video.hidpi.enable = lib.mkDefault true;
-  # services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.deviceSection = ''
-    Driver "i915"
-    Option "DRI" "2"
-    Option "TearFree" "true"
-  '';
+
+  # services.xserver.deviceSection = ''
+  #   Driver "i915"
+  #   Option "DRI" "2"
+  #   Option "TearFree" "true"
+  # '';
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -176,9 +178,9 @@
   };
 
   # Yubikey setup for GPG and SSH
-  services.yubikey-agent.enable = true;
-  hardware.gpgSmartcards.enable = true;
-  services.udev.packages = [ pkgs.yubikey-personalization ];
+  # services.yubikey-agent.enable = true;
+  # hardware.gpgSmartcards.enable = true;
+  # services.udev.packages = [ pkgs.yubikey-personalization ];
   #environment.shellInit = ''
   #  export GPG_TTY="$(tty)"
   #  gpg-connect-agent /bye
@@ -226,16 +228,16 @@
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    pinentryFlavor = "curses";
-  };
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  #   pinentryFlavor = "curses";
+  # };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  # services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
