@@ -4,6 +4,11 @@
 
 { config, pkgs, ... }:
 
+let
+  unstable = import
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
+  { config = config.nixpkgs.config; };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -17,6 +22,7 @@
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_0;
   # boot.kernelParams = [ "nouveau.modeset=0" ];
 
@@ -130,7 +136,7 @@
     iotop
     usbutils
     pciutils
-    vscode
+    unstable.vscode
     plasma5Packages.plasma-thunderbolt
     unzip
     intel-gpu-tools
@@ -159,7 +165,11 @@
     openscad
     gparted
     vlc
-    discord
+    unstable.discord
+    intel-gpu-tools
+    joplin-desktop
+    cups-brother-hl3140cw
+    lm_sensors
     # agenix
   ];
 
