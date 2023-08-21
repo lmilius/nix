@@ -92,7 +92,7 @@ in
   users.users.lmilius = {
     isNormalUser = true;
     description = "Luke Milius";
-    extraGroups = [ "networkmanager" "wheel" "docker"];
+    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
       firefox
       kate
@@ -150,7 +150,7 @@ in
     yubikey-manager-qt
     yubikey-personalization
     yubikey-personalization-gui
-    yubioath-desktop
+    # yubioath-desktop
 #    busybox
     powertop
     docker
@@ -170,8 +170,31 @@ in
     joplin-desktop
     cups-brother-hl3140cw
     lm_sensors
+    screen
+    nmap
+    distrobox
     # agenix
+    exfatprogs
+    ### Matrix Clients
+    # fractal
+    element-desktop
+    libsForQt5.neochat
+    fluffychat
+    fwupd
+    # fprintd
+    python310
+    python310Packages.pip
+    python310Packages.virtualenv
+    unstable.rtl_433
+    virt-manager
+    qemu
+    openssl
   ];
+
+  # services.fprintd.enable = true;
+  # services.fprintd.tod.enable = true;
+  # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
+  # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
   # Docker setup
   virtualisation.docker = {
@@ -186,6 +209,21 @@ in
     #  };
     #};
   };
+
+  # Virt-Manager Config
+  virtualisation.libvirtd = {
+    enable = true;
+  };
+  programs.dconf.enable = true;
+  # QEMU UEFI support
+  # environment = {
+  #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
+  #     qemu-system-x86_64 \
+  #       -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
+  #       "$@"
+  #   )
+  # };
+  
 
   # Yubikey setup for GPG and SSH
   # services.yubikey-agent.enable = true;
@@ -254,6 +292,20 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+# Home Manager Config
+  # let
+  #   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+  # in
+  # {
+  #   imports = [
+  #     (import "${home-manager}/nixos")
+  #   ];
+    
+  #   home-manager.users.lmilius = {
+  #     home.stateVersion = "23.04";
+  #   };
+  # }
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
