@@ -66,7 +66,7 @@ in
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  # services.xserver.displayManager.defaultSession = "plasmawayland";
+  # # services.xserver.displayManager.defaultSession = "plasmawayland";
   environment.plasma5.excludePackages = with pkgs.libsForQt5; [
     elisa
   ];
@@ -88,8 +88,8 @@ in
   #services.xserver.displayManager.lightdm.enable = true;  
 
   # Enable the XFCE4 Desktop Environment.
-  #services.xserver.desktopManager.xfce.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.displayManager.lightdm.enable = true;
   
   # Enable Budgie Desktop Environment.
   #services.xserver.desktopManager.budgie.enable = true;
