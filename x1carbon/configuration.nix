@@ -157,7 +157,7 @@ in
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-compute-runtime
+      # intel-compute-runtime
       intel-media-driver
       vaapiIntel
       vaapiVdpau
@@ -188,15 +188,15 @@ in
     iotop
     usbutils
     pciutils
-    # unstable.vscode
-    vscode
+    unstable.vscode
+    # vscode
     plasma5Packages.plasma-thunderbolt
     unzip
     intel-gpu-tools
     unstable.bitwarden
     moonlight-qt
     teamviewer
-    tailscale
+    unstable.tailscale
     yubico-piv-tool
     yubikey-agent
     yubikey-manager
@@ -249,6 +249,7 @@ in
     syncthing
     # syncthingtray
     # amtterm
+    wineWowPackages.full # wine
   ];
 
   # services.fprintd.enable = true;
@@ -326,7 +327,11 @@ in
 
   # Enable tailscale service
   services.tailscale.enable = true;
+  services.tailscale.useRoutingFeatures = "both";
   networking.firewall.checkReversePath = "loose";
+  nixpkgs.overlays = [(final: prev: {
+    tailscale = unstable.tailscale;
+  })];
 
   # Syncthing
   services.syncthing = {

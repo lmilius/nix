@@ -11,6 +11,8 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
 
+  isoImage.contents = [ { source = ./parent-util; target = "/nixconfig"; } ];
+
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
@@ -26,17 +28,23 @@
   # services.xserver.displayManager.defaultSession = "plasmawayland";
   environment.plasma5.excludePackages = with pkgs.libsForQt5; [
     elisa
+    gwenview
+    okular
+    oxygen
+    khelpcenter
+    plasma-browser-integration
+    print-manager
   ];
 
   # static networking config
   # networking = {
   #   usePredictableInterfaceNames = false;
-  #   interfaces.eth0.ip4 = [{
-  #     address = "64.137.201.46";
+  #   interfaces.enp1s0.ip4 = [{
+  #     address = "192.168.88.5";
   #     prefixLength = 24;
   #   }];
-  #   defaultGateway = "64.137.201.1";
-  #   nameservers = [ "8.8.8.8" ];
+  #   defaultGateway = "192.168.88.1";
+  #   nameservers = [ "192.168.88.1" "8.8.8.8" ];
   # };
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";

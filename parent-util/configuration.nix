@@ -4,6 +4,11 @@
 
 { config, pkgs, ... }:
 
+let
+  unstable = import
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
+  { config = config.nixpkgs.config; };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -19,6 +24,15 @@
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  # networking = {
+  #   usePredictableInterfaceNames = false;
+  #   interfaces.enp1s0.ipv4.addresses = [{
+  #     address = "192.168.88.5";
+  #     prefixLength = 24;
+  #   }];
+  #   defaultGateway = "192.168.88.1";
+  #   nameservers = [ "192.168.88.1" "8.8.8.8" ];
+  # };
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -35,15 +49,19 @@
   #   useXkbConfig = true; # use xkbOptions in tty.
   # };
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-
-  
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
   # Configure keymap in X11
-  # services.xserver.layout = "us";
+  services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e,caps:escape";
+
+  # Enable the XFCE4 Desktop Environment.
+  services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -115,7 +133,11 @@
 
   # Enable tailscale service
   services.tailscale.enable = true;
+  services.tailscale.useRoutingFeatures = "both";
   networking.firewall.checkReversePath = "loose";
+  nixpkgs.overlays = [(final: prev: {
+    tailscale = unstable.tailscale;
+  })];
 
   programs.bash.shellAliases = {
     l = "ls -alh";
@@ -143,7 +165,7 @@
     curl
     htop
     iotop
-    tailscale
+    unstable.tailscale
     powertop
     tmux
     docker
