@@ -13,6 +13,10 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+      (import ./disko-config.nix {
+        disks = [ "/dev/sda" ];
+      })
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -52,16 +56,27 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  # services.xserver.enable = true;
+  # services.xserver.videoDrivers = [ "amdgpu" ];
 
   # Configure keymap in X11
-  services.xserver.layout = "us";
+  # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
   # Enable the XFCE4 Desktop Environment.
-  services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.displayManager.lightdm.enable = true;
+
+  # services.xserver = {
+    # enable = true;
+    # layout = "us";
+    # videoDrivers = [ "amdgpu" ];
+
+    # Enable the XFCE4 Desktop Environment
+    # displayManager.lightdm.enable = true;
+    # desktopManager.xfce.enable = true;
+  # };
+
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -80,6 +95,7 @@ in
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
     ];
+    initialHashedPassword = "$y$j9T$pIpVsIB6vvgo3wh6aRTbT.$lSwdItSLTZcEEg/KxCWR1FZZUDduWkYgrc4nZ/zusI2";
     #packages = with pkgs; [
     #  firefox
     #  tree
@@ -182,6 +198,9 @@ in
     min-free = ${toString (100 * 1024 * 1024)}
     max-free = ${toString (1024 * 1024 * 1024)}
   '';
+
+  # Enable flakes (experimental)
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

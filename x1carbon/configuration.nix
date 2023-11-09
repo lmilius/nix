@@ -60,20 +60,37 @@ in
     LC_TIME = "en_US.UTF-8";
   };
 
+  services.xserver = {
+    # Enable the X11 windowing system.
+    enable = true;
+
+    # Configure keymap in X11
+    layout = "us";
+    xkbVariant = "";
+
+    # Enable XFCE4
+    # displayManager.lightdm.enable = true;
+    # desktopManager.xfce.enable = true;
+
+    # Enable KDE Plasma 5
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
+
+    # Enable the Gnome Desktop Environment.
+    # desktopManager.gnome.enable = true;
+    # displayManager.gdm.enable = true;
+  };
+
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
   # # services.xserver.displayManager.defaultSession = "plasmawayland";
   environment.plasma5.excludePackages = with pkgs.libsForQt5; [
     elisa
   ];
-
-  # Enable the Gnome Desktop Environment.
-  #services.xserver.desktopManager.gnome.enable = true;
-  #services.xserver.displayManager.gdm.enable = true;  #
   
   # Enable the Cinnamon Desktop Environment.
   #services.xserver.desktopManager.cinnamon.enable = true;
@@ -86,10 +103,6 @@ in
   # Enable the Deepin Desktop Environment.
   #services.xserver.desktopManager.deepin.enable = true;
   #services.xserver.displayManager.lightdm.enable = true;  
-
-  # Enable the XFCE4 Desktop Environment.
-  # services.xserver.desktopManager.xfce.enable = true;
-  # services.xserver.displayManager.lightdm.enable = true;
   
   # Enable Budgie Desktop Environment.
   #services.xserver.desktopManager.budgie.enable = true;
@@ -98,13 +111,6 @@ in
   # Enable the Mate Desktop Environment.
   #services.xserver.desktopManager.mate.enable = true;
   #services.xserver.displayManager.lightdm.enable = true;
-
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;

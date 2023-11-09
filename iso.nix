@@ -15,26 +15,39 @@
 
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
+  # users.users.root.openssh.authorizedKeys.keys = [
+  #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
+  # ];
+  users.users.root.openssh.authorizedKeys.keyFiles = [
+    ~/.ssh/id_ed25519.pub
   ];
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # services.xserver = {
+  #   enable = true;
+  #   layout = "us";
+  #   videoDrivers = [ "amdgpu" ];
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #   # Enable XFCE4
+  #   displayManager.lightdm.enable = true;
+  #   desktopManager.xfce.enable = true;
+
+  #   # Enable KDE Plasma 5
+  #   # displayManager.sddm.enable = true;
+  #   # desktopManager.plasma5.enable = true;
+  # };
+
+
   # services.xserver.displayManager.defaultSession = "plasmawayland";
-  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-    elisa
-    gwenview
-    okular
-    oxygen
-    khelpcenter
-    plasma-browser-integration
-    print-manager
-  ];
+  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
+  #   elisa
+  #   gwenview
+  #   okular
+  #   oxygen
+  #   khelpcenter
+  #   plasma-browser-integration
+  #   print-manager
+  # ];
 
   # static networking config
   # networking = {
@@ -46,6 +59,20 @@
   #   defaultGateway = "192.168.88.1";
   #   nameservers = [ "192.168.88.1" "8.8.8.8" ];
   # };
+
+  # Enable flakes (experimental)
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    curl
+    htop
+    git
+    tmux
+  ];
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";
 }
