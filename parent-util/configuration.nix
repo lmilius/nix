@@ -103,35 +103,65 @@ in
   };
 
   # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
+  # virtualisation.docker = {
+  #   enable = true;
+  #   autoPrune = {
+  #     enable = true;
+  #   };
+  #   enableOnBoot = true;
+  #   #daemon.settings = {
+  #   #  log-opts = {
+  #   #    max-size = "10m";
+  #   #  };
+  #   #};
+  # };
+
+  virtualisation.oci-containers = {
+    # backend = "docker";
+    containers = {
+      speedtest = {
+        image = "linuxserver/librespeed:latest";
+        environment = {
+          MODE = "standalone";
+        };
+        ports = [
+          "8080:80"
+        ];
+      };
+      # Omada uses the following ports: 8088/8043 for the webUI, 
+      omada = {
+        image = "mbentley/omada-controller:latest";
+        environment = {
+          TZ = "America/Chicago";
+        };
+        extraOptions = [
+          "--network=host"
+        ];
+        volumes = [
+          "/home/lmilius/omada/data:/opt/tplink/EAPController/data"
+          "/home/lmilius/omada/logs:/opt/tplink/EAPController/logs"
+          "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
+        ];
+      };
     };
-    enableOnBoot = true;
-    #daemon.settings = {
-    #  log-opts = {
-    #    max-size = "10m";
-    #  };
-    #};
   };
 
   # Podman support
-  #virtualisation = {
-  #  podman = {
-  #    enable = true;
-  #
-  #    # Create a `docker` alias for podman, to use it as a drop-in replacement
-  #    dockerCompat = true;
-  #
-  #    # Required for containers under podman-compose to be able to talk to each other.
-  #    defaultNetwork.settings.dns_enabled = true;
-  #    # For Nixos version > 22.11
-  #    #defaultNetwork.settings = {
-  #    #  dns_enabled = true;
-  #    #};
-  #  };
-  #};
+  virtualisation = {
+   podman = {
+     enable = true;
+  
+     # Create a `docker` alias for podman, to use it as a drop-in replacement
+     dockerCompat = true;
+  
+     # Required for containers under podman-compose to be able to talk to each other.
+     defaultNetwork.settings.dns_enabled = true;
+     # For Nixos version > 22.11
+     #defaultNetwork.settings = {
+     #  dns_enabled = true;
+     #};
+   };
+  };
 
   # Virtualization support
   virtualisation.libvirtd = {
@@ -168,7 +198,31 @@ in
     rebuild = "sudo nixos-rebuild";
   };
 
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # nix trusted users
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
+
+  security.sudo = {
+    enable = true;
+    extraRules = [{
+      commands = [
+        {
+          command = "${pkgs.systemd}/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.systemd}/bin/reboot";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+      groups = [ "wheel" ];
+    }];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -184,8 +238,9 @@ in
     unstable.tailscale
     powertop
     tmux
-    docker
-    docker-compose
+    kmon
+    # docker
+    # docker-compose
   ];
 
   # Nix automated garbage collection

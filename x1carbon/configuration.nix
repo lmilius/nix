@@ -156,6 +156,23 @@ in
     "@wheel"
   ];
 
+  security.sudo = {
+    enable = true;
+    extraRules = [{
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/reboot";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+      groups = [ "wheel" ];
+    }];
+  };
+
   # Intel GPU
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
@@ -239,6 +256,7 @@ in
     element-desktop
     libsForQt5.neochat
     fluffychat
+    signal-desktop
     fwupd
     # fprintd
     python310
@@ -256,6 +274,7 @@ in
     # syncthingtray
     # amtterm
     wineWowPackages.full # wine
+    kmon
   ];
 
   # services.fprintd.enable = true;
@@ -381,6 +400,7 @@ in
     nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
     nix-optimize = "sudo nix-store --optimize";
     rebuild = "sudo nixos-rebuild";
+    target-rebuild = "sudo nixos-rebuild -I nixos-config=./configuration.nix --use-remote-sudo --target-host";
   };
 
   # # nix-command and flakes experimental enable
