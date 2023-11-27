@@ -11,7 +11,7 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
 
-  isoImage.contents = [ { source = ./parent-util; target = "/nixconfig"; } ];
+  isoImage.contents = [ { source = ./util; target = "/nixconfig"; } ];
 
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
@@ -72,6 +72,8 @@
     htop
     git
     tmux
+    dig
+    traceroute
   ];
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";

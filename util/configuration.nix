@@ -17,6 +17,7 @@ in
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
+      # ./vscode-server.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -24,7 +25,7 @@ in
   boot.loader.systemd-boot.graceful = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "parent-util"; # Define your hostname.
+  networking.hostName = "new-util"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -121,35 +122,35 @@ in
   #   #};
   # };
 
-  virtualisation.oci-containers = {
-    # backend = "docker";
-    containers = {
-      speedtest = {
-        image = "linuxserver/librespeed:latest";
-        environment = {
-          MODE = "standalone";
-        };
-        ports = [
-          "8080:80"
-        ];
-      };
-      # Omada uses the following ports: 8088/8043 for the webUI, 
-      omada = {
-        image = "mbentley/omada-controller:latest";
-        environment = {
-          TZ = "America/Chicago";
-        };
-        extraOptions = [
-          "--network=host"
-        ];
-        volumes = [
-          "/home/lmilius/omada/data:/opt/tplink/EAPController/data"
-          "/home/lmilius/omada/logs:/opt/tplink/EAPController/logs"
-          "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
-        ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   # backend = "docker";
+  #   containers = {
+  #     speedtest = {
+  #       image = "linuxserver/librespeed:latest";
+  #       environment = {
+  #         MODE = "standalone";
+  #       };
+  #       ports = [
+  #         "8080:80"
+  #       ];
+  #     };
+  #     # Omada uses the following ports: 8088/8043 for the webUI, 
+  #     omada = {
+  #       image = "mbentley/omada-controller:latest";
+  #       environment = {
+  #         TZ = "America/Chicago";
+  #       };
+  #       extraOptions = [
+  #         "--network=host"
+  #       ];
+  #       volumes = [
+  #         "/home/lmilius/omada/data:/opt/tplink/EAPController/data"
+  #         "/home/lmilius/omada/logs:/opt/tplink/EAPController/logs"
+  #         "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
+  #       ];
+  #     };
+  #   };
+  # };
 
   # Podman support
   virtualisation = {
@@ -173,6 +174,15 @@ in
     enable = true;
   };
 
+  # QEMU UEFI support
+  # environment = {
+  #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
+  #     qemu-system-x86_64 \
+  #       -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
+  #       "$@"
+  #   )
+  # };
+
   # Syncthing
   services.syncthing = {
     enable = true;
@@ -193,24 +203,15 @@ in
       };
     };
     folders = {
-      "/home/lmilius/syncthing/parent-util-nix-config" = {
-        id = "nfrgj-e43cc";
-        devices = [ 
+      "/home/lmilius/syncthing/util-nix-config" = {
+        id = "2tdx5-epjh7";
+        devices = [
           "Server"
           "x1carbon"
         ];
       };
     };
   };
-
-  # QEMU UEFI support
-  # environment = {
-  #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
-  #     qemu-system-x86_64 \
-  #       -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
-  #       "$@"
-  #   )
-  # };
 
   # Enable tailscale service
   services.tailscale.enable = true;

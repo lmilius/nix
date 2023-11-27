@@ -75,6 +75,7 @@ in
     # Enable KDE Plasma 5
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
+    # displayManager.defaultSession = "plasmawayland";
 
     # Enable the Gnome Desktop Environment.
     # desktopManager.gnome.enable = true;
@@ -88,6 +89,7 @@ in
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
   # # services.xserver.displayManager.defaultSession = "plasmawayland";
+  
   environment.plasma5.excludePackages = with pkgs.libsForQt5; [
     elisa
   ];
@@ -256,7 +258,7 @@ in
     element-desktop
     libsForQt5.neochat
     fluffychat
-    signal-desktop
+    unstable.signal-desktop
     fwupd
     # fprintd
     python310
@@ -270,12 +272,17 @@ in
     du-dust
     duf
     dua
-    syncthing
+    # syncthing
     # syncthingtray
     # amtterm
     wineWowPackages.full # wine
     kmon
+    dig
+    traceroute
+    keepassxc
   ];
+
+  services.udev.packages = [ pkgs.yubikey-personalization ];
 
   # services.fprintd.enable = true;
   # services.fprintd.tod.enable = true;
@@ -414,7 +421,7 @@ in
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 10d";
   };
   nix.extraOptions = ''
     min-free = ${toString (100 * 1024 * 1024)}
@@ -437,6 +444,10 @@ in
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
+  networking.firewall = {
+    allowedTCPPorts = [ 22000 ];
+    allowedUDPPorts = [ 22000 ];
+  };
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
