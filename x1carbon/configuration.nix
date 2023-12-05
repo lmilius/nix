@@ -280,6 +280,7 @@ in
     dig
     traceroute
     keepassxc
+    freetube
   ];
 
   services.udev.packages = [ pkgs.yubikey-personalization ];
