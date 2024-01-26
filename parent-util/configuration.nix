@@ -180,25 +180,27 @@ in
     dataDir = "/home/lmilius/syncthing";
     configDir = "/home/lmilius/Documents/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
-    devices = {
-      Server = {
-        addresses = [ 
-          "tcp://sync.miliushome.com:22000"
-          "tcp://10.10.200.80:22000"
-        ];
-        id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+    settings = {
+      devices = {
+        Server = {
+          addresses = [ 
+            "tcp://sync.miliushome.com:22000"
+            "tcp://10.10.200.80:22000"
+          ];
+          id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+        };
+        x1carbon = {
+          id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
+        };
       };
-      x1carbon = {
-        id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
-      };
-    };
-    folders = {
-      "/home/lmilius/syncthing/parent-util-nix-config" = {
-        id = "nfrgj-e43cc";
-        devices = [ 
-          "Server"
-          "x1carbon"
-        ];
+      folders = {
+        "/home/lmilius/syncthing/parent-util-nix-config" = {
+          id = "nfrgj-e43cc";
+          devices = [ 
+            "Server"
+            "x1carbon"
+          ];
+        };
       };
     };
   };
@@ -215,7 +217,16 @@ in
   # Enable tailscale service
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "both";
-  networking.firewall.checkReversePath = "loose";
+  services.tailscale.extraUpFlags = [
+    "--accept-routes"
+    "--accept-dns"
+    "--advertise-exit-node"
+    "--advertise-routes 192.168.88.0/24"
+    "--ssh"
+    # "--exit-node gateway"
+    # "--exit-node-allow-lan-access"
+  ];
+  # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   nixpkgs.overlays = [(final: prev: {
     tailscale = unstable.tailscale;
@@ -282,15 +293,15 @@ in
   ];
 
   # Nix automated garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
-    options = "--delete-older-than 3d";
-  };
-  nix.extraOptions = ''
-    min-free = ${toString (100 * 1024 * 1024)}
-    max-free = ${toString (1024 * 1024 * 1024)}
-  '';
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   options = "--delete-older-than 7d";
+  # };
+  # nix.extraOptions = ''
+  #   min-free = ${toString (100 * 1024 * 1024)}
+  #   max-free = ${toString (1024 * 1024 * 1024)}
+  # '';
 
   # Enable flakes (experimental)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

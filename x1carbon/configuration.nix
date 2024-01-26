@@ -42,6 +42,7 @@ in
   # and: https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
   services.resolved.enable = true;
+  # services.nftables.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -75,7 +76,7 @@ in
     # Enable KDE Plasma 5
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
-    # displayManager.defaultSession = "plasmawayland";
+    displayManager.defaultSession = "plasmawayland";
 
     # Enable the Gnome Desktop Environment.
     # desktopManager.gnome.enable = true;
@@ -170,6 +171,10 @@ in
           command = "/run/current-system/sw/bin/reboot";
           options = [ "NOPASSWD" ];
         }
+        {
+          command = "/run/current-system/sw/bin/trip";
+          options = [ "NOPASSWD" ];
+        }
       ];
       groups = [ "wheel" ];
     }];
@@ -218,7 +223,7 @@ in
     plasma5Packages.plasma-thunderbolt
     unzip
     intel-gpu-tools
-    unstable.bitwarden
+    bitwarden
     moonlight-qt
     teamviewer
     unstable.tailscale
@@ -238,7 +243,7 @@ in
     nextcloud-client
     google-chrome
     chromium
-    arduino
+    # arduino
     ubootTools
     openscad
     gparted
@@ -261,9 +266,9 @@ in
     unstable.signal-desktop
     fwupd
     # fprintd
-    python310
-    python310Packages.pip
-    python310Packages.virtualenv
+    python311Full
+    python311Packages.virtualenv
+    python311Packages.pip
     unstable.rtl_433
     virt-manager
     qemu
@@ -281,6 +286,9 @@ in
     traceroute
     keepassxc
     freetube
+    # chia
+    trippy
+    libsForQt5.kdeconnect-kde
   ];
 
   services.udev.packages = [ pkgs.yubikey-personalization ];
@@ -291,35 +299,35 @@ in
   # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
   # Docker setup
-  # virtualisation.docker = {
-  #   enable = true;
-  #   autoPrune = {
-  #     enable = true;
-  #   };
-  #   enableOnBoot = true;
-  #   #daemon.settings = {
-  #   #  log-opts = {
-  #   #    max-size = "10m";
-  #   #  };
-  #   #};
-  # };
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+    };
+    enableOnBoot = true;
+    #daemon.settings = {
+    #  log-opts = {
+    #    max-size = "10m";
+    #  };
+    #};
+  };
 
   # Podman support
-  virtualisation = {
-    podman = {
-      enable = true;
+  # virtualisation = {
+  #   podman = {
+  #     enable = true;
 
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
+  #     # Create a `docker` alias for podman, to use it as a drop-in replacement
+  #     dockerCompat = true;
 
-      # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-      # For Nixos version > 22.11
-      #defaultNetwork.settings = {
-      #  dns_enabled = true;
-      #};
-    };
-  };
+  #     # Required for containers under podman-compose to be able to talk to each other.
+  #     defaultNetwork.settings.dns_enabled = true;
+  #     # For Nixos version > 22.11
+  #     #defaultNetwork.settings = {
+  #     #  dns_enabled = true;
+  #     #};
+  #   };
+  # };
 
   # VirtualBox support
   virtualisation.virtualbox.host.enable = true;
@@ -361,7 +369,14 @@ in
   # Enable tailscale service
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "both";
-  networking.firewall.checkReversePath = "loose";
+  services.tailscale.openFirewall = true;
+  services.tailscale.extraUpFlags = [
+    "--accept-routes"
+    "--accept-dns"
+    # "--exit-node gateway"
+    # "--exit-node-allow-lan-access"
+  ];
+  # networking.firewall.checkReversePath = "loose";
   nixpkgs.overlays = [(final: prev: {
     tailscale = unstable.tailscale;
   })];
@@ -409,14 +424,11 @@ in
     nix-optimize = "sudo nix-store --optimize";
     rebuild = "sudo nixos-rebuild";
     target-rebuild = "sudo nixos-rebuild -I nixos-config=./configuration.nix --use-remote-sudo --target-host";
+    trip = "sudo /run/current-system/sw/bin/trip";
   };
 
-  # # nix-command and flakes experimental enable
-  # nix = {
-  #   package = pkgs.nixFlakes;
-  #   extraOptions = lib.optionalString (config.nix.package == pkgs.nixFlakes)
-  #     "experimental-features = nix-command flakes";
-  # };
+  # Enable flakes and nix-command
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Nix automated garbage collection
   nix.gc = {
@@ -446,9 +458,26 @@ in
 
   # Open ports in the firewall.
   networking.firewall = {
-    allowedTCPPorts = [ 22000 ];
-    allowedUDPPorts = [ 22000 ];
+    enable = true;
+    allowedTCPPorts = [ 
+      22000 # Syncthing
+      # config.services.tailscale.port
+      # 41641 # tailscale
+    ]; 
+    allowedUDPPorts = [ 
+      22000 # Syncthing
+      # 41641 # tailscale
+      # config.services.tailscale.port
+    ]; 
+    allowedTCPPortRanges = [ 
+      { from = 1714; to = 1764; } # KDE Connect
+    ];  
+    allowedUDPPortRanges = [ 
+      { from = 1714; to = 1764; } # KDE Connect
+    ];
+    trustedInterfaces = [ "tailscale0" ];
   };
+  # networking.interfaces.enp0s31f6.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.

@@ -17,6 +17,7 @@ in
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
+      # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       # ./vscode-server.nix
     ];
 
@@ -29,6 +30,7 @@ in
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.unmanaged = ["tailscale0"];
   # networking = {
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{
@@ -109,22 +111,36 @@ in
   };
 
   # Docker setup
-  # virtualisation.docker = {
-  #   enable = true;
-  #   autoPrune = {
-  #     enable = true;
-  #   };
-  #   enableOnBoot = true;
-  #   #daemon.settings = {
-  #   #  log-opts = {
-  #   #    max-size = "10m";
-  #   #  };
-  #   #};
-  # };
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+    };
+    enableOnBoot = true;
+    #daemon.settings = {
+    #  log-opts = {
+    #    max-size = "10m";
+    #  };
+    #};
+  };
 
-  # virtualisation.oci-containers = {
-  #   # backend = "docker";
-  #   containers = {
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      codeserver = {
+        image = "lscr.io/linuxserver/code-server:latest";
+        environment = {
+          PUID = "1000";
+          PGID = "1000";
+          DEFAULT_WORKSPACE = "/config/workspace";
+        };
+        volumes = [
+          "/home/lmilius/code-server:/config"
+        ];
+        ports = [
+          "443:8443"
+        ];
+      };
   #     speedtest = {
   #       image = "linuxserver/librespeed:latest";
   #       environment = {
@@ -149,25 +165,25 @@ in
   #         "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
   #       ];
   #     };
-  #   };
-  # };
+    };
+  };
 
   # Podman support
-  virtualisation = {
-   podman = {
-     enable = true;
+  # virtualisation = {
+  #  podman = {
+  #    enable = true;
   
-     # Create a `docker` alias for podman, to use it as a drop-in replacement
-     dockerCompat = true;
+  #    # Create a `docker` alias for podman, to use it as a drop-in replacement
+  #    dockerCompat = true;
   
-     # Required for containers under podman-compose to be able to talk to each other.
-     defaultNetwork.settings.dns_enabled = true;
-     # For Nixos version > 22.11
-     #defaultNetwork.settings = {
-     #  dns_enabled = true;
-     #};
-   };
-  };
+  #    # Required for containers under podman-compose to be able to talk to each other.
+  #    defaultNetwork.settings.dns_enabled = true;
+  #    # For Nixos version > 22.11
+  #    #defaultNetwork.settings = {
+  #    #  dns_enabled = true;
+  #    #};
+  #  };
+  # };
 
   # Virtualization support
   virtualisation.libvirtd = {
@@ -190,33 +206,47 @@ in
     dataDir = "/home/lmilius/syncthing";
     configDir = "/home/lmilius/Documents/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
-    devices = {
-      Server = {
-        addresses = [ 
-          "tcp://sync.miliushome.com:22000"
-          "tcp://10.10.200.80:22000"
-        ];
-        id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+    settings = {
+      devices = {
+        Server = {
+          addresses = [ 
+            "tcp://sync.miliushome.com:22000"
+            "tcp://10.10.200.80:22000"
+          ];
+          id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+        };
+        x1carbon = {
+          id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
+        };
       };
-      x1carbon = {
-        id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
-      };
-    };
-    folders = {
-      "/home/lmilius/syncthing/util-nix-config" = {
-        id = "2tdx5-epjh7";
-        devices = [
-          "Server"
-          "x1carbon"
-        ];
+      folders = {
+        "/home/lmilius/syncthing/util-nix-config" = {
+          id = "2tdx5-epjh7";
+          devices = [
+            "Server"
+            "x1carbon"
+          ];
+        };
       };
     };
   };
 
+  # Enable VSCode Server
+  # services.vscode-server.enable = true;
+
   # Enable tailscale service
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "both";
-  networking.firewall.checkReversePath = "loose";
+  services.tailscale.extraUpFlags = [
+    "--accept-routes"
+    "--accept-dns"
+    "--advertise-exit-node"
+    "--advertise-routes 10.10.200.0/24"
+    "--ssh"
+    # "--exit-node gateway"
+    # "--exit-node-allow-lan-access"
+  ];
+  # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   nixpkgs.overlays = [(final: prev: {
     tailscale = unstable.tailscale;
@@ -285,8 +315,8 @@ in
   # Nix automated garbage collection
   nix.gc = {
     automatic = true;
-    dates = "daily";
-    options = "--delete-older-than 3d";
+    dates = "weekly";
+    options = "--delete-older-than 7d";
   };
   nix.extraOptions = ''
     min-free = ${toString (100 * 1024 * 1024)}
