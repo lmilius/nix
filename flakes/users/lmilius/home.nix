@@ -32,6 +32,7 @@ in
     discover
     unstable.tailscale-systray
     direnv
+    insomnia
     # unstable.vscode
     # unstable.joplin-desktop
 
@@ -154,4 +155,8 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  programs.git.enable = true;
+
+  # Nicely reload system units when changing configs
+  systemd.user.startServices = "sd-switch";
 }
