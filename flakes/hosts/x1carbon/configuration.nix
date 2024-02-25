@@ -14,7 +14,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # ./steam.nix
+      ../../modules/gui/plasma.nix
     ];
 
   # Bootloader.
@@ -62,27 +62,27 @@ in
     LC_TIME = "en_US.UTF-8";
   };
 
-  services.xserver = {
-    # Enable the X11 windowing system.
-    enable = true;
+  # services.xserver = {
+  #   # Enable the X11 windowing system.
+  #   enable = true;
 
-    # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "";
+  #   # Configure keymap in X11
+  #   layout = "us";
+  #   xkbVariant = "";
 
-    # Enable XFCE4
-    # displayManager.lightdm.enable = true;
-    # desktopManager.xfce.enable = true;
+  #   # Enable XFCE4
+  #   # displayManager.lightdm.enable = true;
+  #   # desktopManager.xfce.enable = true;
 
-    # Enable KDE Plasma 5
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
-    displayManager.defaultSession = "plasmawayland";
+  #   # Enable KDE Plasma 5
+  #   displayManager.sddm.enable = true;
+  #   desktopManager.plasma5.enable = true;
+  #   displayManager.defaultSession = "plasmawayland";
 
-    # Enable the Gnome Desktop Environment.
-    # desktopManager.gnome.enable = true;
-    # displayManager.gdm.enable = true;
-  };
+  #   # Enable the Gnome Desktop Environment.
+  #   # desktopManager.gnome.enable = true;
+  #   # displayManager.gdm.enable = true;
+  # };
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
@@ -92,9 +92,9 @@ in
   # services.xserver.desktopManager.plasma5.enable = true;
   # # services.xserver.displayManager.defaultSession = "plasmawayland";
   
-  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-    elisa
-  ];
+  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
+  #   elisa
+  # ];
   
   # Enable the Cinnamon Desktop Environment.
   #services.xserver.desktopManager.cinnamon.enable = true;
@@ -221,8 +221,6 @@ in
     bitwarden
     moonlight-qt
     teamviewer
-    # unstable.tailscale
-    # tailscale
     yubico-piv-tool
     yubikey-agent
     yubikey-manager
@@ -232,7 +230,6 @@ in
     # yubioath-desktop
 #    busybox
     powertop
-    # docker
     docker-compose
     steam
     moonlight-qt
@@ -244,9 +241,8 @@ in
     openscad
     gparted
     vlc
-    # unstable.discord
+    unstable.discord
     intel-gpu-tools
-    # unstable.joplin-desktop
     cups-brother-hl3140cw
     lm_sensors
     screen
@@ -274,9 +270,6 @@ in
     du-dust
     duf
     dua
-    # syncthing
-    # syncthingtray
-    # amtterm
     wineWowPackages.full # wine
     kmon
     dig
