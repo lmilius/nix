@@ -8,6 +8,8 @@ let
   unstable = import
     (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
   { config = config.nixpkgs.config; };
+
+  hostname = "new-util";
 in
 {
   imports =
@@ -26,7 +28,7 @@ in
   boot.loader.systemd-boot.graceful = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "new-util"; # Define your hostname.
+  networking.hostName = hostname; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -99,7 +101,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
     ];
@@ -190,6 +192,8 @@ in
     enable = true;
   };
 
+  programs.virt-manager.enable = true;
+
   # QEMU UEFI support
   # environment = {
   #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
@@ -265,6 +269,7 @@ in
     rebuild = "sudo nixos-rebuild";
   };
 
+  # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
 
   # Allow unfree packages
@@ -274,6 +279,7 @@ in
   nix.settings.trusted-users = [
     "root"
     "@wheel"
+    "lmilius"
   ];
 
   security.sudo = {
@@ -281,11 +287,11 @@ in
     extraRules = [{
       commands = [
         {
-          command = "${pkgs.systemd}/bin/nixos-rebuild";
+          command = "/run/current-system/sw/bin/nixos-rebuild";
           options = [ "NOPASSWD" ];
         }
         {
-          command = "${pkgs.systemd}/bin/reboot";
+          command = "/run/current-system/sw/bin/reboot";
           options = [ "NOPASSWD" ];
         }
       ];
@@ -299,7 +305,7 @@ in
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     qemu
-    virt-manager
+    # virt-manager
     git
     curl
     htop
@@ -340,6 +346,45 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Makes shares visible for Windows 10 clients
+  services.samba-wsdd = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  # Enable Samba (SMB) file shares
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+    # securityType = "user";
+
+    # You will still need to set up the user accounts to begin with:
+    # $ sudo smbpasswd -a yourusername
+
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = ${hostname}
+      netbios name = ${hostname}
+      security = user
+      guest ok = no
+      guest account = nobody
+      map to guest = bad user
+      load printers = no
+    '';
+    shares = {
+      test = {
+        path = "/home/lmilius";
+        browsable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        # "force user" = "lmilius";
+        # "force group" = "users";
+      };
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
