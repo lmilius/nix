@@ -279,6 +279,7 @@ in
     # chia
     trippy
     libsForQt5.kdeconnect-kde
+    xwayland
   ];
 
   services.udev.packages = [ pkgs.yubikey-personalization ];
