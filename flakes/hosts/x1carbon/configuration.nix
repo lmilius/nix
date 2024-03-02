@@ -252,11 +252,11 @@ in
     exfatprogs
     ### Matrix Clients
     # fractal
-    element-desktop
-    libsForQt5.neochat
-    fluffychat
+    # element-desktop
+    # libsForQt5.neochat
+    # fluffychat
     # unstable.signal-desktop
-    signal-desktop
+    # signal-desktop
     fwupd
     # fprintd
     python311Full
