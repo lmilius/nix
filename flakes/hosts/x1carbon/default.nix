@@ -2,19 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, unstablePkgs, ... }:
 
-let
-  # unstable = import
-  #   (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
-  # { config = config.nixpkgs.config; };
-  unstable = pkgs.unstable;
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/gui/plasma.nix
+      ./../common/common-packages.nix
     ];
 
   # Bootloader.
@@ -22,19 +17,15 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
+
   # Kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_0;
   # boot.kernelParams = [ "nouveau.modeset=0" ];
 
-  boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   networking.hostName = "x1carbon"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -42,82 +33,24 @@ in
   # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
   # and: https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  
   services.resolved.enable = true;
   # services.nftables.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "America/Chicago";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  # services.xserver = {
-  #   # Enable the X11 windowing system.
-  #   enable = true;
-
-  #   # Configure keymap in X11
-  #   layout = "us";
-  #   xkbVariant = "";
-
-  #   # Enable XFCE4
-  #   # displayManager.lightdm.enable = true;
-  #   # desktopManager.xfce.enable = true;
-
-  #   # Enable KDE Plasma 5
-  #   displayManager.sddm.enable = true;
-  #   desktopManager.plasma5.enable = true;
-  #   displayManager.defaultSession = "plasmawayland";
-
-  #   # Enable the Gnome Desktop Environment.
-  #   # desktopManager.gnome.enable = true;
-  #   # displayManager.gdm.enable = true;
-  # };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  # # services.xserver.displayManager.defaultSession = "plasmawayland";
-  
-  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-  #   elisa
-  # ];
-  
-  # Enable the Cinnamon Desktop Environment.
-  #services.xserver.desktopManager.cinnamon.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  
-  # Enable the Panthen Desktop Environment.
-  #services.xserver.desktopManager.pantheon.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-
-  # Enable the Deepin Desktop Environment.
-  #services.xserver.desktopManager.deepin.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;  
-  
-  # Enable Budgie Desktop Environment.
-  #services.xserver.desktopManager.budgie.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  
-  # Enable the Mate Desktop Environment.
-  #services.xserver.desktopManager.mate.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  ## enable printer auto discovery
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    openFirewall = true;
+  };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -136,6 +69,11 @@ in
   #   #media-session.enable = true;
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -147,32 +85,23 @@ in
     packages = with pkgs; [
       firefox
       kate
-    #  thunderbird
+      unstablePkgs.vscode
+      # vscode extensions
+      (vscode-with-extensions.override {
+        vscodeExtensions = with vscode-extensions; [
+          mkhl.direnv
+          njpwerner.autodocstring
+          ms-vscode.cpptools
+          ms-vscode.cmake-tools
+          ms-vscode-remote.remote-ssh
+          ms-vscode-remote.remote-containers
+          ms-python.python
+          ms-python.vscode-pylance
+          njpwerner.autodocstring
+          tailscale.vscode-tailscale
+        ];
+      })
     ];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  security.sudo = {
-    enable = true;
-    extraRules = [{
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/reboot";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/trip";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-      groups = [ "wheel" ];
-    }];
   };
 
   # Intel GPU
@@ -190,33 +119,13 @@ in
     ];
   };
 
-  # services.xserver.deviceSection = ''
-  #   Driver "i915"
-  #   Option "DRI" "2"
-  #   Option "TearFree" "true"
-  # '';
-
-
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "electron-24.8.6"
-  # ];
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    git
-    curl
-    tmux
-    htop
-    iotop
-    usbutils
-    pciutils
+    # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     # unstable.vscode
     # vscode
     plasma5Packages.plasma-thunderbolt
-    unzip
     intel-gpu-tools
     bitwarden
     moonlight-qt
@@ -227,60 +136,37 @@ in
     yubikey-manager-qt
     yubikey-personalization
     yubikey-personalization-gui
-    # yubioath-desktop
-#    busybox
-    powertop
-    docker-compose
     steam
     moonlight-qt
     nextcloud-client
     google-chrome
     chromium
-    # arduino
     ubootTools
     openscad
-    gparted
     vlc
-    unstable.discord
-    intel-gpu-tools
+    unstablePkgs.discord
     cups-brother-hl3140cw
     lm_sensors
-    screen
-    nmap
     distrobox
-    # agenix
     exfatprogs
-    ### Matrix Clients
-    # fractal
-    # element-desktop
-    # libsForQt5.neochat
-    # fluffychat
-    # unstable.signal-desktop
-    # signal-desktop
-    fwupd
-    # fprintd
     python311Full
     python311Packages.virtualenv
     python311Packages.pip
-    # unstable.rtl_433
     virt-manager
     qemu
     openssl
-    #disk utils
-    du-dust
-    duf
-    dua
     wineWowPackages.full # wine
     kmon
-    dig
-    traceroute
     keepassxc
     freetube
-    # chia
-    trippy
     libsForQt5.kdeconnect-kde
     xwayland
   ];
+#   ++ import ./../../common/common-packages.nix
+#   {
+#     pkgs = pkgs;
+#     unstablePkgs = unstablePkgs;
+#   };
 
   services.udev.packages = [ pkgs.yubikey-personalization ];
 
@@ -320,6 +206,13 @@ in
   #     #};
   #   };
   # };
+
+  # Cockpit
+  services.cockpit = {
+    enable = true;
+    openFirewall = true;
+    port = 9090;
+  };
 
   # VirtualBox support
   virtualisation.virtualbox.host.enable = true;
@@ -375,22 +268,23 @@ in
   ];
   # networking.firewall.checkReversePath = "loose";
   nixpkgs.overlays = [(final: prev: {
-    tailscale = unstable.tailscale;
+    tailscale = unstablePkgs.tailscale;
   })];
 
-  # Syncthing
+  # Syncthing (port 8384 web gui)
   services.syncthing = {
     enable = true;
     user = "lmilius";
     dataDir = "/home/lmilius/Documents";
     configDir = "/home/lmilius/Documents/.config/syncthing";
+    openDefaultPorts = true;
   };
 
   # Enable steam
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    # remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    # dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   };
   hardware.steam-hardware.enable = true;
   environment.sessionVariables = rec {
@@ -409,22 +303,6 @@ in
 
   # system.copySystemConfiguration = true;
 
-  programs.bash.shellAliases = {
-    l = "ls -alh";
-    ll = "ls -l";
-    ls = "ls --color=tty";
-    dcp = "docker-compose ";
-    dlog = "docker logs -f ";
-    dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
-    nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
-    nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
-    nix-optimize = "sudo nix-store --optimize";
-    rebuild = "sudo nixos-rebuild";
-    target-rebuild = "sudo nixos-rebuild -I nixos-config=./configuration.nix --use-remote-sudo --target-host";
-    trip = "sudo /run/current-system/sw/bin/trip";
-  };
-
-
 #   # This will add each flake input as a registry
 #   # To make nix3 commands consistent with your flake
 #   nix.registry = (lib.mapAttrs (_: flake: {inherit flake;})) ((lib.filterAttrs (_: lib.isType "flake")) inputs);
@@ -442,9 +320,9 @@ in
 
   nix = {
     settings = {
-      # Enable flakes and nix-command
-      experimental-features = [ "nix-command" "flakes" ];
-      warn-dirty = false;
+      # # Enable flakes and nix-command (in nixos-common.nix)
+      # experimental-features = [ "nix-command" "flakes" ];
+      # warn-dirty = false;
       
       # Definte trusted users
       trusted-users = [
@@ -455,16 +333,16 @@ in
     };
   };
 
-  # Nix automated garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-  nix.extraOptions = ''
-    min-free = ${toString (100 * 1024 * 1024)}
-    max-free = ${toString (1024 * 1024 * 1024)}
-  '';
+  # # Nix automated garbage collection
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   options = "--delete-older-than 30d";
+  # };
+  # nix.extraOptions = ''
+  #   min-free = ${toString (100 * 1024 * 1024)}
+  #   max-free = ${toString (1024 * 1024 * 1024)}
+  # '';
 
 
   # Some programs need SUID wrappers, can be configured further or are

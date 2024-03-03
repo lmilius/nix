@@ -20,4 +20,8 @@ in
   environment.plasma5.excludePackages = with pkgs.libsForQt5; [
     elisa
   ];
+
+  # KDE apps
+  programs.partition-manager.enable = true;
+  programs.kdeconnect.enable = true;
 }

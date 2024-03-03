@@ -210,6 +210,7 @@ in
     dataDir = "/home/lmilius/syncthing";
     configDir = "/home/lmilius/Documents/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
+    openDefaultPorts = true;
     settings = {
       devices = {
         Server = {
@@ -229,6 +230,14 @@ in
           devices = [
             "Server"
             "x1carbon"
+          ];
+        };
+        "/home/lmilius/syncthing/nix-flake-config" = {
+          id = "vccxz-vvrns";
+          devices = [
+            "Server"
+            "x1carbon"
+            "parent-util"
           ];
         };
       };

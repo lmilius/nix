@@ -6,7 +6,6 @@ let
     l = "ls -CF";
     ".." = "cd ..";
   };
-  unstable = pkgs.unstable;
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -30,11 +29,11 @@ in
     # # "Hello, world!" when run.
     # pkgs.hello
     discover
-    unstable.tailscale-systray
+    # unstablePkgs.tailscale-systray
     direnv
     insomnia
-    # unstable.vscode
-    # unstable.joplin-desktop
+    # unstablePkgs.vscode
+    # unstablePkgs.joplin-desktop
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -137,21 +136,21 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   
-  programs.vscode = {
-    enable = true;
-    extensions = with pkgs.vscode-extensions; [
-      mkhl.direnv
-      njpwerner.autodocstring
-      ms-vscode.cpptools
-      ms-vscode.cmake-tools
-      ms-vscode-remote.remote-ssh
-      ms-vscode-remote.remote-containers
-      ms-python.python
-      ms-python.vscode-pylance
-      njpwerner.autodocstring
-      tailscale.vscode-tailscale
-    ];
-  };
+  # programs.vscode = {
+  #   enable = true;
+  #   extensions = with pkgs.vscode-extensions; [
+  #     mkhl.direnv
+  #     njpwerner.autodocstring
+  #     ms-vscode.cpptools
+  #     ms-vscode.cmake-tools
+  #     ms-vscode-remote.remote-ssh
+  #     ms-vscode-remote.remote-containers
+  #     ms-python.python
+  #     ms-python.vscode-pylance
+  #     njpwerner.autodocstring
+  #     tailscale.vscode-tailscale
+  #   ];
+  # };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
