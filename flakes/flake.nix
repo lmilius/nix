@@ -53,6 +53,8 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.${username} = { imports = [ ./users/${username}/home.nix ]; };
+
+              home-manager.extraSpecialArgs = { inherit pkgs unstablePkgs; };
             }
 
             ./hosts/common/nixos-common.nix

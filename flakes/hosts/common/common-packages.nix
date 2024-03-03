@@ -19,6 +19,7 @@
     iperf3
     ipmitool
     jq
+    kmon
     nmap
     pciutils
     powertop

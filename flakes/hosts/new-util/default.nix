@@ -237,7 +237,7 @@ in
           devices = [
             "Server"
             "x1carbon"
-            "parent-util"
+            # "parent-util"
           ];
         };
       };
@@ -265,18 +265,18 @@ in
     tailscale = unstable.tailscale;
   })];
 
-  programs.bash.shellAliases = {
-    l = "ls -alh";
-    ll = "ls -l";
-    ls = "ls --color=tty";
-    dcp = "docker-compose ";
-    dlog = "docker logs -f ";
-    dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
-    nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
-    nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
-    nix-optimize = "sudo nix-store --optimize";
-    rebuild = "sudo nixos-rebuild";
-  };
+  # programs.bash.shellAliases = {
+  #   l = "ls -alh";
+  #   ll = "ls -l";
+  #   ls = "ls --color=tty";
+  #   dcp = "docker-compose ";
+  #   dlog = "docker logs -f ";
+  #   dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
+  #   nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
+  #   nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
+  #   nix-optimize = "sudo nix-store --optimize";
+  #   rebuild = "sudo nixos-rebuild";
+  # };
 
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
@@ -291,57 +291,62 @@ in
     "lmilius"
   ];
 
-  security.sudo = {
-    enable = true;
-    extraRules = [{
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/reboot";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-      groups = [ "wheel" ];
-    }];
-  };
+  # security.sudo = {
+  #   enable = true;
+  #   extraRules = [{
+  #     commands = [
+  #       {
+  #         command = "/run/current-system/sw/bin/nixos-rebuild";
+  #         options = [ "NOPASSWD" ];
+  #       }
+  #       {
+  #         command = "/run/current-system/sw/bin/reboot";
+  #         options = [ "NOPASSWD" ];
+  #       }
+  #     ];
+  #     groups = [ "wheel" ];
+  #   }];
+  # };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    qemu
-    # virt-manager
-    git
-    curl
-    htop
-    iotop
-    unstable.tailscale
-    powertop
-    tmux
-    kmon
-    dig
-    traceroute
-    # docker
-    # docker-compose
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+  #   qemu
+  #   # virt-manager
+  #   git
+  #   curl
+  #   htop
+  #   iotop
+  #   unstable.tailscale
+  #   powertop
+  #   tmux
+  #   kmon
+  #   dig
+  #   traceroute
+  #   # docker
+  #   # docker-compose
+  # ];
 
-  # Nix automated garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
-  nix.extraOptions = ''
-    min-free = ${toString (100 * 1024 * 1024)}
-    max-free = ${toString (1024 * 1024 * 1024)}
-  '';
+  services.cockpit = {
+    enable = true;
+    port = 9090;
+  }
+
+  # # Nix automated garbage collection
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   options = "--delete-older-than 7d";
+  # };
+  # nix.extraOptions = ''
+  #   min-free = ${toString (100 * 1024 * 1024)}
+  #   max-free = ${toString (1024 * 1024 * 1024)}
+  # '';
 
   # Enable flakes (experimental)
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -404,7 +409,7 @@ in
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
