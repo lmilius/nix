@@ -42,10 +42,10 @@
             inherit pkgs unstablePkgs;
 
             # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs; };
+            customArgs = { inherit system hostname username pkgs unstablePkgs disko; };
           };
           modules = [
-            ./hosts/${hostname}/default.nix
+            ./hosts/${hostname}
 
             vscode-server.nixosModules.default
             home-manager.nixosModules.home-manager {

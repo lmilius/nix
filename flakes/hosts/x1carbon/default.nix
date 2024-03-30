@@ -149,9 +149,6 @@
     lm_sensors
     distrobox
     exfatprogs
-    python311Full
-    python311Packages.virtualenv
-    python311Packages.pip
     virt-manager
     qemu
     openssl
@@ -161,6 +158,7 @@
     freetube
     libsForQt5.kdeconnect-kde
     xwayland
+    trayscale
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {

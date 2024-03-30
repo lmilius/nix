@@ -2,23 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, unstablePkgs, disko, hostname, ... }:
 
-let
-  unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
-  { config = config.nixpkgs.config; };
-
-  hostname = "new-util";
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
-      (import ./disko-config.nix {
-        disks = [ "/dev/sda" ];
-      })
+      # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+      # ./disko-config.nix
+      # (import ./disko-config.nix {
+      #   disks = [ "/dev/sda" ];
+      # })
       # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       # ./vscode-server.nix
     ];
@@ -262,7 +256,7 @@ in
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   nixpkgs.overlays = [(final: prev: {
-    tailscale = unstable.tailscale;
+    tailscale = unstablePkgs.tailscale;
   })];
 
   # programs.bash.shellAliases = {
@@ -332,7 +326,7 @@ in
   services.cockpit = {
     enable = true;
     port = 9090;
-  }
+  };
 
   # # Nix automated garbage collection
   # nix.gc = {

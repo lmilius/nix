@@ -23,6 +23,9 @@
     nmap
     pciutils
     powertop
+    python311Full
+    python311Packages.virtualenv
+    python311Packages.pip
     smartmontools
     tmux
     traceroute
