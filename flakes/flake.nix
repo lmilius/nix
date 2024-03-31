@@ -39,7 +39,7 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit pkgs unstablePkgs;
+            inherit pkgs unstablePkgs hostname;
 
             # lets us use these things in modules
             customArgs = { inherit system hostname username pkgs unstablePkgs disko; };
