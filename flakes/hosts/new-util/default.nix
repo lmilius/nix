@@ -9,10 +9,10 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
-      ./disko-config.nix
-      # (import ./disko-config.nix {
-      #   disks = [ "/dev/sda" ];
-      # })
+      # ./disko-config.nix
+      (import ./disko-config.nix {
+        disks = [ "/dev/sda" ];
+      })
       # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       # ./vscode-server.nix
     ];
@@ -27,6 +27,8 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.networkmanager.unmanaged = ["tailscale0"];
+  systemd.services.NetworkManager-wait-online.enable = false;
+  networking.networkmanager.dns = "systemd-resolved";
   # networking = {
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{

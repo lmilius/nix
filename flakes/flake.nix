@@ -45,6 +45,7 @@
             customArgs = { inherit system hostname username pkgs unstablePkgs disko; };
           };
           modules = [
+            disko.nixosModules.disko
             ./hosts/${hostname}
 
             vscode-server.nixosModules.default

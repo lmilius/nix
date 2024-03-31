@@ -316,21 +316,6 @@
 #     })
 #     config.nix.registry;
 
-  nix = {
-    settings = {
-      # # Enable flakes and nix-command (in nixos-common.nix)
-      # experimental-features = [ "nix-command" "flakes" ];
-      # warn-dirty = false;
-      
-      # Definte trusted users
-      trusted-users = [
-        "root"
-        "@wheel"
-        "lmilius"
-      ];
-    };
-  };
-
   # # Nix automated garbage collection
   # nix.gc = {
   #   automatic = true;

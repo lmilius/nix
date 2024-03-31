@@ -9,6 +9,13 @@ in
     settings = {
         experimental-features = [ "nix-command" "flakes" ];
         warn-dirty = false;
+        
+        # Definte trusted users
+        trusted-users = [
+          "root"
+          "@wheel"
+          "lmilius"
+        ];
     };
     # Automate garbage collection
     gc = {
