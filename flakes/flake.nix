@@ -68,6 +68,7 @@
 
       # servers
       new-util = nixosSystem "x86_64-linux" "new-util" "lmilius";
+      parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
 
       # blank ISO + disko
       nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";

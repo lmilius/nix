@@ -13,3 +13,7 @@ This contains configuration for hosts/users that are using flakes to configure n
 ## Build home-manager configuration
 
 `home-manager switch --flake .`
+
+## NixOS Flake Inspiration Repositories
+
+- https://github.com/reckenrode/nixos-configs/blob/main/README.md

@@ -201,6 +201,14 @@ in
             "x1carbon"
           ];
         };
+        "/home/lmilius/syncthing/nix-flake-config" = {
+          id = "vccxz-vvrns";
+          devices = [
+            "Server"
+            "x1carbon"
+            # "parent-util"
+          ];
+        };
       };
     };
   };

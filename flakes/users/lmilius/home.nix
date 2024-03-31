@@ -30,7 +30,7 @@ in
     # pkgs.hello
     discover
     # unstablePkgs.tailscale-systray
-    direnv
+    # direnv
     insomnia
     # unstablePkgs.vscode
     # unstablePkgs.joplin-desktop
@@ -48,6 +48,11 @@ in
     #   echo "Hello, ${config.home.username}!"
     # '')
   ];
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -152,9 +157,74 @@ in
   #   ];
   # };
 
+  programs.tmux = {
+    enable = true;
+    historyLimit = 10000;
+  };
+
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+    Host *
+      StrictHostKeyChecking no
+    '';
+    matchBlocks = {
+      "new-util" = {
+        hostname = "new-util.milius.home";
+        user = "lmilius";
+      };
+      "parent-util" = {
+        hostname = "192.168.88.5";
+        user = "lmilius";
+      };
+      "util" = {
+        hostname = "util.milius.home";
+        user = "lmilius";
+      };
+      "pve1" = {
+        hostname = "pve1";
+        user = "root";
+      };
+      "pve2" = {
+        hostname = "pve2";
+        user = "root";
+      };
+      "pve3" = {
+        hostname = "pve3";
+        user = "root";
+      };
+      "ha" = {
+        hostname = "homeassistant";
+        user = "root";
+        port = 22222;
+      };
+      "influxdb" = {
+        hostname = "10.10.200.99";
+        user = "root";
+      };
+      "pi" = {
+        hostname = "raspberrypi";
+        user = "admin";
+      };
+      "gateway" = {
+        hostname = "gateway.miliusfam.com";
+        user = "root";
+      };
+      "storj" = {
+        hostname = "storj";
+        user = "root";
+      };
+    };
+  }; 
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    userEmail = "lmilius12@gmail.com";
+    userName = "Luke Milius";
+    diff-so-fancy.enable = true;
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

@@ -9,12 +9,9 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
-      # ./disko-config.nix
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
-      # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
-      # ./vscode-server.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -109,95 +106,71 @@
   };
 
   # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-    };
-    enableOnBoot = true;
-    #daemon.settings = {
-    #  log-opts = {
-    #    max-size = "10m";
-    #  };
-    #};
-  };
+  # virtualisation.docker = {
+  #   enable = true;
+  #   autoPrune = {
+  #     enable = true;
+  #   };
+  #   enableOnBoot = true;
+  #   #daemon.settings = {
+  #   #  log-opts = {
+  #   #    max-size = "10m";
+  #   #  };
+  #   #};
+  # };
 
   virtualisation.oci-containers = {
-    backend = "docker";
+    # backend = "docker";
     containers = {
-      codeserver = {
-        image = "lscr.io/linuxserver/code-server:latest";
+      speedtest = {
+        image = "linuxserver/librespeed:latest";
         environment = {
-          PUID = "1000";
-          PGID = "1000";
-          DEFAULT_WORKSPACE = "/config/workspace";
+          MODE = "standalone";
         };
-        volumes = [
-          "/home/lmilius/code-server:/config"
-        ];
         ports = [
-          "443:8443"
+          "8080:80"
         ];
       };
-  #     speedtest = {
-  #       image = "linuxserver/librespeed:latest";
-  #       environment = {
-  #         MODE = "standalone";
-  #       };
-  #       ports = [
-  #         "8080:80"
-  #       ];
-  #     };
-  #     # Omada uses the following ports: 8088/8043 for the webUI, 
-  #     omada = {
-  #       image = "mbentley/omada-controller:latest";
-  #       environment = {
-  #         TZ = "America/Chicago";
-  #       };
-  #       extraOptions = [
-  #         "--network=host"
-  #       ];
-  #       volumes = [
-  #         "/home/lmilius/omada/data:/opt/tplink/EAPController/data"
-  #         "/home/lmilius/omada/logs:/opt/tplink/EAPController/logs"
-  #         "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
-  #       ];
-  #     };
+      # Omada uses the following ports: 8088/8043 for the webUI, 
+      omada = {
+        image = "mbentley/omada-controller:latest";
+        environment = {
+          TZ = "America/Chicago";
+        };
+        extraOptions = [
+          "--network=host"
+        ];
+        volumes = [
+          "/home/lmilius/omada/data:/opt/tplink/EAPController/data"
+          "/home/lmilius/omada/logs:/opt/tplink/EAPController/logs"
+          "/home/lmilius/omada/work:/opt/tplink/EAPController/work"
+        ];
+      };
     };
   };
 
   # Podman support
-  # virtualisation = {
-  #  podman = {
-  #    enable = true;
+  virtualisation = {
+   podman = {
+     enable = true;
   
-  #    # Create a `docker` alias for podman, to use it as a drop-in replacement
-  #    dockerCompat = true;
+     # Create a `docker` alias for podman, to use it as a drop-in replacement
+     dockerCompat = true;
   
-  #    # Required for containers under podman-compose to be able to talk to each other.
-  #    defaultNetwork.settings.dns_enabled = true;
-  #    # For Nixos version > 22.11
-  #    #defaultNetwork.settings = {
-  #    #  dns_enabled = true;
-  #    #};
-  #  };
-  # };
+     # Required for containers under podman-compose to be able to talk to each other.
+     defaultNetwork.settings.dns_enabled = true;
+     # For Nixos version > 22.11
+     #defaultNetwork.settings = {
+     #  dns_enabled = true;
+     #};
+   };
+  };
 
   # Virtualization support
   virtualisation.libvirtd = {
     enable = true;
   };
-
   programs.virt-manager.enable = true;
-
-  # QEMU UEFI support
-  # environment = {
-  #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
-  #     qemu-system-x86_64 \
-  #       -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
-  #       "$@"
-  #   )
-  # };
 
   # Syncthing
   services.syncthing = {
@@ -206,7 +179,6 @@
     dataDir = "/home/lmilius/syncthing";
     configDir = "/home/lmilius/Documents/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
-    openDefaultPorts = true;
     settings = {
       devices = {
         Server = {
@@ -221,9 +193,9 @@
         };
       };
       folders = {
-        "/home/lmilius/syncthing/util-nix-config" = {
-          id = "2tdx5-epjh7";
-          devices = [
+        "/home/lmilius/syncthing/parent-util-nix-config" = {
+          id = "nfrgj-e43cc";
+          devices = [ 
             "Server"
             "x1carbon"
           ];
@@ -240,8 +212,14 @@
     };
   };
 
-  # Enable VSCode Server
-  # services.vscode-server.enable = true;
+  # QEMU UEFI support
+  # environment = {
+  #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
+  #     qemu-system-x86_64 \
+  #       -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
+  #       "$@"
+  #   )
+  # };
 
   # Enable tailscale service
   services.tailscale.enable = true;
@@ -250,7 +228,7 @@
     "--accept-routes"
     "--accept-dns"
     "--advertise-exit-node"
-    "--advertise-routes 10.10.200.0/24"
+    "--advertise-routes 192.168.88.0/24"
     "--ssh"
     # "--exit-node gateway"
     # "--exit-node-allow-lan-access"
@@ -284,7 +262,6 @@
   # nix.settings.trusted-users = [
   #   "root"
   #   "@wheel"
-  #   "lmilius"
   # ];
 
   # security.sudo = {
@@ -292,11 +269,11 @@
   #   extraRules = [{
   #     commands = [
   #       {
-  #         command = "/run/current-system/sw/bin/nixos-rebuild";
+  #         command = "${pkgs.systemd}/bin/nixos-rebuild";
   #         options = [ "NOPASSWD" ];
   #       }
   #       {
-  #         command = "/run/current-system/sw/bin/reboot";
+  #         command = "${pkgs.systemd}/bin/reboot";
   #         options = [ "NOPASSWD" ];
   #       }
   #     ];
@@ -310,12 +287,11 @@
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   #   qemu
-  #   # virt-manager
+  #   virt-manager
   #   git
   #   curl
   #   htop
   #   iotop
-  #   unstable.tailscale
   #   powertop
   #   tmux
   #   kmon
@@ -325,12 +301,7 @@
   #   # docker-compose
   # ];
 
-  services.cockpit = {
-    enable = true;
-    port = 9090;
-  };
-
-  # # Nix automated garbage collection
+  # Nix automated garbage collection
   # nix.gc = {
   #   automatic = true;
   #   dates = "weekly";
@@ -356,45 +327,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # Makes shares visible for Windows 10 clients
-  services.samba-wsdd = {
-    enable = true;
-    openFirewall = true;
-  };
-
-  # Enable Samba (SMB) file shares
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    # securityType = "user";
-
-    # You will still need to set up the user accounts to begin with:
-    # $ sudo smbpasswd -a yourusername
-
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = ${hostname}
-      netbios name = ${hostname}
-      security = user
-      guest ok = no
-      guest account = nobody
-      map to guest = bad user
-      load printers = no
-    '';
-    shares = {
-      test = {
-        path = "/home/lmilius";
-        browsable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        # "force user" = "lmilius";
-        # "force group" = "users";
-      };
-    };
-  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
