@@ -10,10 +10,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    disko.url = "github:nix-community/disko";
-    disko.inputs.nixpkgs.follows = "nixpkgs";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+
+    # Enable fingerprint reader
+    nixos-06cb-009a-fingerprint-sensor = {
+      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # agenix = {
     #   url   = "github:ryantm/agenix";
@@ -23,9 +31,9 @@
     # };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, ... }:
   let
-    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable; };
+    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor; };
 
     # creates correct package sets for specified arch
     genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
@@ -39,10 +47,10 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit pkgs unstablePkgs hostname;
+            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor;
 
             # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs disko; };
+            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor; };
           };
           modules = [
             disko.nixosModules.disko
@@ -59,6 +67,9 @@
             }
 
             ./hosts/common/nixos-common.nix
+            ./hosts/common/common-packages.nix
+            nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
+            nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
           ];
         };
   in {
@@ -69,6 +80,7 @@
       # servers
       new-util = nixosSystem "x86_64-linux" "new-util" "lmilius";
       parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
+      nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
 
       # blank ISO + disko
       nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
