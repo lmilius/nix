@@ -17,3 +17,4 @@ This contains configuration for hosts/users that are using flakes to configure n
 ## NixOS Flake Inspiration Repositories
 
 - https://github.com/reckenrode/nixos-configs/blob/main/README.md
+- https://github.com/cjlarose/nixos-dev-env/
