@@ -10,7 +10,11 @@
       ./hardware-configuration.nix
       ../../modules/gui/plasma.nix
       ./../common/common-packages.nix
+      ./nix-cache.nix
     ];
+
+  # Use local nix cache
+  nix.settings.substituters = [ "http://10.10.200.166/" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -378,11 +382,13 @@ security.pam.services.sudo.text = ''
     enable = true;
     allowedTCPPorts = [ 
       22000 # Syncthing
+      80 # nix-cache nginx
       # config.services.tailscale.port
       # 41641 # tailscale
     ]; 
     allowedUDPPorts = [ 
       22000 # Syncthing
+      80 # nix-cache nginx
       # 41641 # tailscale
       # config.services.tailscale.port
     ]; 

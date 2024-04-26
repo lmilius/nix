@@ -25,7 +25,7 @@
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.networkmanager.unmanaged = ["tailscale0"];
   systemd.services.NetworkManager-wait-online.enable = false;
-  networking.networkmanager.dns = "systemd-resolved";
+  # networking.networkmanager.dns = "systemd-resolved";
   # networking = {
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{

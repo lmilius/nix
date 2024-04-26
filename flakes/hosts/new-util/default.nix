@@ -17,6 +17,9 @@
       # ./vscode-server.nix
     ];
 
+  # Use local nix cache
+  nix.settings.substituters = [ "http://10.10.200.166/" ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.graceful = true;
@@ -28,7 +31,7 @@
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.networkmanager.unmanaged = ["tailscale0"];
   systemd.services.NetworkManager-wait-online.enable = false;
-  networking.networkmanager.dns = "systemd-resolved";
+  # networking.networkmanager.dns = "systemd-resolved";
   # networking = {
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{
