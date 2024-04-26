@@ -14,7 +14,7 @@
     ];
 
   # Use local nix cache
-  nix.settings.substituters = [ "http://10.10.200.166/" ];
+  nix.settings.substituters = [ "http://127.0.0.1/" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -33,7 +33,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.networkmanager.dns = "systemd-resolved";
+  # networking.networkmanager.dns = "systemd-resolved";
   # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
   # and: https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
