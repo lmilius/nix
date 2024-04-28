@@ -1,9 +1,12 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, ip_address, ... }:
 let 
-  ip_address = "10.10.200.8";
   dns_ip = "1.1.1.1";
 in
 {
+  # Use local nix cache
+  nix.settings.substituters = [ "http://127.0.0.1/" ];
+
+  # Host proxy cache
   services.nginx = {
     enable = true;
     appendHttpConfig = ''

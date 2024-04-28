@@ -15,11 +15,10 @@
       })
       # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       # ./vscode-server.nix
-      ./nix-cache.nix
+      ( import ../../modules/nix-cache/default.nix {
+        ip_address = "10.10.200.8";
+      })
     ];
-
-  # Use local nix cache
-  nix.settings.substituters = [ "http://127.0.0.1/" ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
