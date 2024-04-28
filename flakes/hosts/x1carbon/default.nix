@@ -14,7 +14,7 @@
     ];
 
   # Use local nix cache
-  nix.settings.substituters = [ "http://127.0.0.1/" ];
+  nix.settings.substituters = [ "http://127.0.0.1" "http://100.81.224.48/" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
