@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/gui/plasma.nix
       ./../common/common-packages.nix
-      ./nix-cache.nix
+      # ./nix-cache.nix
     ];
 
   # Use local nix cache
