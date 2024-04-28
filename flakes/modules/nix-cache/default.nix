@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ip_address, ... }:
+{ ip_address, ... }:
 let 
   dns_ip = "1.1.1.1";
 in
