@@ -109,21 +109,21 @@
   };
 
   # Docker setup
-  # virtualisation.docker = {
-  #   enable = true;
-  #   autoPrune = {
-  #     enable = true;
-  #   };
-  #   enableOnBoot = true;
-  #   #daemon.settings = {
-  #   #  log-opts = {
-  #   #    max-size = "10m";
-  #   #  };
-  #   #};
-  # };
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+    };
+    enableOnBoot = true;
+    #daemon.settings = {
+    #  log-opts = {
+    #    max-size = "10m";
+    #  };
+    #};
+  };
 
   virtualisation.oci-containers = {
-    # backend = "docker";
+    backend = "docker";
     containers = {
       speedtest = {
         image = "linuxserver/librespeed:latest";
@@ -153,21 +153,21 @@
   };
 
   # Podman support
-  virtualisation = {
-   podman = {
-     enable = true;
+  # virtualisation = {
+  #  podman = {
+  #    enable = true;
   
-     # Create a `docker` alias for podman, to use it as a drop-in replacement
-     dockerCompat = true;
+  #    # Create a `docker` alias for podman, to use it as a drop-in replacement
+  #    dockerCompat = true;
   
-     # Required for containers under podman-compose to be able to talk to each other.
-     defaultNetwork.settings.dns_enabled = true;
-     # For Nixos version > 22.11
-     #defaultNetwork.settings = {
-     #  dns_enabled = true;
-     #};
-   };
-  };
+  #    # Required for containers under podman-compose to be able to talk to each other.
+  #    defaultNetwork.settings.dns_enabled = true;
+  #    # For Nixos version > 22.11
+  #    #defaultNetwork.settings = {
+  #    #  dns_enabled = true;
+  #    #};
+  #  };
+  # };
 
   # Virtualization support
   virtualisation.libvirtd = {

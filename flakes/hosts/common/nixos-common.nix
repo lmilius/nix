@@ -19,7 +19,11 @@ in
         ];
 
         # Use local nix cache
-        substituters = [ "http://10.10.200.8" "http://100.69.216.71/" ];
+        substituters = [ 
+          "http://10.10.200.8" 
+          "http://100.69.216.71/" 
+          "" 
+        ];
     };
     # Automate garbage collection
     gc = {
