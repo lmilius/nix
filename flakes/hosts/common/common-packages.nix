@@ -27,6 +27,7 @@
     python311Packages.virtualenv
     python311Packages.pip
     smartmontools
+    unstablePkgs.tailscale
     tmux
     traceroute
     trippy

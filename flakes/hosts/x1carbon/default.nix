@@ -248,10 +248,10 @@ security.pam.services.sudo.text = ''
   # };
 
   # VirtualBox support
-  virtualisation.virtualbox.host.enable = true;
-  boot.kernelParams = [ "vboxdrv.load_state=1" ];
-  boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" "vboxpci" ];
-  users.extraGroups.vboxusers.members = [ "lmilius" ];
+  # virtualisation.virtualbox.host.enable = true;
+  # boot.kernelParams = [ "vboxdrv.load_state=1" ];
+  # boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" "vboxpci" ];
+  # users.extraGroups.vboxusers.members = [ "lmilius" ];
 
   # Virtualization support
   virtualisation.libvirtd = {
