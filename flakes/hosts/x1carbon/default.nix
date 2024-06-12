@@ -52,7 +52,7 @@
   ## enable printer auto discovery
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
 
@@ -77,6 +77,8 @@
     enable = true;
     powerOnBoot = true;
   };
+
+  hardware.flipperzero.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -163,6 +165,7 @@
     libsForQt5.kdeconnect-kde
     xwayland
     trayscale
+    qFlipper
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
@@ -218,7 +221,7 @@
 
   # Enable fingerprint reader.
   services.open-fprintd.enable = true;
-  services.python-validity.enable = true;
+  # services.python-validity.enable = true; # service failing to start 6/12
 
   # fingerprint scanning for authentication
 # (this makes it so that it prompts for a password first. If none is entered or an incorrect one is entered, it will ask for a fingerprint instead)

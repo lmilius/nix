@@ -4,19 +4,22 @@ let
   # unstableEnv = environment: import unstablePkgs { inherit environment; };
 in
 {
-  services.xserver = {
-    # Enable the X11 windowing system.
-    enable = true;
+  services = {
+    xserver = {
+      # Enable the X11 windowing system.
+      enable = true;
+      desktopManager.plasma5.enable = true;
 
-    # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "";
+      # Configure keymap in X11
+      xkb = {
+        variant = "";
+        layout = "us";
+      };
+    };
 
     # Enable KDE Plasma 5
     displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
     displayManager.defaultSession = "plasmawayland";
-
     
   };
 
