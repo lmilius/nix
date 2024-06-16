@@ -14,7 +14,10 @@
     ];
 
   # Use local nix cache
-  # nix.settings.substituters = [ "http://10.10.200.8" "http://100.69.216.71/" ];
+  nix.settings.substituters = [ 
+    # "http://10.10.200.8" 
+    # "http://100.69.216.71/" 
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -165,7 +168,7 @@
     libsForQt5.kdeconnect-kde
     xwayland
     trayscale
-    qFlipper
+    thonny
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
