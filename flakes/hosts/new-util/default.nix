@@ -20,6 +20,11 @@
       })
     ];
 
+  # Use local nix cache
+  nix.settings.substituters = [ 
+    "http://127.0.0.1"
+  ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.graceful = true;
