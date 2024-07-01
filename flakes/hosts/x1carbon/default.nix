@@ -37,9 +37,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
-  # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
-  # and: https://github.com/NixOS/nixpkgs/issues/180175
-  systemd.services.NetworkManager-wait-online.enable = false;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -49,6 +46,28 @@
   
   services.resolved.enable = true;
   # services.nftables.enable = true;
+
+  # OOM configuration:
+  systemd = {
+    # Create a separate slice for nix-daemon that is
+    # memory-managed by the userspace systemd-oomd killer
+    slices."nix-daemon".sliceConfig = {
+      ManagedOOMMemoryPressure = "kill";
+      ManagedOOMMemoryPressureLimit = "95%";
+    };
+    services = {
+      "nix-daemon".serviceConfig = {
+        Slice = "nix-daemon.slice";
+
+        # If a kernel-level OOM event does occur anyway,
+        # strongly prefer killing nix-daemon child processes
+        OOMScoreAdjust = 1000;
+      };
+      # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
+      # and: https://github.com/NixOS/nixpkgs/issues/180175
+      NetworkManager-wait-online.enable = false;
+    };
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -227,23 +246,23 @@
   # services.python-validity.enable = true; # service failing to start 6/12
 
   # fingerprint scanning for authentication
-# (this makes it so that it prompts for a password first. If none is entered or an incorrect one is entered, it will ask for a fingerprint instead)
-security.pam.services.sudo.text = ''
-  # Account management.
-  account required pam_unix.so
-  
-  # Authentication management.
-  auth sufficient pam_unix.so   likeauth try_first_pass nullok
-  auth sufficient ${nixos-06cb-009a-fingerprint-sensor.localPackages.fprintd-clients}/lib/security/pam_fprintd.so
-  auth required pam_deny.so
-  
-  # Password management.
-  password sufficient pam_unix.so nullok sha512
-  
-  # Session management.
-  session required pam_env.so conffile=/etc/pam/environment readenv=0
-  session required pam_unix.so
-'';
+  # (this makes it so that it prompts for a password first. If none is entered or an incorrect one is entered, it will ask for a fingerprint instead)
+  security.pam.services.sudo.text = ''
+    # Account management.
+    account required pam_unix.so
+    
+    # Authentication management.
+    auth sufficient pam_unix.so   likeauth try_first_pass nullok
+    auth sufficient ${nixos-06cb-009a-fingerprint-sensor.localPackages.fprintd-clients}/lib/security/pam_fprintd.so
+    auth required pam_deny.so
+    
+    # Password management.
+    password sufficient pam_unix.so nullok sha512
+    
+    # Session management.
+    session required pam_env.so conffile=/etc/pam/environment readenv=0
+    session required pam_unix.so
+  '';
 
   # services.fprintd = {
   #   enable = true;
@@ -319,6 +338,15 @@ security.pam.services.sudo.text = ''
     openDefaultPorts = true;
   };
 
+  # nix cli helper
+  # https://github.com/viperML/nh
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 14d --keep 5";
+    flake = "/home/user/workspace/nix/flakes";
+  };
+
   # Enable steam
   programs.steam = {
     enable = true;
@@ -359,7 +387,7 @@ security.pam.services.sudo.text = ''
 
   # # Nix automated garbage collection
   # nix.gc = {
-  #   automatic = true;
+    # automatic = true;
   #   dates = "weekly";
   #   options = "--delete-older-than 30d";
   # };
