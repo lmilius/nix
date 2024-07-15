@@ -242,27 +242,27 @@
   };
 
   # Enable fingerprint reader.
-  services.open-fprintd.enable = true;
+  # services.open-fprintd.enable = true;
   # services.python-validity.enable = true; # service failing to start 6/12
 
   # fingerprint scanning for authentication
   # (this makes it so that it prompts for a password first. If none is entered or an incorrect one is entered, it will ask for a fingerprint instead)
-  security.pam.services.sudo.text = ''
-    # Account management.
-    account required pam_unix.so
+  # security.pam.services.sudo.text = ''
+  #   # Account management.
+  #   account required pam_unix.so
     
-    # Authentication management.
-    auth sufficient pam_unix.so   likeauth try_first_pass nullok
-    auth sufficient ${nixos-06cb-009a-fingerprint-sensor.localPackages.fprintd-clients}/lib/security/pam_fprintd.so
-    auth required pam_deny.so
+  #   # Authentication management.
+  #   auth sufficient pam_unix.so   likeauth try_first_pass nullok
+  #   auth sufficient ${nixos-06cb-009a-fingerprint-sensor.localPackages.fprintd-clients}/lib/security/pam_fprintd.so
+  #   auth required pam_deny.so
     
-    # Password management.
-    password sufficient pam_unix.so nullok sha512
+  #   # Password management.
+  #   password sufficient pam_unix.so nullok sha512
     
-    # Session management.
-    session required pam_env.so conffile=/etc/pam/environment readenv=0
-    session required pam_unix.so
-  '';
+  #   # Session management.
+  #   session required pam_env.so conffile=/etc/pam/environment readenv=0
+  #   session required pam_unix.so
+  # '';
 
   # services.fprintd = {
   #   enable = true;
