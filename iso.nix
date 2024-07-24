@@ -15,12 +15,13 @@
 
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
-  # users.users.root.openssh.authorizedKeys.keys = [
-  #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
-  # ];
   users.users.root.openssh.authorizedKeys.keyFiles = [
     ~/.ssh/id_ed25519.pub
   ];
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+  networking.wireless.enable = true;
 
   # Enable the X11 windowing system.
   # services.xserver = {
@@ -69,29 +70,6 @@
   # KDE apps
   programs.partition-manager.enable = true;
   programs.kdeconnect.enable = true;
-
-
-  # services.xserver.displayManager.defaultSession = "plasmawayland";
-  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-  #   elisa
-  #   gwenview
-  #   okular
-  #   oxygen
-  #   khelpcenter
-  #   plasma-browser-integration
-  #   print-manager
-  # ];
-
-  # static networking config
-  # networking = {
-  #   usePredictableInterfaceNames = false;
-  #   interfaces.enp1s0.ip4 = [{
-  #     address = "192.168.88.5";
-  #     prefixLength = 24;
-  #   }];
-  #   defaultGateway = "192.168.88.1";
-  #   nameservers = [ "192.168.88.1" "8.8.8.8" ];
-  # };
 
   # Enable flakes (experimental)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
