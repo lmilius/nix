@@ -7,7 +7,11 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      (import ./disko-config.nix {
+        disks = [ "/dev/sda" ];
+      })
       ./hardware-configuration.nix
+      nixos-hardware.nixosModules.lenovo-thinkpad-t480s
       ../../modules/gui/plasma.nix
       ./../common/common-packages.nix
       # ./nix-cache.nix
@@ -153,7 +157,7 @@
     # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     # unstable.vscode
     # vscode
-    plasma5Packages.plasma-thunderbolt
+    # plasma5Packages.plasma-thunderbolt
     intel-gpu-tools
     bitwarden
     moonlight-qt
@@ -235,11 +239,11 @@
   # };
 
   # Cockpit
-  services.cockpit = {
-    enable = true;
-    openFirewall = true;
-    port = 9090;
-  };
+  # services.cockpit = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   port = 9090;
+  # };
 
   # Enable fingerprint reader.
   # services.open-fprintd.enable = true;
@@ -344,7 +348,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 14d --keep 5";
-    flake = "/home/user/workspace/nix/flakes";
+    flake = "/home/lmilius/workspace/nix/flakes";
   };
 
   # Enable steam
