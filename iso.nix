@@ -13,7 +13,7 @@
 
   isoImage.contents = [ 
     { source = ./flakes/hosts/t480s; target = "/nixconfig"; }
-    { source = ./init_new_system.sh; target = "/nixconfig"; }
+    { source = ./init_new_system.sh; target = "/init_new_system.sh"; }
   ];
 
   # Enable SSH in the boot process.
@@ -23,8 +23,8 @@
   ];
 
   # Enable networking
-  networking.networkmanager.enable = true;
-  networking.useDHCP = true;
+  networking.networkmanager.enable = pkgs.lib.mkForce true;
+  networking.wireless.enable = pkgs.lib.mkForce false;
 
   # Enable KDE Plasma 6
   services = {
