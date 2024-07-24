@@ -1,5 +1,5 @@
 # Assuming your system is x86_64-linux
-hostname=nix-cache
+hostname=t480s
 
 # sudo nix \
 #     --extra-experimental-features 'flakes nix-command' \
