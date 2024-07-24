@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       (import ./disko-config.nix {
-        disks = [ "/dev/sda" ];
+        disks = [ "/dev/nvme0n1" ];
       })
       ./hardware-configuration.nix
       nixos-hardware.nixosModules.lenovo-thinkpad-t480s
