@@ -10,6 +10,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,9 +35,9 @@
     # };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, ... }:
   let
-    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor; };
+    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware; };
 
     # creates correct package sets for specified arch
     genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
@@ -47,10 +51,10 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor;
+            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware;
 
             # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor; };
+            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware; };
           };
           modules = [
             disko.nixosModules.disko
@@ -70,6 +74,7 @@
             ./hosts/common/common-packages.nix
             nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
             nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
+            nixos-hardware
           ];
         };
   in {
