@@ -2,15 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, ... }:
+{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/gui/plasma.nix
+      ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
       # ./nix-cache.nix
+      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
     ];
 
   # Use local nix cache
@@ -344,7 +345,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 14d --keep 5";
-    flake = "/home/user/workspace/nix/flakes";
+    flake = "/home/lmilius/workspace/nix/flakes";
   };
 
   # Enable steam

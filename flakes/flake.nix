@@ -74,7 +74,7 @@
             ./hosts/common/common-packages.nix
             nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
             nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
-            nixos-hardware
+            # nixos-hardware
           ];
         };
   in {

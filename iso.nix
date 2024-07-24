@@ -11,7 +11,7 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
 
-  isoImage.contents = [ { source = ./util; target = "/nixconfig"; } ];
+  isoImage.contents = [ { source = ./flakes/hosts/t480s; target = "/nixconfig"; } ];
 
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
@@ -36,6 +36,40 @@
   #   # displayManager.sddm.enable = true;
   #   # desktopManager.plasma5.enable = true;
   # };
+
+  # Enable KDE Plasma 6
+  services = {
+    xserver = {
+      # Enable the X11 windowing system.
+      enable = true;
+      desktopManager.plasma6.enable = true;
+
+
+      # Configure keymap in X11
+      xkb = {
+        variant = "";
+        layout = "us";
+      };
+    };
+
+    # Enable KDE Plasma 5
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+      defaultSession = "plasmawayland";
+    };
+    
+  };
+
+  environment.plasma6.excludePackages = with pkgs.libsForQt5; [
+    elisa
+  ];
+
+  # KDE apps
+  programs.partition-manager.enable = true;
+  programs.kdeconnect.enable = true;
 
 
   # services.xserver.displayManager.defaultSession = "plasmawayland";
