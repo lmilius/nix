@@ -9,7 +9,7 @@ in
   nix = {
     settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        warn-dirty = false;
+        warn-dirty = true;
         
         # Definte trusted users
         trusted-users = [

@@ -23,7 +23,7 @@ in
         enable = true;
         wayland.enable = true;
       };
-      defaultSession = "plasmawayland";
+      defaultSession = "plasma";
     };
     
   };

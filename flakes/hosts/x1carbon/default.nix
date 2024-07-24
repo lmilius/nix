@@ -8,10 +8,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
       # ./nix-cache.nix
-      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
     ];
 
   # Use local nix cache
