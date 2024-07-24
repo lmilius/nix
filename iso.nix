@@ -11,7 +11,10 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
 
-  isoImage.contents = [ { source = ./flakes/hosts/t480s; target = "/nixconfig"; } ];
+  isoImage.contents = [ 
+    { source = ./flakes/hosts/t480s; target = "/nixconfig"; }
+    { source = ./init_new_system.sh; target = "/nixconfig"; }
+  ];
 
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
@@ -21,22 +24,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.wireless.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver = {
-  #   enable = true;
-  #   layout = "us";
-  #   videoDrivers = [ "amdgpu" ];
-
-  #   # Enable XFCE4
-  #   displayManager.lightdm.enable = true;
-  #   desktopManager.xfce.enable = true;
-
-  #   # Enable KDE Plasma 5
-  #   # displayManager.sddm.enable = true;
-  #   # desktopManager.plasma5.enable = true;
-  # };
 
   # Enable KDE Plasma 6
   services = {
@@ -72,7 +59,15 @@
   programs.kdeconnect.enable = true;
 
   # Enable flakes (experimental)
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    # Use local nix cache
+    substituters = [ 
+      "http://10.10.200.8" 
+      # "http://100.69.216.71/" 
+      "" 
+    ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
