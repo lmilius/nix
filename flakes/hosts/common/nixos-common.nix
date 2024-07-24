@@ -58,7 +58,8 @@ in
     nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
     nix-optimize = "sudo nix-store --optimize";
     # rebuild = "sudo nixos-rebuild";
-    rebuild = "nh os --ask";
+    rebuild = "nh os switch --ask";
+    rebuild-boot = "nh os boot --ask";
     target-rebuild = "sudo nixos-rebuild -I nixos-config=./configuration.nix --use-remote-sudo --target-host";
     trip = "sudo /run/current-system/sw/bin/trip";
   };
