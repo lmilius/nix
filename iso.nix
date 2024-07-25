@@ -81,6 +81,7 @@
     tmux
     dig
     traceroute
+    firefox
   ];
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";

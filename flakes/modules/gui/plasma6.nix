@@ -7,8 +7,6 @@ in
     xserver = {
       # Enable the X11 windowing system.
       enable = true;
-      desktopManager.plasma6.enable = true;
-
 
       # Configure keymap in X11
       xkb = {
@@ -17,7 +15,12 @@ in
       };
     };
 
-    # Enable KDE Plasma 5
+    # Enable KDE Plasma 6
+    desktopManager.plasma6 = {
+      enable = true;
+      enableQt5Integration = false;
+    };
+    
     displayManager = {
       sddm = {
         enable = true;
