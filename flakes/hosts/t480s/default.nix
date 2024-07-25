@@ -12,7 +12,7 @@
       })
       ./hardware-configuration.nix
       nixos-hardware.nixosModules.lenovo-thinkpad-t480s
-      ../../modules/gui/plasma.nix
+      ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
       # ./nix-cache.nix
     ];

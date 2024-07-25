@@ -6,7 +6,7 @@ in
   services = {
     xserver = {
       # Enable the X11 windowing system.
-      enable = true;
+      enable = false;
 
       # Configure keymap in X11
       xkb = {

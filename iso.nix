@@ -28,7 +28,6 @@
 
   # Enable KDE Plasma 6
   services = {
-    desktopManager.plasma6.enable = true;
     xserver = {
       # Enable the X11 windowing system.
       enable = true;
@@ -40,7 +39,8 @@
       };
     };
 
-    # Enable KDE Plasma 5
+    # Enable KDE Plasma 6
+    desktopManager.plasma6.enable = true;
     displayManager = {
       sddm = {
         enable = true;
@@ -51,7 +51,7 @@
     
   };
 
-  environment.plasma6.excludePackages = with pkgs.libsForQt5; [
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
     elisa
   ];
 
