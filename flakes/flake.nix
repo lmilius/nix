@@ -81,6 +81,7 @@
     nixosConfigurations = {
       # clients
       x1carbon = nixosSystem "x86_64-linux" "x1carbon" "lmilius";
+      t480s = nixosSystem "x86_64-linux" "t480s" "lmilius";
 
       # servers
       new-util = nixosSystem "x86_64-linux" "new-util" "lmilius";
