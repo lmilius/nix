@@ -11,7 +11,7 @@
         disks = [ "/dev/nvme0n1" ];
       })
       ./hardware-configuration.nix
-      nixos-hardware.nixosModules.lenovo-thinkpad-t480s
+      # nixos-hardware.nixosModules.lenovo-thinkpad-t480s
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
       # ./nix-cache.nix
@@ -19,14 +19,16 @@
 
   # Use local nix cache
   nix.settings.substituters = [ 
-    # "http://10.10.200.8" 
+    "http://10.10.200.8" 
     # "http://100.69.216.71/" 
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.grub.enable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
