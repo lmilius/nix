@@ -10,8 +10,9 @@
             ESP = {
               # priority = 1;
               # name = "ESP";
-              start = "1MiB";
-              end = "1G";
+              # start = "1MiB";
+              # end = "1G";
+              size = "4G";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -21,17 +22,18 @@
             };
             swap = {
               # name = "swap";
-              start = "1G";
-              end = "25G";
+              # start = "1G";
+              # end = "25G";
+              size = "24G";
               content = {
                 type = "swap";
                 randomEncryption = true;
               };
             };
             root = {
-              start = "25G";
-              end = "100%";
-              # size = "100%";
+              # start = "25G";
+              # end = "100%";
+              size = "100%";
               content = {
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
@@ -45,8 +47,8 @@
                     mountOptions = [ "compress=zstd" "noatime" ];
                   };
                   "@/home" = {
-                    mountOptions = [ "compress=zstd" ];
                     mountpoint = "/home";
+                    mountOptions = [ "compress=zstd" ];
                   };
                   "@/nix" = {
                     mountpoint = "/nix";
