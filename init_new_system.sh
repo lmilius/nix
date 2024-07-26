@@ -13,7 +13,7 @@ DISK=$1
 DCONFIG="/tmp/disko-config.nix"
 git clone "https://github.com/lmilius/nix.git" /tmp/nix
 curl "https://raw.githubusercontent.com/lmilius/nix/main/flakes/hosts/$hostname/disko-config.nix" > $DCONFIG && \
-sudo nix --extra-experimental-features 'flakes nix-command' run github:nix-community/disko -- --mode zap_create_mount $DCONFIG --arg disks '[ "$DISK" ]' && \
+sudo nix --extra-experimental-features 'flakes nix-command' run github:nix-community/disko -- --mode zap_create_mount $DCONFIG && \
 
 echo "Making empty snapshot of root"
 MOUNT="/mnt2"
