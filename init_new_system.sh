@@ -1,9 +1,9 @@
 # Assuming your system is x86_64-linux
 hostname=t480s
 DISK=$1
-read -n 1 -srp $"Disk supplied: $DISK. Is this correct? (Y/n) " key
-echo
-if [ "$key" == 'n' ]; then exit;
+#read -n 1 -srp $"Disk supplied: $DISK. Is this correct? (Y/n) " key
+#echo
+#if [ "$key" == 'n' ]; then exit;
 # sudo nix \
 #     --extra-experimental-features 'flakes nix-command' \
 #     run github:nix-community/disko#disko-install -- \
@@ -13,7 +13,7 @@ if [ "$key" == 'n' ]; then exit;
 DCONFIG="/tmp/disko-config.nix"
 git clone "https://github.com/lmilius/nix.git" /tmp/nix
 curl "https://raw.githubusercontent.com/lmilius/nix/main/flakes/hosts/$hostname/disko-config.nix" > $DCONFIG && \
-sudo nix --extra-experimental-features 'flakes nix-command' run github:nix-community/disko -- --mode zap_create_mount $DCONFIG --arg disks '[ ""\"""$DISK""\""" ]' && \
+sudo nix --extra-experimental-features 'flakes nix-command' run github:nix-community/disko -- --mode zap_create_mount $DCONFIG --arg disks '[ "$DISK" ]' && \
 
 echo "Making empty snapshot of root"
 MOUNT="/mnt2"
