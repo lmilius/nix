@@ -26,7 +26,7 @@
   # Boot
   boot = {
     # kernelParams = [ "quiet" "loglevel=3" ];
-    kernelParams = [ "quiet" ];
+    # kernelParams = [ "quiet" ];
     loader = {
       efi.canTouchEfiVariables=true;
       # systemd-boot.enable = true;
@@ -192,7 +192,7 @@
     moonlight-qt
     nextcloud-client
     google-chrome
-    chromium
+    # chromium
     ubootTools
     openscad
     vlc
@@ -206,12 +206,13 @@
     openssl
     wineWowPackages.full # wine
     kmon
-    keepassxc
+    # keepassxc
     freetube
     libsForQt5.kdeconnect-kde
     xwayland
     trayscale
     thonny
+    wayland-utils
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
