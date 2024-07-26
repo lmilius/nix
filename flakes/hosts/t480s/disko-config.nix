@@ -8,10 +8,10 @@
           type = "gpt";
           partitions = {
             ESP = {
-              priority = 1;
-              name = "ESP";
-              start = "1M";
-              end = "5G";
+              # priority = 1;
+              # name = "ESP";
+              start = "1MiB";
+              end = "1G";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -19,8 +19,19 @@
                 mountpoint = "/boot";
               };
             };
+            swap = {
+              # name = "swap";
+              start = "1G";
+              end = "25G";
+              content = {
+                type = "swap";
+                randomEncryption = true;
+              };
+            };
             root = {
-              size = "100%";
+              start = "25G";
+              end = "100%";
+              # size = "100%";
               content = {
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
@@ -28,41 +39,30 @@
                 # unless their parent is mounted
                 subvolumes = {
                   # Subvolume name is different from mountpoint
-                  "/rootfs" = {
+                  "@" = {};
+                  "@/root" = {
                     mountpoint = "/";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
-                  # Subvolume name is the same as the mountpoint
-                  "/home" = {
+                  "@/home" = {
                     mountOptions = [ "compress=zstd" ];
                     mountpoint = "/home";
                   };
-                  # Sub(sub)volume doesn't need a mountpoint as its parent is mounted
-                  # "/home/user" = { };
-                  # Parent is not mounted so the mountpoint must be set
-                  "/nix" = {
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                  "@/nix" = {
                     mountpoint = "/nix";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
-                  # This subvolume will be created but not mounted
-                  # "/test" = { };
-                  # Subvolume for the swapfile
-                  "/swap" = {
-                    mountpoint = "/.swapvol";
-                    swap = {
-                      swapfile.size = "24G";
-                      swapfile2.size = "24G";
-                      swapfile2.path = "rel-path";
-                    };
+                  "@/var-lib" = {
+                    mountpoint = "/var/lib";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
-                };
-
-                mountpoint = "/partition-root";
-                swap = {
-                  swapfile = {
-                    size = "24G";
+                  "@/var-log" = {
+                    mountpoint = "/var/log";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
-                  swapfile1 = {
-                    size = "24G";
+                  "@/var-tmp" = {
+                    mountpoint = "/var/tmp";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
                 };
               };

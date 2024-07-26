@@ -23,17 +23,35 @@
     # "http://100.69.216.71/" 
   ];
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  # Boot
+  boot = {
+    # kernelParams = [ "quiet" "loglevel=3" ];
+    kernelParams = [ "quiet" ];
+    loader = {
+      efi.canTouchEfiVariables=true;
+      # systemd-boot.enable = true;
+      grub = { 
+          enable = true;
+          devices = [ "nodev" ];
+          efiSupport = true;
+      };
+      timeout = 3;
+    };
+    kernel.sysctl = { "vm.swappiness" = 10; };
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
-  boot.kernel.sysctl = { "vm.swappiness" = 10; };
+  # # Bootloader.
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # # boot.loader.efi.canTouchEfiVariables = true;
+  # # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  # boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_0;
   # boot.kernelParams = [ "nouveau.modeset=0" ];
 
