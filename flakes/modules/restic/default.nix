@@ -2,8 +2,8 @@
 
 {
   age.secrets = {
-    "restic/repo".file = ../../secrets/restic/repo.age;
-    "restic/password".file = ../../secrets/restic/password.age;
+    "restic/repo".file = ../secrets/restic/repo.age;
+    "restic/password".file = ../secrets/restic/password.age;
   };
 
   services.restic.backups = {
