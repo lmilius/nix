@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    autorestic
     bitwarden-cli
     btop
     curl
@@ -26,6 +27,7 @@
     python311Full
     python311Packages.virtualenv
     python311Packages.pip
+    restic
     smartmontools
     # unstablePkgs.tailscale
     tmux
