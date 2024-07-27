@@ -1,22 +1,23 @@
 { config, agenix, ... }:
 let
   home_dir = config.users.users.lmilius.home;
+  hostname = "t480s";
 in
 {
   age.secrets = {
-    "restic/repo".file = ../../secrets/restic/repo.age;
-    "restic/password".file = ../../secrets/restic/password.age;
+    "${hostname}/restic/repo".file = "../../secrets/${hostname}/restic/repo.age";
+    "${hostname}/restic/password".file = "../../secrets/${hostname}/restic/password.age";
   };
 
   services.restic.backups = {
     daily = {
       initialize = true;
 
-      repositoryFile = config.age.secrets."restic/repo".path;
-      passwordFile = config.age.secrets."restic/password".path;
+      repositoryFile = config.age.secrets."${hostname}/restic/repo".path;
+      passwordFile = config.age.secrets."${hostname}/restic/password".path;
 
       paths = [
-        "${home_dir}/Documents"
+        "${home_dir}"
       ];
 
       exclude = [
