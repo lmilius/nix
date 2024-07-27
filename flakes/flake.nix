@@ -27,17 +27,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # agenix = {
-    #   url   = "github:ryantm/agenix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.darwin.follows = "";
-    #   inputs.home-manager.follows = "";
-    # };
+    agenix = {
+      url   = "github:ryantm/agenix";
+      # inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.darwin.follows = "";
+      # inputs.home-manager.follows = "";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, agenix, ... }:
   let
-    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware; };
+    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
 
     # creates correct package sets for specified arch
     genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
@@ -51,13 +51,14 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware;
+            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix;
 
             # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware; };
+            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
           };
           modules = [
             disko.nixosModules.disko
+            agenix.nixosModules.default
             ./hosts/${hostname}
 
             vscode-server.nixosModules.default

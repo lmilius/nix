@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, ... }:
+{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, ... }:
 
 {
   imports =
@@ -14,6 +14,7 @@
       # nixos-hardware.nixosModules.lenovo-thinkpad-t480s
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
+      ../../modules/restic/default.nix
       # ./nix-cache.nix
     ];
 
@@ -66,7 +67,6 @@
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   
   services.resolved.enable = true;
   # services.nftables.enable = true;
@@ -329,6 +329,8 @@
   #  gpg-connect-agent /bye
   #  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
   #'';
+
+  age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
 
   environment.shells = with pkgs; [ bash zsh ];
   users.defaultUserShell = pkgs.bash;
