@@ -1,9 +1,11 @@
 { config, agenix, ... }:
-
+let
+  home_dir = config.users.users.lmilius.home;
+in
 {
   age.secrets = {
-    "restic/repo".file = ../secrets/restic/repo.age;
-    "restic/password".file = ../secrets/restic/password.age;
+    "restic/repo".file = ../../secrets/restic/repo.age;
+    "restic/password".file = ../../secrets/restic/password.age;
   };
 
   services.restic.backups = {
@@ -14,7 +16,11 @@
       passwordFile = config.age.secrets."restic/password".path;
 
       paths = [
-        "${config.users.users.lmilius.home}/Documents"
+        "${home_dir}/Documents"
+      ];
+
+      exclude = [
+        "${home_dir}/.local/share/Steam"
       ];
 
       pruneOpts = [
