@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, ... }:
+{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, agenix, ... }:
 
 {
   imports =
@@ -305,6 +305,37 @@
   #  gpg-connect-agent /bye
   #  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
   #'';
+
+  age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
+
+  age.secrets = {
+    "restic/repo".file = "../../secrets/restic/repo_x1carbon_home.age";
+    "restic/password".file = "../../secrets/restic/password_x1carbon_home.age";
+  };
+
+  services.restic.backups = {
+    daily = {
+      initialize = true;
+
+      repositoryFile = config.age.secrets."restic/repo".path;
+      passwordFile = config.age.secrets."restic/password".path;
+
+      paths = [
+        "${config.users.users.lmilius.home}"
+      ];
+
+      exclude = [
+        "${config.users.users.lmilius.home}/.local/share/Steam"
+        "${config.users.users.lmilius.home}/workspace"
+      ];
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+    };
+  };
 
   environment.shells = with pkgs; [ bash zsh ];
   users.defaultUserShell = pkgs.bash;
