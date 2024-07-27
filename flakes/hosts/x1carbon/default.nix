@@ -309,16 +309,16 @@
   age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
 
   age.secrets = {
-    "restic/repo".file = "../../secrets/restic/repo_x1carbon_home.age";
-    "restic/password".file = "../../secrets/restic/password_x1carbon_home.age";
+    restic_repo_x1carbon_home.file = "../../secrets/restic_repo_x1carbon_home.age";
+    restic_password_x1carbon_home.file = "../../secrets/restic_password_x1carbon_home.age";
   };
 
   services.restic.backups = {
     daily = {
       initialize = true;
 
-      repositoryFile = config.age.secrets."restic/repo".path;
-      passwordFile = config.age.secrets."restic/password".path;
+      repositoryFile = config.age.secrets.restic_repo.path;
+      passwordFile = config.age.secrets.restic_password.path;
 
       paths = [
         "${config.users.users.lmilius.home}"
