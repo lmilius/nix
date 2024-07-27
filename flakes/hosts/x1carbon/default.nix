@@ -309,8 +309,8 @@
   age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
 
   age.secrets = {
-    restic_repo_x1carbon_home.file = "../../secrets/restic_repo_x1carbon_home.age";
-    restic_password_x1carbon_home.file = "../../secrets/restic_password_x1carbon_home.age";
+    restic_repo_x1carbon_home.file = ../../secrets/restic_repo_x1carbon_home.age;
+    restic_password_x1carbon_home.file = ../../secrets/restic_password_x1carbon_home.age;
   };
 
   services.restic.backups = {
