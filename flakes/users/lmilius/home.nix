@@ -164,9 +164,10 @@ in
 
   programs.ssh = {
     enable = true;
+    serverAliveInterval = 60;
+    serverAliveCountMax = 240;
     extraConfig = ''
-    Host *
-      StrictHostKeyChecking no
+StrictHostKeyChecking no
     '';
     matchBlocks = {
       "new-util" = {
