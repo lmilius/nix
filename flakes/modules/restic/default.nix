@@ -1,3 +1,5 @@
+{ config, agenix, ... }:
+
 {
   age.secrets = {
     "restic/repo".file = ../../secrets/restic/repo.age;
