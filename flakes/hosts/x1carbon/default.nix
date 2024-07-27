@@ -317,8 +317,8 @@
     daily = {
       initialize = true;
 
-      repositoryFile = config.age.secrets.restic_repo.path;
-      passwordFile = config.age.secrets.restic_password.path;
+      repositoryFile = config.age.secrets.restic_repo_x1carbon_home.path;
+      passwordFile = config.age.secrets.restic_password_x1carbon_home.path;
 
       paths = [
         "${config.users.users.lmilius.home}"
