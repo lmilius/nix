@@ -18,8 +18,8 @@
         config = config;
         hostname = config.networking.hostname;
         home_dir = config.users.users.lmilius.home;
-        repo_file = "";
-        password_file = "";
+        repo_file = ../../secrets/restic_repo_t480s_home.age;
+        password_file = ../../secrets/restic_password_t480s_home.age;
       })
       # ./nix-cache.nix
     ];

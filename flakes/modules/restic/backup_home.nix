@@ -5,8 +5,8 @@ let
 in
 {
   age.secrets = {
-    "restic/repo".file = ../../secrets/restic_repo.age;
-    "restic/password".file = ../../secrets/restic_password.age;
+    "restic/repo".file = repo_file;
+    "restic/password".file = password_file;
   };
 
   services.restic.backups = {
