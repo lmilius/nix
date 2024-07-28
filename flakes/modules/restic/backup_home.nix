@@ -9,7 +9,7 @@ in
   };
 
   security.wrappers.restic = {
-    source = "${pkgs.restic.out}/bin/restic";
+    source = "${config.pkgs.restic.out}/bin/restic";
     owner = "restic";
     group = "users";
     permissions = "u=rwx,g=,o=";
