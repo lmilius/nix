@@ -16,6 +16,7 @@
       ./../common/common-packages.nix
       (import ../../modules/restic/backup_home.nix {
         config = config;
+        pkgs = pkgs;
         hostname = config.networking.hostname;
         home_dir = config.users.users.lmilius.home;
         repo_file = ../../secrets/restic_repo_t480s_home.age;

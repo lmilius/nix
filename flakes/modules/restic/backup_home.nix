@@ -1,4 +1,4 @@
-{ config, home_dir, hostname, repo_file, password_file, ... }:
+{ config, pkgs, home_dir, hostname, repo_file, password_file, ... }:
 let
   # home_dir = config.users.users.lmilius.home;
   # hostname = "t480s";
@@ -9,7 +9,7 @@ in
   };
 
   security.wrappers.restic = {
-    source = "${config.pkgs.restic.out}/bin/restic";
+    source = "${pkgs.restic.out}/bin/restic";
     owner = "restic";
     group = "users";
     permissions = "u=rwx,g=,o=";
