@@ -214,11 +214,11 @@
     kmon
     # keepassxc
     freetube
-    libsForQt5.kdeconnect-kde
     xwayland
     trayscale
     thonny
     wayland-utils
+    btrfs-assistant
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
@@ -399,6 +399,8 @@
       "\${XDG_BIN_HOME}"
     ];
   };
+
+  programs.kdeconnect.enable = true;
 
 
   # system.copySystemConfiguration = true;
