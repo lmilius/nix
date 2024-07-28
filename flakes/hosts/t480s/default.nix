@@ -48,22 +48,13 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  # # Bootloader.
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # # boot.loader.efi.canTouchEfiVariables = true;
-  # # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
-  # boot.kernel.sysctl = { "vm.swappiness" = 10; };
-
-  # Kernel
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_6_0;
-  # boot.kernelParams = [ "nouveau.modeset=0" ];
-
-
   networking.hostName = "t480s"; # Define your hostname.
+
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "weekly";
+    fileSystems = [ "@" ];
+  };
 
   # Enable networking
   networking.networkmanager.enable = true;
