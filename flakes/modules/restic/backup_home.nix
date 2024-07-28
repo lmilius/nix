@@ -4,6 +4,18 @@ let
   # hostname = "t480s";
 in
 {
+  users.users.restic = {
+    isNormalUser = true;
+  };
+
+  security.wrappers.restic = {
+    source = "${pkgs.restic.out}/bin/restic";
+    owner = "restic";
+    group = "users";
+    permissions = "u=rwx,g=,o=";
+    capabilities = "cap_dac_read_search=+ep";
+  };
+
   age.secrets = {
     "restic/repo".file = repo_file;
     "restic/password".file = password_file;
@@ -12,6 +24,7 @@ in
   services.restic.backups = {
     daily = {
       initialize = true;
+      user = "restic";
 
       repositoryFile = config.age.secrets."restic/repo".path;
       passwordFile = config.age.secrets."restic/password".path;
