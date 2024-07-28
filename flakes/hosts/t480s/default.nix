@@ -6,7 +6,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       (import ./disko-config.nix {
         disks = [ "/dev/nvme0n1" ];
       })
@@ -14,7 +14,13 @@
       # nixos-hardware.nixosModules.lenovo-thinkpad-t480s
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
-      ../../modules/restic/default.nix
+      (import ../../modules/restic/backup_home.nix {
+        config = config;
+        hostname = config.networking.hostname;
+        home_dir = config.users.users.lmilius.home;
+        repo_file = "";
+        password_file = "";
+      })
       # ./nix-cache.nix
     ];
 

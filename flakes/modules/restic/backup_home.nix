@@ -1,7 +1,7 @@
-{ config, agenix, ... }:
+{ config, home_dir, hostname, repo_file, password_file, ... }:
 let
-  home_dir = config.users.users.lmilius.home;
-  hostname = "t480s";
+  # home_dir = config.users.users.lmilius.home;
+  # hostname = "t480s";
 in
 {
   age.secrets = {
