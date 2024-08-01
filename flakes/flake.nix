@@ -85,7 +85,7 @@
       t480s = nixosSystem "x86_64-linux" "t480s" "lmilius";
 
       # servers
-      new-util = nixosSystem "x86_64-linux" "new-util" "lmilius";
+      util = nixosSystem "x86_64-linux" "util" "lmilius";
       parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
       nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
 

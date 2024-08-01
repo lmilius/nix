@@ -11,6 +11,13 @@
       nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
+      (import ../../modules/restic/backup_home.nix {
+        config = config;
+        hostname = config.networking.hostname;
+        home_dir = config.users.users.lmilius.home;
+        repo_file = ../../secrets/restic_repo_x1carbon_home.age;
+        password_file = ../../secrets/restic_password_x1carbon_home.age;
+      })
       # ./nix-cache.nix
     ];
 
@@ -308,34 +315,6 @@
 
   age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
 
-  age.secrets = {
-    restic_repo_x1carbon_home.file = ../../secrets/restic_repo_x1carbon_home.age;
-    restic_password_x1carbon_home.file = ../../secrets/restic_password_x1carbon_home.age;
-  };
-
-  services.restic.backups = {
-    daily = {
-      initialize = true;
-
-      repositoryFile = config.age.secrets.restic_repo_x1carbon_home.path;
-      passwordFile = config.age.secrets.restic_password_x1carbon_home.path;
-
-      paths = [
-        "${config.users.users.lmilius.home}"
-      ];
-
-      exclude = [
-        "${config.users.users.lmilius.home}/.local/share/Steam"
-        "${config.users.users.lmilius.home}/workspace"
-      ];
-
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 5"
-        "--keep-monthly 12"
-      ];
-    };
-  };
 
   environment.shells = with pkgs; [ bash zsh ];
   users.defaultUserShell = pkgs.bash;

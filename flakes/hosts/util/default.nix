@@ -2,26 +2,28 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, unstablePkgs, disko, hostname, ... }:
 
-let
-  unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable)
-  { config = config.nixpkgs.config; };
-
-  hostname = "util";
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+      # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+      # ./disko-config.nix
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
       # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       # ./vscode-server.nix
+      ( import ../../modules/nix-cache/default.nix {
+        ip_address = "10.10.200.8";
+      })
     ];
+
+  # Use local nix cache
+  nix.settings.substituters = [ 
+    "http://127.0.0.1"
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -33,6 +35,8 @@ in
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.networkmanager.unmanaged = ["tailscale0"];
+  systemd.services.NetworkManager-wait-online.enable = false;
+  # networking.networkmanager.dns = "systemd-resolved";
   # networking = {
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{
@@ -51,7 +55,7 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  # i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -210,6 +214,7 @@ in
     dataDir = "/home/lmilius/syncthing";
     configDir = "/home/lmilius/Documents/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
+    openDefaultPorts = true;
     settings = {
       devices = {
         Server = {
@@ -222,20 +227,17 @@ in
         x1carbon = {
           id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
         };
+        t480s = {
+          id = "ZJA3J2Y-B43GBN6-US2DC6M-JJ56R6H-NOOOKOJ-2KD2HCP-WRJTWU2-6NZYBQX";
+        };
       };
       folders = {
-        "/home/lmilius/syncthing/util-nix-config" = {
-          id = "2tdx5-epjh7";
-          devices = [
-            "Server"
-            "x1carbon"
-          ];
-        };
         "/home/lmilius/syncthing/nix-flake-config" = {
           id = "vccxz-vvrns";
           devices = [
             "Server"
             "x1carbon"
+            "t480s"
             # "parent-util"
           ];
         };
@@ -261,21 +263,21 @@ in
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   nixpkgs.overlays = [(final: prev: {
-    tailscale = unstable.tailscale;
+    tailscale = unstablePkgs.tailscale;
   })];
 
-  programs.bash.shellAliases = {
-    l = "ls -alh";
-    ll = "ls -l";
-    ls = "ls --color=tty";
-    dcp = "docker-compose ";
-    dlog = "docker logs -f ";
-    dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
-    nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
-    nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
-    nix-optimize = "sudo nix-store --optimize";
-    rebuild = "sudo nixos-rebuild";
-  };
+  # programs.bash.shellAliases = {
+  #   l = "ls -alh";
+  #   ll = "ls -l";
+  #   ls = "ls --color=tty";
+  #   dcp = "docker-compose ";
+  #   dlog = "docker logs -f ";
+  #   dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
+  #   nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
+  #   nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
+  #   nix-optimize = "sudo nix-store --optimize";
+  #   rebuild = "sudo nixos-rebuild";
+  # };
 
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
@@ -284,63 +286,68 @@ in
   nixpkgs.config.allowUnfree = true;
 
   # nix trusted users
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-    "lmilius"
-  ];
+  # nix.settings.trusted-users = [
+  #   "root"
+  #   "@wheel"
+  #   "lmilius"
+  # ];
 
-  security.sudo = {
-    enable = true;
-    extraRules = [{
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/reboot";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-      groups = [ "wheel" ];
-    }];
-  };
+  # security.sudo = {
+  #   enable = true;
+  #   extraRules = [{
+  #     commands = [
+  #       {
+  #         command = "/run/current-system/sw/bin/nixos-rebuild";
+  #         options = [ "NOPASSWD" ];
+  #       }
+  #       {
+  #         command = "/run/current-system/sw/bin/reboot";
+  #         options = [ "NOPASSWD" ];
+  #       }
+  #     ];
+  #     groups = [ "wheel" ];
+  #   }];
+  # };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    qemu
-    # virt-manager
-    git
-    curl
-    htop
-    iotop
-    unstable.tailscale
-    powertop
-    tmux
-    kmon
-    dig
-    traceroute
-    # docker
-    # docker-compose
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+  #   qemu
+  #   # virt-manager
+  #   git
+  #   curl
+  #   htop
+  #   iotop
+  #   unstable.tailscale
+  #   powertop
+  #   tmux
+  #   kmon
+  #   dig
+  #   traceroute
+  #   # docker
+  #   # docker-compose
+  # ];
 
-  # Nix automated garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  services.cockpit = {
+    enable = true;
+    port = 9090;
   };
-  nix.extraOptions = ''
-    min-free = ${toString (100 * 1024 * 1024)}
-    max-free = ${toString (1024 * 1024 * 1024)}
-  '';
+
+  # # Nix automated garbage collection
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   options = "--delete-older-than 7d";
+  # };
+  # nix.extraOptions = ''
+  #   min-free = ${toString (100 * 1024 * 1024)}
+  #   max-free = ${toString (1024 * 1024 * 1024)}
+  # '';
 
   # Enable flakes (experimental)
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -403,7 +410,7 @@ in
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

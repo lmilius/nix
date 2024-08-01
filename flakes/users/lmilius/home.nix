@@ -170,16 +170,12 @@ in
 StrictHostKeyChecking no
     '';
     matchBlocks = {
-      "new-util" = {
-        hostname = "new-util.milius.home";
+      "util" = {
+        hostname = "util.milius.home";
         user = "lmilius";
       };
       "parent-util" = {
         hostname = "192.168.88.5";
-        user = "lmilius";
-      };
-      "util" = {
-        hostname = "util.milius.home";
         user = "lmilius";
       };
       "pve1" = {
