@@ -71,6 +71,14 @@ ServerAliveCountMax 240
     trip = "sudo /run/current-system/sw/bin/trip";
   };
 
+  # nix cli helper
+  # https://github.com/viperML/nh
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 14d --keep 5";
+  };
+
   security.sudo = {
     enable = true;
     extraRules = [{
