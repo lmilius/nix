@@ -282,6 +282,10 @@
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
 
+  # nix cli helper
+  # https://github.com/viperML/nh
+  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
