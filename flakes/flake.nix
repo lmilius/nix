@@ -88,6 +88,7 @@
       util = nixosSystem "x86_64-linux" "util" "lmilius";
       parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
       nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
+      prod-nix-1 = nixosSystem "x86_64-linux" "prod-nix-1" "lmilius";
 
       # blank ISO + disko
       nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
