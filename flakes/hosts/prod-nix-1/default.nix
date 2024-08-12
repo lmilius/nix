@@ -3,6 +3,16 @@
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-image.nix")
+
+    # (import ../../modules/nextcloud/default.nix {
+    #     config = config;
+    #     lib = lib;
+    #     pkgs = pkgs;
+    #     cloudflare_creds_file = ../../secrets/cloudflare_dns_credentials.age;
+    #     domain_file = ../../secrets/nextcloud_domain_name.age;
+    #     postgres_file = ../../secrets/nextcloud_postgres_admin.age;
+    #   })
+    
   ];
 
   proxmox = {

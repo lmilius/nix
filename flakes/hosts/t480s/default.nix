@@ -365,7 +365,12 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 14d --keep 5";
+    flake = "/home/lmilius/workspace/nix/flakes";
+  };
 
   # Enable steam
   programs.steam = {
