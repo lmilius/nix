@@ -211,6 +211,7 @@
     thonny
     wayland-utils
     btrfs-assistant
+    via # qmk keyboard configurator
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
