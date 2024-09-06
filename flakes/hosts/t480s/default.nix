@@ -211,7 +211,6 @@
     thonny
     wayland-utils
     btrfs-assistant
-    via # qmk keyboard configurator
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
@@ -219,7 +218,9 @@
 #     unstablePkgs = unstablePkgs;
 #   };
 
-  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.udev.packages = with pkgs; [
+    yubikey-personalization
+  ];
 
   # services.fprintd.enable = true;
   # services.fprintd.tod.enable = true;
