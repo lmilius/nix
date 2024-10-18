@@ -55,7 +55,7 @@
 
   users.users.lmilius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker"]; # Enable ‘sudo’ for the user.
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
     ];
@@ -110,6 +110,47 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # services.frigate = {
+  #   enable = true;
+  #   hostname = "prod-nix-1";
+  #   package = unstablePkgs.frigate;
+  #   settings = {
+  #     cameras = {
+  #       "cam1" = {
+  #         ffmpeg.inputs = [ {
+  #           path = "rtsp://10.10.200.90:8554/doorbell";
+  #           roles = [
+  #             "detect"
+  #           ];
+  #         } ];
+  #       };
+  #     };
+  #     record = {
+  #       enabled = false;
+  #     };
+  #     detectors = {
+  #       "cpu" = {
+  #         type = "cpu";
+  #       };
+  #     };
+  #   };
+  # };
+
+  # Docker setup
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
+    enableOnBoot = true;
+    #daemon.settings = {
+    #  log-opts = {
+    #    max-size = "10m";
+    #  };
+    #};
+  };
+
   # Enable tailscale service
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "both";
@@ -123,6 +164,7 @@
     # "--exit-node-allow-lan-access"
   ];
   # networking.firewall.checkReversePath = "loose";
+  networking.firewall.enable = false;
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   nixpkgs.overlays = [(final: prev: {
     tailscale = unstablePkgs.tailscale;
