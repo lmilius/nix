@@ -35,7 +35,10 @@
 
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking.networkmanager.unmanaged = ["tailscale0"];
-  systemd.services.NetworkManager-wait-online.enable = false;
+  networking.networkmanager.dns = "systemd-resolved";
+  services.resolved.enable = true;
+
+  # systemd.services.NetworkManager-wait-online.enable = false;
 
   # environment.systemPackages = [
   #   pkgs.vim
@@ -154,9 +157,9 @@
 
   # Enable tailscale service
   services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "both";
+  services.tailscale.useRoutingFeatures = "server";
   services.tailscale.extraUpFlags = [
-    "--accept-routes"
+    "--accept-routes=false"
     "--accept-dns"
     "--ssh"
     # "--advertise-exit-node"
@@ -170,6 +173,8 @@
   nixpkgs.overlays = [(final: prev: {
     tailscale = unstablePkgs.tailscale;
   })];
+  networking.useDHCP = false;
+  networking.interfaces.ens18.useDHCP = true;
 
   system.stateVersion = "24.05";
 }

@@ -92,7 +92,7 @@
     openFirewall = true;
     package = unstablePkgs.tailscale;
     extraUpFlags = [
-      "--accept-routes"
+      "--accept-routes=false"
       "--accept-dns"
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"

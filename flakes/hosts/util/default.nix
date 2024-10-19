@@ -252,7 +252,7 @@
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "both";
   services.tailscale.extraUpFlags = [
-    "--accept-routes"
+    "--accept-routes=false"
     "--accept-dns"
     "--advertise-exit-node"
     "--advertise-routes 10.10.200.0/24"
