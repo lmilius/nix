@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, ... }:
+{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, hostname, ... }:
 
 {
   imports =
@@ -17,7 +17,7 @@
       (import ../../modules/restic/backup_home.nix {
         config = config;
         pkgs = pkgs;
-        hostname = config.networking.hostname;
+        hostname = hostname;
         home_dir = config.users.users.lmilius.home;
         repo_file = ../../secrets/restic_repo_t480s_home.age;
         password_file = ../../secrets/restic_password_t480s_home.age;
@@ -49,7 +49,6 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  networking.hostName = "t480s"; # Define your hostname.
 
   services.btrfs.autoScrub = {
     enable = true;
@@ -58,16 +57,66 @@
   };
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  # networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+    hostName = hostname; # Define your hostname.
+    networkmanager = {
+      enable = true;
+      # wifi.backend = "iwd";
+    };
+    # wireless = {
+    #   # enable = true;  # Enables wireless support via wpa_supplicant.
+    #   iwd.enable = true;
+    # };
+    useDHCP = false;
+    # useNetworkd = true;
+    # nftables.enable = true;
+    interfaces = {
+      enp0s31f6 = {
+        useDHCP = true;
+      };
+      wlp61s0 = {
+        useDHCP = true;
+      };
+    };
+    # dhcpd.enable = true;
+  };
+
+  services.resolved.enable = true;
+
+  # Enable tailscale service
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    openFirewall = true;
+    package = unstablePkgs.tailscale;
+    extraUpFlags = [
+      "--accept-routes"
+      "--accept-dns"
+      # "--exit-node gateway"
+      # "--exit-node-allow-lan-access"
+    ];
+  };
+  # services.tailscale.enable = true;
+  # services.tailscale.useRoutingFeatures = "client";
+  # services.tailscale.openFirewall = true;
+  # services.tailscale.extraUpFlags = [
+  #   "--accept-routes"
+  #   "--accept-dns"
+  #   # "--exit-node gateway"
+  #   # "--exit-node-allow-lan-access"
+  # ];
+  # # networking.firewall.checkReversePath = "loose";
+  # nixpkgs.overlays = [(final: prev: {
+  #   tailscale = unstablePkgs.tailscale;
+  # })];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   
-  services.resolved.enable = true;
-  # services.nftables.enable = true;
+  
 
   # OOM configuration:
   systemd = {
@@ -211,6 +260,7 @@
     thonny
     wayland-utils
     btrfs-assistant
+    pulseview
   ];
 #   ++ import ./../../common/common-packages.nix
 #   {
@@ -340,21 +390,6 @@
 
   # Enable the teamviewer service
   services.teamviewer.enable = true;
-
-  # Enable tailscale service
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "client";
-  services.tailscale.openFirewall = true;
-  services.tailscale.extraUpFlags = [
-    "--accept-routes"
-    "--accept-dns"
-    # "--exit-node gateway"
-    # "--exit-node-allow-lan-access"
-  ];
-  # networking.firewall.checkReversePath = "loose";
-  nixpkgs.overlays = [(final: prev: {
-    tailscale = unstablePkgs.tailscale;
-  })];
 
   # Syncthing (port 8384 web gui)
   services.syncthing = {

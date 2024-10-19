@@ -29,6 +29,7 @@
     #   defaultStorage = "local_ssd";
     # };
   };
+  services.qemuGuest.enable = true;
 
   networking.hostName = hostname;
 

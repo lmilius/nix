@@ -62,6 +62,7 @@ ServerAliveCountMax 240
     dlog = "docker logs -f ";
     dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
     nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
+    nix-switchgen = "sudo nix-env -p /nix/var/nix/profiles/system --switch-generation";
     nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
     nix-optimize = "sudo nix-store --optimize";
     # rebuild = "sudo nixos-rebuild";
