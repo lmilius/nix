@@ -45,7 +45,7 @@
   #   pkgs.vim
   # ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_10;
+  boot.kernelPackages = pkgs.linuxPackages_6_10; # needed for gasket module
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
