@@ -3,6 +3,7 @@
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-image.nix")
+    ../../modules/coral/default.nix
 
     # (import ../../modules/nextcloud/default.nix {
     #     config = config;
@@ -44,7 +45,7 @@
   #   pkgs.vim
   # ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_10;
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
