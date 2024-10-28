@@ -182,9 +182,9 @@ StrictHostKeyChecking no
         hostname = "pve1";
         user = "root";
       };
-      "pve2" = {
-        hostname = "pve2";
-        user = "root";
+      "nix-server" = {
+        hostname = "10.10.200.91";
+        user = "lmilius";
       };
       "pve3" = {
         hostname = "pve3";
