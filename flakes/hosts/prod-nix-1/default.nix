@@ -3,7 +3,7 @@
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-image.nix")
-    ../../modules/coral/default.nix
+    # ../../modules/coral/default.nix
 
     # (import ../../modules/nextcloud/default.nix {
     #     config = config;

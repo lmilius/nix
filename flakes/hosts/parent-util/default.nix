@@ -115,11 +115,6 @@
       enable = true;
     };
     enableOnBoot = true;
-    #daemon.settings = {
-    #  log-opts = {
-    #    max-size = "10m";
-    #  };
-    #};
   };
 
   virtualisation.oci-containers = {
