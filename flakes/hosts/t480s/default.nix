@@ -25,6 +25,13 @@
       # ./nix-cache.nix
     ];
 
+  ## DEPLOYMENT
+  # deployment = {
+  #   targetHost = name;
+  #   targetUser = "root";
+  #   buildOnTarget = true;
+  # };
+
   # Use local nix cache
   nix.settings.substituters = [ 
     "http://10.10.200.8" 
