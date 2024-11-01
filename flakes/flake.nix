@@ -67,8 +67,6 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.${username} = { imports = [ ./users/${username}/home.nix ]; };
-
-              home-manager.extraSpecialArgs = { inherit pkgs unstablePkgs; };
             }
 
             ./hosts/common/nixos-common.nix
@@ -89,6 +87,7 @@
       parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
       nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
       prod-nix-1 = nixosSystem "x86_64-linux" "prod-nix-1" "lmilius";
+      nix-server = nixosSystem "x86_64-linux" "nix-server" "lmilius";
 
       # blank ISO + disko
       nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
