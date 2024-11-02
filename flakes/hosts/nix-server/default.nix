@@ -201,21 +201,6 @@
           "8080:80"
         ];
       };
-      # Omada uses the following ports: 8088/8043 for the webUI, 
-      omada = {
-        image = "mbentley/omada-controller:latest";
-        environment = {
-          TZ = "America/Chicago";
-        };
-        extraOptions = [
-          "--network=host"
-        ];
-        volumes = [
-          "/tank/appdata/omada/data:/opt/tplink/EAPController/data"
-          "/tank/appdata/omada/logs:/opt/tplink/EAPController/logs"
-          "/tank/appdata/omada/work:/opt/tplink/EAPController/work"
-        ];
-      };
     };
   };
 
