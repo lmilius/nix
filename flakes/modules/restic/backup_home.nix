@@ -1,7 +1,6 @@
 { config, pkgs, home_dir, hostname, repo_file, password_file, ... }:
 let
-  # home_dir = config.users.users.lmilius.home;
-  # hostname = "t480s";
+
 in
 {
   users.groups.restic = {
