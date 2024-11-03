@@ -504,20 +504,6 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-# Home Manager Config
-  # let
-  #   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-  # in
-  # {
-  #   imports = [
-  #     (import "${home-manager}/nixos")
-  #   ];
-    
-  #   home-manager.users.lmilius = {
-  #     home.stateVersion = "23.04";
-  #   };
-  # }
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

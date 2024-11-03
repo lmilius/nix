@@ -4,8 +4,12 @@ let
   # hostname = "t480s";
 in
 {
+  users.groups.restic = {
+    name = "restic";
+  };
   users.users.restic = {
     isNormalUser = true;
+    group = "restic";
   };
 
   security.wrappers.restic = {
