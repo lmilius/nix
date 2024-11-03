@@ -34,7 +34,7 @@ in
   services.restic.backups = {
     daily = {
       initialize = true;
-      user = "restic";
+      # user = "restic";
 
       repositoryFile = config.age.secrets."restic/repo".path;
       passwordFile = config.age.secrets."restic/password".path;
