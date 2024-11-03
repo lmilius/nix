@@ -17,8 +17,14 @@ in
   };
 
   age.secrets = {
-    "restic/repo".file = repo_file;
-    "restic/password".file = password_file;
+    "restic/repo" = {
+      file = repo_file;
+      owner = "restic";
+    };
+    "restic/password" = {
+      file = password_file;
+      owner = "restic";
+    };
   };
 
   services.restic.backups = {

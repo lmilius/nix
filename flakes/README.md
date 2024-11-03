@@ -18,3 +18,10 @@ This contains configuration for hosts/users that are using flakes to configure n
 
 - https://github.com/reckenrode/nixos-configs/blob/main/README.md
 - https://github.com/cjlarose/nixos-dev-env/
+
+## Update age files
+
+```bash
+cd flakes/secrets
+nix run github:ryantm/agenix -- -e restic_repo.age -i ~/.ssh/id_ed25519
+```

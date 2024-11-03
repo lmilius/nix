@@ -211,6 +211,10 @@ StrictHostKeyChecking no
         hostname = "storj";
         user = "root";
       };
+      "restic-backup-host" = {
+        hostname = "pve1";
+        user = "root";
+      };
     };
   }; 
 
