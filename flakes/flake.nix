@@ -34,64 +34,122 @@
       # inputs.home-manager.follows = "";
     };
   };
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    nixos-hardware,
+    disko,
+    vscode-server,
+    nixos-06cb-009a-fingerprint-sensor,
+    agenix,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+  # outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, agenix, ... }:
+  # let
+    # inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, agenix, ... }:
-  let
-    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
+    systems = [
+      "x86_64-linux"
+      # "aarch64-linux"
+    ];
 
-    # creates correct package sets for specified arch
-    genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
-    genUnstablePkgs = system: import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+    forAllSystems = nixpkgs.lib.genAttrs systems;
 
-    nixosSystem = system: hostname: username:
+    nixosSys = hostname:
       let
-        pkgs = genPkgs system;
-        unstablePkgs = genUnstablePkgs system;
+        # hostname = hostname;
       in
         nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix;
-
-            # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
-          };
+          specialArgs = {inherit inputs outputs;};
           modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
             ./hosts/${hostname}
-
-            vscode-server.nixosModules.default
-            home-manager.nixosModules.home-manager {
-              # networking.hostname = hostname;
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.${username} = { imports = [ ./users/${username}/home.nix ]; };
-            }
-
             ./hosts/common/nixos-common.nix
             ./hosts/common/common-packages.nix
-            nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
-            nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
-            # nixos-hardware
           ];
         };
   in {
+
+    # Your custom packages and modifications, exported as overlays
+    overlays = import ./overlays {inherit inputs;};
+    # Reusable nixos modules you might want to export
+    # These are usually stuff you would upstream into nixpkgs
+    nixosModules = import ./modules/nixos;
+    # Reusable home-manager modules you might want to export
+    # These are usually stuff you would upstream into home-manager
+    homeManagerModules = import ./modules/home-manager;
+    
     nixosConfigurations = {
       # clients
-      x1carbon = nixosSystem "x86_64-linux" "x1carbon" "lmilius";
-      t480s = nixosSystem "x86_64-linux" "t480s" "lmilius";
+      x1carbon = nixosSys "x86_64-linux" "x1carbon" "lmilius";
+      # t480s = nixosSys "x86_64-linux" "t480s" "lmilius";
+      t480s = nixosSys "t480s";
 
       # servers
-      util = nixosSystem "x86_64-linux" "util" "lmilius";
-      parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
-      nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
-      prod-nix-1 = nixosSystem "x86_64-linux" "prod-nix-1" "lmilius";
-      nix-server = nixosSystem "x86_64-linux" "nix-server" "lmilius";
+      util = nixosSys "x86_64-linux" "util" "lmilius";
+      parent-util = nixosSys "x86_64-linux" "parent-util" "lmilius";
+      nix-cache = nixosSys "x86_64-linux" "nix-cache" "lmilius";
+      prod-nix-1 = nixosSys "x86_64-linux" "prod-nix-1" "lmilius";
+      nix-server = nixosSys "x86_64-linux" "nix-server" "lmilius";
 
       # blank ISO + disko
-      nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
+      nixos = nixosSys "x86_64-linux" "nixos" "lmilius";
     };
+    
+    # # creates correct package sets for specified arch
+    # genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
+    # genUnstablePkgs = system: import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+
+    # nixosSystem = system: hostname: username:
+    #   let
+    #     pkgs = genPkgs system;
+    #     unstablePkgs = genUnstablePkgs system;
+    #   in
+    #     nixpkgs.lib.nixosSystem {
+    #       inherit system;
+    #       specialArgs = {
+    #         inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix;
+
+    #         # lets us use these things in modules
+    #         customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
+    #       };
+    #       modules = [
+    #         disko.nixosModules.disko
+    #         agenix.nixosModules.default
+    #         ./hosts/${hostname}
+
+    #         vscode-server.nixosModules.default
+    #         home-manager.nixosModules.home-manager {
+    #           # networking.hostname = hostname;
+    #           home-manager.useGlobalPkgs = true;
+    #           home-manager.useUserPackages = true;
+    #           home-manager.users.${username} = { imports = [ ./users/${username}/home.nix ]; };
+    #         }
+
+    #         ./hosts/common/nixos-common.nix
+    #         ./hosts/common/common-packages.nix
+    #         nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
+    #         nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
+    #         # nixos-hardware
+    #       ];
+    #     };
+  # in {
+    # nixosConfigurations = {
+    #   # clients
+    #   x1carbon = nixosSystem "x86_64-linux" "x1carbon" "lmilius";
+    #   t480s = nixosSystem "x86_64-linux" "t480s" "lmilius";
+
+    #   # servers
+    #   util = nixosSystem "x86_64-linux" "util" "lmilius";
+    #   parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
+    #   nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
+    #   prod-nix-1 = nixosSystem "x86_64-linux" "prod-nix-1" "lmilius";
+    #   nix-server = nixosSystem "x86_64-linux" "nix-server" "lmilius";
+
+    #   # blank ISO + disko
+    #   nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
+    # };
   };
 
 

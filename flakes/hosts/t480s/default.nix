@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, hostname, ... }:
+{ inputs, outputs, lib, config, pkgs, ... }:#unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, hostname, ... }:
 
 {
   imports =
@@ -12,12 +12,14 @@
       })
       ./hardware-configuration.nix
       # nixos-hardware.nixosModules.lenovo-thinkpad-t480s
+      inputs.home-manager
+      inputs.agenix
       ../../modules/gui/plasma6.nix
       ./../common/common-packages.nix
       (import ../../modules/restic/backup_home.nix {
         config = config;
         pkgs = pkgs;
-        hostname = hostname;
+        hostname = inputs.hostname;
         home_dir = config.users.users.lmilius.home;
         repo_file = ../../secrets/restic_repo_t480s_home.age;
         password_file = ../../secrets/restic_password_t480s_home.age;
@@ -56,11 +58,17 @@
     # fileSystems = [ "/" ];
   };
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.lmilius = { imports = [ ../../users/lmilius/home.nix ]; };
+  };
+
   # Enable networking
   # networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
   networking = {
-    hostName = hostname; # Define your hostname.
+    hostName = inputs.hostname; # Define your hostname.
     networkmanager = {
       enable = true;
       # wifi.backend = "iwd";
@@ -236,7 +244,6 @@
     yubikey-personalization
     yubikey-personalization-gui
     steam
-    moonlight-qt
     nextcloud-client
     google-chrome
     # chromium
