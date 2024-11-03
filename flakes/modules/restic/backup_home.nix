@@ -10,9 +10,9 @@ in
 
   security.wrappers.restic = {
     source = "${pkgs.restic.out}/bin/restic";
-    owner = "restic";
-    group = "users";
-    permissions = "u=rwx,g=,o=";
+    owner = "root";
+    group = "restic";
+    permissions = 750; #"u=rwx,g=,o=";
     capabilities = "cap_dac_read_search=+ep";
   };
 
