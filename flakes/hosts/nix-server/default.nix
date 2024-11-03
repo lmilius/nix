@@ -17,7 +17,7 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
   boot.zfs.extraPools = [ "tank" ];
-  networking.hostId = "d131645e";
+  networking.hostId = "aeb247be";
   services.zfs.autoScrub.enable = true;
 
   networking.hostName = hostname; # Define your hostname.
