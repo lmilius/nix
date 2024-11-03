@@ -12,7 +12,7 @@ in
     source = "${pkgs.restic.out}/bin/restic";
     owner = "root";
     group = "restic";
-    permissions = 750; #"u=rwx,g=,o=";
+    permissions = "u=rwx,g=rx,o=";
     capabilities = "cap_dac_read_search=+ep";
   };
 
