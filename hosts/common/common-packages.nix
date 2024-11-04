@@ -22,6 +22,7 @@
     jq
     kmon
     nmap
+    openssl
     pciutils
     powertop
     python311Full

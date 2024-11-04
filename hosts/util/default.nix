@@ -2,35 +2,42 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ lib, config, pkgs, unstablePkgs, disko, hostname, ... }:
-
+{ inputs, outputs, lib, config, pkgs, hostname, ... }:
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
-      # ./disko-config.nix
+    [
+      inputs.disko.nixosModules.disko
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
-      # (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
-      # ./vscode-server.nix
-      ( import ../../modules/nix-cache/default.nix {
+      ./hardware-configuration.nix
+
+      ( outputs.nixosModules.nix_cache {
         ip_address = "10.10.200.8";
       })
+
+      inputs.home-manager.nixosModules.home-manager
+      # outputs.nixosModules.ansible
+      outputs.nixosModules.cockpit
+      outputs.nixosModules.docker_daemon
+      outputs.nixosModules.systemd_oom
+
+      inputs.agenix.nixosModules.default
     ];
 
-  # Use local nix cache
-  nix.settings.substituters = [ 
-    "http://127.0.0.1"
-  ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.graceful = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        graceful = true;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+  };
 
-  networking.hostName = hostname; # Define your hostname.
+  # networking.hostName = hostname; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -48,7 +55,7 @@
   # };
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  # time.timeZone = "America/Chicago";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -116,19 +123,19 @@
     #];
   };
 
-  # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-    };
-    enableOnBoot = true;
-    #daemon.settings = {
-    #  log-opts = {
-    #    max-size = "10m";
-    #  };
-    #};
-  };
+  # # Docker setup
+  # virtualisation.docker = {
+  #   enable = true;
+  #   autoPrune = {
+  #     enable = true;
+  #   };
+  #   enableOnBoot = true;
+  #   #daemon.settings = {
+  #   #  log-opts = {
+  #   #    max-size = "10m";
+  #   #  };
+  #   #};
+  # };
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -249,22 +256,24 @@
   # services.vscode-server.enable = true;
 
   # Enable tailscale service
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "both";
-  services.tailscale.extraUpFlags = [
-    "--accept-routes=false"
-    "--accept-dns"
-    "--advertise-exit-node"
-    "--advertise-routes 10.10.200.0/24"
-    "--ssh"
-    # "--exit-node gateway"
-    # "--exit-node-allow-lan-access"
-  ];
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "both";
+    openFirewall = true;
+    package = pkgs.unstable.tailscale;
+    extraUpFlags = [
+      "--accept-routes=false"
+      "--accept-dns"
+      "--advertise-exit-node"
+      "--advertise-routes 10.10.200.0/24"
+      "--ssh"
+      # "--exit-node gateway"
+      # "--exit-node-allow-lan-access"
+    ];
+  };
+
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
-  nixpkgs.overlays = [(final: prev: {
-    tailscale = unstablePkgs.tailscale;
-  })];
 
   # programs.bash.shellAliases = {
   #   l = "ls -alh";
@@ -287,7 +296,7 @@
   programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   # nix trusted users
   # nix.settings.trusted-users = [
@@ -334,10 +343,10 @@
   #   # docker-compose
   # ];
 
-  services.cockpit = {
-    enable = true;
-    port = 9090;
-  };
+  # services.cockpit = {
+  #   enable = true;
+  #   port = 9090;
+  # };
 
   # # Nix automated garbage collection
   # nix.gc = {
