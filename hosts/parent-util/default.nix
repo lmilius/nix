@@ -2,25 +2,36 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ lib, config, pkgs, unstablePkgs, disko, hostname, ... }:
+{ inputs, outputs, lib, config, pkgs, hostname, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+    [ 
+      inputs.disko.nixosModules.disko
       (import ./disko-config.nix {
         disks = [ "/dev/sda" ];
       })
+      ./hardware-configuration.nix
+
+      inputs.home-manager.nixosModules.home-manager
+      outputs.nixosModules.docker_daemon
+      outputs.nixosModules.systemd_oom
+      inputs.agenix.nixosModules.default
     ];
 
   # Use local nix cache
   nix.settings.substituters = [ ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.graceful = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        graceful = true;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+  };
 
   networking.hostName = hostname; # Define your hostname.
   # Pick only one of the below networking options.
@@ -40,7 +51,7 @@
   # };
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  # time.timeZone = "America/Chicago";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -94,6 +105,16 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.lmilius = { 
+      imports = [
+        ../../users/lmilius/home.nix 
+      ]; 
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
@@ -108,14 +129,14 @@
     #];
   };
 
-  # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-    };
-    enableOnBoot = true;
-  };
+  # # Docker setup
+  # virtualisation.docker = {
+  #   enable = true;
+  #   autoPrune = {
+  #     enable = true;
+  #   };
+  #   enableOnBoot = true;
+  # };
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -170,10 +191,6 @@
   };
   programs.virt-manager.enable = true;
 
-  # nix cli helper
-  # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
-
   # Syncthing
   services.syncthing = {
     enable = true;
@@ -195,18 +212,20 @@
         };
       };
       folders = {
-        "/home/lmilius/syncthing/parent-util-nix-config" = {
-          id = "nfrgj-e43cc";
-          devices = [ 
-            "Server"
-            "x1carbon"
-          ];
-        };
         "/home/lmilius/syncthing/nix-flake-config" = {
           id = "vccxz-vvrns";
           devices = [
             "Server"
             "x1carbon"
+            # "parent-util"
+          ];
+        };
+        "/home/lmilius/syncthing/nix-config" = {
+          id = "lmyem-knmpz";
+          devices = [
+            "Server"
+            "x1carbon"
+            "t480s"
             # "parent-util"
           ];
         };
@@ -224,22 +243,23 @@
   # };
 
   # Enable tailscale service
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "both";
-  services.tailscale.extraUpFlags = [
-    "--accept-routes"
-    "--accept-dns"
-    "--advertise-exit-node"
-    "--advertise-routes 192.168.88.0/24"
-    "--ssh"
-    # "--exit-node gateway"
-    # "--exit-node-allow-lan-access"
-  ];
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "both";
+    openFirewall = true;
+    package = pkgs.unstable.tailscale;
+    extraUpFlags = [
+      "--accept-routes"
+      "--accept-dns"
+      "--advertise-exit-node"
+      "--advertise-routes 192.168.88.0/24"
+      "--ssh"
+      # "--exit-node gateway"
+      # "--exit-node-allow-lan-access"
+    ];
+  };
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
-  nixpkgs.overlays = [(final: prev: {
-    tailscale = unstablePkgs.tailscale;
-  })];
 
   # programs.bash.shellAliases = {
   #   l = "ls -alh";
@@ -256,6 +276,10 @@
 
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
+
+  # nix cli helper
+  # https://github.com/viperML/nh
+  programs.nh.flake = "/home/lmilius/syncthing/nix-config";
 
   # List services that you want to enable:
 
