@@ -302,7 +302,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
+  programs.nh.flake = "/home/lmilius/syncthing/nix-config";
 
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;

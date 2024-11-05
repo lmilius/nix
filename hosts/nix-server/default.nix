@@ -71,6 +71,16 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.lmilius = { 
+      imports = [
+        ../../users/lmilius/home.nix 
+      ]; 
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
@@ -147,7 +157,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
+  programs.nh.flake = "/home/lmilius/syncthing/nix-config";
 
   # List services that you want to enable:
 
