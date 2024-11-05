@@ -322,6 +322,8 @@
     wayland-utils
     btrfs-assistant
     pulseview
+    discover
+    insomnia
   ];
 
   services.udev.packages = with pkgs; [

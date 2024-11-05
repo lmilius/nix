@@ -57,8 +57,7 @@ in
     username = "lmilius";
     homeDirectory = "/home/lmilius";
     packages = with pkgs; [
-      discover
-      insomnia
+      
     ];
   };
 
