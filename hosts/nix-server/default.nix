@@ -124,6 +124,15 @@
             # "parent-util"
           ];
         };
+        "/home/lmilius/syncthing/nix-config" = {
+          id = "lmyem-knmpz";
+          devices = [
+            "Server"
+            "x1carbon"
+            "t480s"
+            # "parent-util"
+          ];
+        };
       };
     };
   };
