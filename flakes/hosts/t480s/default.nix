@@ -2,19 +2,39 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, hostname, ... }:
-
+{ inputs, outputs, lib, config, pkgs, hostname, ... }:#unstablePkgs, nixos-06cb-009a-fingerprint-sensor, agenix, hostname, ... }:
+# inputs: flakes from the original imports in flake.nix
+# outputs: modules from the 'modules' directory in the repo
+#   outputs.nixosModules is from the 'modules/nixos/default.nix'
+#   outputs.homeManagerModules is from the 'modules/home-manager/default.nix'
+# let
+#   outpunts = inputs.self;
+# in
 {
   imports =
     [
+      inputs.disko.nixosModules.disko
+
       (import ./disko-config.nix {
         disks = [ "/dev/nvme0n1" ];
       })
+
       ./hardware-configuration.nix
+
       # nixos-hardware.nixosModules.lenovo-thinkpad-t480s
-      ../../modules/gui/plasma6.nix
-      ./../common/common-packages.nix
-      (import ../../modules/restic/backup_home.nix {
+
+      inputs.home-manager.nixosModules.home-manager
+
+      outputs.nixosModules.bluetooth
+      outputs.nixosModules.docker_daemon
+      outputs.nixosModules.intel_gpu
+      outputs.nixosModules.pipewire
+      outputs.nixosModules.plasma6
+      outputs.nixosModules.systemd_oom
+
+      inputs.agenix.nixosModules.default
+
+      (outputs.nixosModules.restic_home_backup {
         config = config;
         pkgs = pkgs;
         hostname = hostname;
@@ -22,14 +42,62 @@
         repo_file = ../../secrets/restic_repo_t480s_home.age;
         password_file = ../../secrets/restic_password_t480s_home.age;
       })
-      # ./nix-cache.nix
     ];
 
+  # nixpkgs = {
+  #   # You can add overlays here
+  #   overlays = [
+  #     # Add overlays your own flake exports (from overlays and pkgs dir):
+  #     outputs.overlays.additions
+  #     outputs.overlays.modifications
+  #     outputs.overlays.unstable-packages
+
+  #     # You can also add overlays exported from other flakes:
+  #     # neovim-nightly-overlay.overlays.default
+
+  #     # Or define it inline, for example:
+  #     # (final: prev: {
+  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
+  #     #     patches = [ ./change-hello-to-hi.patch ];
+  #     #   });
+  #     # })
+  #   ];
+  #   # Configure your nixpkgs instance
+  #   config = {
+  #     # Disable if you don't want unfree packages
+  #     allowUnfree = true;
+  #   };
+  # };
+
+  # nix = let
+  #   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  # in {
+  #   settings = {
+  #     # Enable flakes and new 'nix' command
+  #     # experimental-features = "nix-command flakes";
+  #     # Opinionated: disable global registry
+  #     # flake-registry = "";
+  #     # Workaround for https://github.com/NixOS/nix/issues/9574
+  #     nix-path = config.nix.nixPath;
+  #     # Use local nix cache
+  #     # substituters = [ 
+  #     #   "http://10.10.200.8" 
+  #     #   # "http://100.69.216.71/" 
+  #     # ];
+  #   };
+  #   # Opinionated: disable channels
+  #   channel.enable = false;
+
+  #   # Opinionated: make flake registry and nix path match flake inputs
+  #   registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+  #   nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  # };
+
   # Use local nix cache
-  nix.settings.substituters = [ 
-    "http://10.10.200.8" 
-    # "http://100.69.216.71/" 
-  ];
+  # nix.settings.substituters = [ 
+  #   "http://10.10.200.8" 
+  #   # "http://100.69.216.71/" 
+  # ];
 
   # Boot
   boot = {
@@ -60,7 +128,7 @@
   # networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
   networking = {
-    hostName = hostname; # Define your hostname.
+    # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
       enable = true;
       # wifi.backend = "iwd";
@@ -90,7 +158,7 @@
     enable = true;
     useRoutingFeatures = "client";
     openFirewall = true;
-    package = unstablePkgs.tailscale;
+    package = pkgs.unstable.tailscale;
     extraUpFlags = [
       "--accept-routes=false"
       "--accept-dns"
@@ -98,47 +166,32 @@
       # "--exit-node-allow-lan-access"
     ];
   };
-  # services.tailscale.enable = true;
-  # services.tailscale.useRoutingFeatures = "client";
-  # services.tailscale.openFirewall = true;
-  # services.tailscale.extraUpFlags = [
-  #   "--accept-routes"
-  #   "--accept-dns"
-  #   # "--exit-node gateway"
-  #   # "--exit-node-allow-lan-access"
-  # ];
-  # # networking.firewall.checkReversePath = "loose";
-  # nixpkgs.overlays = [(final: prev: {
-  #   tailscale = unstablePkgs.tailscale;
-  # })];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-  
-  
 
-  # OOM configuration:
-  systemd = {
-    # Create a separate slice for nix-daemon that is
-    # memory-managed by the userspace systemd-oomd killer
-    slices."nix-daemon".sliceConfig = {
-      ManagedOOMMemoryPressure = "kill";
-      ManagedOOMMemoryPressureLimit = "95%";
-    };
-    services = {
-      "nix-daemon".serviceConfig = {
-        Slice = "nix-daemon.slice";
+  # # OOM configuration:
+  # systemd = {
+  #   # Create a separate slice for nix-daemon that is
+  #   # memory-managed by the userspace systemd-oomd killer
+  #   slices."nix-daemon".sliceConfig = {
+  #     ManagedOOMMemoryPressure = "kill";
+  #     ManagedOOMMemoryPressureLimit = "95%";
+  #   };
+  #   services = {
+  #     "nix-daemon".serviceConfig = {
+  #       Slice = "nix-daemon.slice";
 
-        # If a kernel-level OOM event does occur anyway,
-        # strongly prefer killing nix-daemon child processes
-        OOMScoreAdjust = 1000;
-      };
-      # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
-      # and: https://github.com/NixOS/nixpkgs/issues/180175
-      NetworkManager-wait-online.enable = false;
-    };
-  };
+  #       # If a kernel-level OOM event does occur anyway,
+  #       # strongly prefer killing nix-daemon child processes
+  #       OOMScoreAdjust = 1000;
+  #     };
+  #     # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
+  #     # and: https://github.com/NixOS/nixpkgs/issues/180175
+  #     NetworkManager-wait-online.enable = false;
+  #   };
+  # };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -149,33 +202,42 @@
     openFirewall = true;
   };
 
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  #   # If you want to use JACK applications, uncomment this
-  #   #jack.enable = true;
+  # # Enable sound with pipewire.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = false;
+  # security.rtkit.enable = true;
+  # services.pipewire = {
+  #   enable = true;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  #   pulse.enable = true;
+  # #   # If you want to use JACK applications, uncomment this
+  # #   #jack.enable = true;
 
-  #   # use the example session manager (no others are packaged yet so this is enabled by default,
-  #   # no need to redefine it in your config for now)
-  #   #media-session.enable = true;
-  };
+  # #   # use the example session manager (no others are packaged yet so this is enabled by default,
+  # #   # no need to redefine it in your config for now)
+  # #   #media-session.enable = true;
+  # };
 
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-  };
+  # hardware.bluetooth = {
+  #   enable = true;
+  #   powerOnBoot = true;
+  # };
 
   hardware.flipperzero.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.lmilius = { 
+      imports = [
+        ../../users/lmilius/home.nix 
+      ]; 
+    };
+  };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
@@ -184,7 +246,7 @@
     packages = with pkgs; [
       firefox
       kate
-      unstablePkgs.vscode
+      pkgs.unstable.vscode
       # vscode extensions
       (vscode-with-extensions.override {
         vscodeExtensions = with vscode-extensions; [
@@ -203,20 +265,20 @@
     ];
   };
 
-  # Intel GPU
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      # intel-compute-runtime
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
+  # # Intel GPU
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  # };
+  # hardware.opengl = {
+  #   enable = true;
+  #   extraPackages = with pkgs; [
+  #     # intel-compute-runtime
+  #     intel-media-driver
+  #     vaapiIntel
+  #     vaapiVdpau
+  #     libvdpau-va-gl
+  #   ];
+  # };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -236,14 +298,13 @@
     yubikey-personalization
     yubikey-personalization-gui
     steam
-    moonlight-qt
     nextcloud-client
     google-chrome
     # chromium
     ubootTools
     openscad
     vlc
-    unstablePkgs.discord
+    pkgs.unstable.discord
     cups-brother-hl3140cw
     lm_sensors
     distrobox
@@ -261,12 +322,9 @@
     wayland-utils
     btrfs-assistant
     pulseview
+    discover
+    insomnia
   ];
-#   ++ import ./../../common/common-packages.nix
-#   {
-#     pkgs = pkgs;
-#     unstablePkgs = unstablePkgs;
-#   };
 
   services.udev.packages = with pkgs; [
     yubikey-personalization
@@ -277,20 +335,20 @@
   # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
   # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
-  # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-      dates = "weekly";
-    };
-    enableOnBoot = true;
-    #daemon.settings = {
-    #  log-opts = {
-    #    max-size = "10m";
-    #  };
-    #};
-  };
+  # # Docker setup
+  # virtualisation.docker = {
+  #   enable = true;
+  #   autoPrune = {
+  #     enable = true;
+  #     dates = "weekly";
+  #   };
+  #   enableOnBoot = true;
+  #   #daemon.settings = {
+  #   #  log-opts = {
+  #   #    max-size = "10m";
+  #   #  };
+  #   #};
+  # };
 
   # Podman support
   # virtualisation = {
@@ -380,7 +438,7 @@
   #  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
   #'';
 
-  age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" ];
+  age.identityPaths = [ "${config.users.users.lmilius.home}/.ssh/id_ed25519" "/root/.ssh/id_ed25519" ];
 
   environment.shells = with pkgs; [ bash zsh ];
   users.defaultUserShell = pkgs.bash;
@@ -402,12 +460,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep-since 14d --keep 5";
-    flake = "/home/lmilius/workspace/nix/flakes";
-  };
+  programs.nh.flake = "/home/lmilius/workspace/nix";
 
   # Enable steam
   programs.steam = {

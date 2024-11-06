@@ -1,77 +1,56 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, unstablePkgs, hostname, ... }:
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
+      outputs.nixosModules.cockpit
+      outputs.nixosModules.docker_daemon
+      outputs.nixosModules.intel_gpu
+      outputs.nixosModules.systemd_oom
+
+      (outputs.nixosModules.nextcloud {
+        trusted_domains = ["10.10.200.91"];
+      })
+
+      inputs.agenix.nixosModules.default
     ];
+  
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    supportedFilesystems = [ "zfs" ];
+    zfs = {
+      forceImportRoot = false;
+      extraPools = [ "tank" ];
+    };
+  };
   
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.forceImportRoot = false;
-  boot.zfs.extraPools = [ "tank" ];
   networking.hostId = "d131645e";
   services.zfs.autoScrub.enable = true;
 
-  networking.hostName = hostname; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  # Set your time zone.
-  time.timeZone = "America/Chicago";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
+  # services.nextcloud = {
+  #   enable = true;
+  #   hostName = "localhost";
+  #   database.createLocally = true;
+  #   config = {
+  #     dbtype = "pgsql";
+  #     adminpassFile = "/etc/nextcloud-admin-pass";
+  #   };
+  #   settings = {
+  #     trusted_domains = [
+  #       "10.10.200.91"
+  #     ];
+  #   };
   # };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Intel GPU
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      # intel-compute-runtime
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
-
-  services.nextcloud = {
-    enable = true;
-    hostName = "localhost";
-    database.createLocally = true;
-    config = {
-      dbtype = "pgsql";
-      adminpassFile = "/etc/nextcloud-admin-pass";
-    };
-    settings = {
-      trusted_domains = [
-        "10.10.200.91"
-      ];
-    };
-  };
   
 
   # Configure keymap in X11
@@ -92,6 +71,16 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.lmilius = { 
+      imports = [
+        ../../users/lmilius/home.nix 
+      ]; 
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
@@ -105,15 +94,10 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    htop
     intel-gpu-tools
     distrobox
     virt-manager
     qemu
-    openssl
-    #zfs
-    #nextcloud30
   ];
 
   # Syncthing
@@ -150,6 +134,15 @@
             # "parent-util"
           ];
         };
+        "/home/lmilius/syncthing/nix-config" = {
+          id = "lmyem-knmpz";
+          devices = [
+            "Server"
+            "x1carbon"
+            "t480s"
+            # "parent-util"
+          ];
+        };
       };
     };
   };
@@ -164,8 +157,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
-  nixpkgs.config.allowUnfree = true;
+  programs.nh.flake = "/home/lmilius/syncthing/nix-config";
 
   # List services that you want to enable:
 
@@ -179,15 +171,6 @@
     enable = true;
   };
   programs.virt-manager.enable = true;
-
-  # Docker setup
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-    };
-    enableOnBoot = true;
-  };
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -204,12 +187,7 @@
     };
   };
 
-  # Cockpit
-  services.cockpit = {
-    enable = true;
-    openFirewall = true;
-    port = 9090;
-  };
+  
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

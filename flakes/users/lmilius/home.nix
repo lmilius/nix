@@ -1,4 +1,12 @@
-{ config, pkgs, ... }:
+# This is your home-manager configuration file
+# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: 
 let
   myAliases = {
     ll = "ls -alF";
@@ -8,50 +16,49 @@ let
   };
 in
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "lmilius";
-  home.homeDirectory = "/home/lmilius";
+  # You can import other home-manager modules here
+  imports = [
+    # If you want to use modules your own flake exports (from modules/home-manager):
+    # outputs.homeManagerModules.example
 
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  #
-  # You should not change this value, even if you update Home Manager. If you do
-  # want to update the value, then make sure to first check the Home Manager
-  # release notes.
-  home.stateVersion = "23.11"; # Please read the comment before changing.
+    # Or modules exported from other flakes (such as nix-colors):
+    # inputs.nix-colors.homeManagerModules.default
 
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-    discover
-    # unstablePkgs.tailscale-systray
-    # direnv
-    insomnia
-    # unstablePkgs.vscode
-    # unstablePkgs.joplin-desktop
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    # You can also split up your configuration and import pieces of it here:
+    # ./nvim.nix
   ];
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
+  nixpkgs = {
+    # You can add overlays here
+    # overlays = [
+    #   # Add overlays your own flake exports (from overlays and pkgs dir):
+    #   outputs.overlays.additions
+    #   outputs.overlays.modifications
+    #   outputs.overlays.unstable-packages
+
+    #   # You can also add overlays exported from other flakes:
+    #   # neovim-nightly-overlay.overlays.default
+
+    #   # Or define it inline, for example:
+    #   # (final: prev: {
+    #   #   hi = final.hello.overrideAttrs (oldAttrs: {
+    #   #     patches = [ ./change-hello-to-hi.patch ];
+    #   #   });
+    #   # })
+    # ];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      allowUnfree = true;
+    };
+  };
+
+  home = {
+    username = "lmilius";
+    homeDirectory = "/home/lmilius";
+    packages = with pkgs; [
+      
+    ];
   };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -67,6 +74,7 @@ in
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+    ".bashrc".source = ./bashrc;
   };
 
   # Home Manager can also manage your environment variables through
@@ -88,80 +96,18 @@ in
     # EDITOR = "emacs";
   };
 
-  # programs.bash = {
-    # enable = true;
-    # shellAliases = myAliases;
-    # enableCompletion = true;
-    # bashrcExtra = ''
-    # # set variable identifying the chroot you work in (used in the prompt below)
-    # if [ -z "''${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    #     debian_chroot=$(cat /etc/debian_chroot)
-    # fi
-
-
-    # # set a fancy prompt (non-color, unless we know we "want" color)
-    # case "$TERM" in
-    #     xterm-color|*-256color) color_prompt=yes;;
-    # esac
-
-    # # uncomment for a colored prompt, if the terminal has the capability; turned
-    # # off by default to not distract the user: the focus in a terminal window
-    # # should be on the output of commands, not on the prompt
-    # #force_color_prompt=yes
-
-    # if [ -n "$force_color_prompt" ]; then
-    #     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    #         # We have color support; assume it's compliant with Ecma-48
-    #         # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    #         # a case would tend to support setf rather than setaf.)
-    #         color_prompt=yes
-    #     else
-    #         color_prompt=
-    #     fi
-    # fi
-
-    # if [ "$color_prompt" = yes ]; then
-    #     PS1="''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-    # else
-    #     PS1="''${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "
-    # fi
-
-    # unset color_prompt force_color_prompt
-    # '';
-  # };
-
-  home.file.".bashrc".source = ./bashrc;
-
-  programs.zsh = {
+  # Enable home-manager and git
+  programs.direnv = {
     enable = true;
-    shellAliases = myAliases;
-    enableCompletion = true;
+    nix-direnv.enable = true;
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  
-  # programs.vscode = {
-  #   enable = true;
-  #   extensions = with pkgs.vscode-extensions; [
-  #     mkhl.direnv
-  #     njpwerner.autodocstring
-  #     ms-vscode.cpptools
-  #     ms-vscode.cmake-tools
-  #     ms-vscode-remote.remote-ssh
-  #     ms-vscode-remote.remote-containers
-  #     ms-python.python
-  #     ms-python.vscode-pylance
-  #     njpwerner.autodocstring
-  #     tailscale.vscode-tailscale
-  #   ];
-  # };
-
-  programs.tmux = {
+  programs.git = {
     enable = true;
-    historyLimit = 10000;
+    userEmail = "lmilius12@gmail.com";
+    userName = "Luke Milius";
+    diff-so-fancy.enable = true;
   };
-
+  programs.home-manager.enable = true;
   programs.ssh = {
     enable = true;
     serverAliveInterval = 60;
@@ -213,16 +159,19 @@ StrictHostKeyChecking no
       };
     };
   }; 
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-  programs.git = {
+  programs.tmux = {
     enable = true;
-    userEmail = "lmilius12@gmail.com";
-    userName = "Luke Milius";
-    diff-so-fancy.enable = true;
+    historyLimit = 10000;
+  };
+  programs.zsh = {
+    enable = true;
+    shellAliases = myAliases;
+    enableCompletion = true;
   };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
+
+  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+  home.stateVersion = "23.11";
 }

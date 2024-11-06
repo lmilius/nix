@@ -1,3 +1,6 @@
+# nix
+Nix related configuration
+
 # Flake Configs
 
 This contains configuration for hosts/users that are using flakes to configure nixos and home-manager to manage user profiles.

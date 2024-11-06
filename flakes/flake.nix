@@ -1,6 +1,5 @@
 {
-
-  description = "My first flake!";
+  description = "Nix Config";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.05";
@@ -35,136 +34,75 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, vscode-server, nixos-06cb-009a-fingerprint-sensor, nixos-hardware, agenix, ... }:
-  let
-    inputs = { inherit disko home-manager nixpkgs nixpkgs-unstable nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    nixos-hardware,
+    disko,
+    vscode-server,
+    # nixos-06cb-009a-fingerprint-sensor,
+    agenix,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    # Supported systems for your flake packages, shell, etc.
+    systems = [
+      # "aarch64-linux"
+      # "i686-linux"
+      "x86_64-linux"
+      # "aarch64-darwin"
+      # "x86_64-darwin"
+    ];
+    # This is a function that generates an attribute by calling a function you
+    # pass to it, with each system as an argument
+    forAllSystems = nixpkgs.lib.genAttrs systems;
 
-    # creates correct package sets for specified arch
-    genPkgs = system: import nixpkgs { inherit system; config.allowUnfree = true; };
-    genUnstablePkgs = system: import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
-
-    nixosSystem = system: hostname: username:
-      let
-        pkgs = genPkgs system;
-        unstablePkgs = genUnstablePkgs system;
-      in
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit pkgs unstablePkgs hostname nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix;
-
-            # lets us use these things in modules
-            customArgs = { inherit system hostname username pkgs unstablePkgs disko nixos-06cb-009a-fingerprint-sensor nixos-hardware agenix; };
-          };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/${hostname}
-
-            vscode-server.nixosModules.default
-            home-manager.nixosModules.home-manager {
-              # networking.hostname = hostname;
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.${username} = { imports = [ ./users/${username}/home.nix ]; };
-            }
-
-            ./hosts/common/nixos-common.nix
-            ./hosts/common/common-packages.nix
-            nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
-            nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
-            # nixos-hardware
-          ];
-        };
+    nixosSystem = hostname:
+      nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs hostname;};
+        modules = [
+          # > Our main nixos configuration file <
+          { networking.hostName = "${hostname}"; }
+          ./hosts/${hostname}
+          ./hosts/common/nixos-common.nix
+          ./hosts/common/common-packages.nix
+        ];
+      };
   in {
+    # Your custom packages
+    # Accessible through 'nix build', 'nix shell', etc
+    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    # Formatter for your nix files, available through 'nix fmt'
+    # Other options beside 'alejandra' include 'nixpkgs-fmt'
+    # formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    # Your custom packages and modifications, exported as overlays
+    overlays = import ./overlays {inherit inputs;};
+    # Reusable nixos modules you might want to export
+    # These are usually stuff you would upstream into nixpkgs
+    nixosModules = import ./modules/nixos;
+    # Reusable home-manager modules you might want to export
+    # These are usually stuff you would upstream into home-manager
+    # homeManagerModules = import ./modules/home-manager;
+
+    # NixOS configuration entrypoint
+    # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      # clients
-      x1carbon = nixosSystem "x86_64-linux" "x1carbon" "lmilius";
-      t480s = nixosSystem "x86_64-linux" "t480s" "lmilius";
-
-      # servers
-      util = nixosSystem "x86_64-linux" "util" "lmilius";
-      parent-util = nixosSystem "x86_64-linux" "parent-util" "lmilius";
-      nix-cache = nixosSystem "x86_64-linux" "nix-cache" "lmilius";
-      prod-nix-1 = nixosSystem "x86_64-linux" "prod-nix-1" "lmilius";
-      nix-server = nixosSystem "x86_64-linux" "nix-server" "lmilius";
-
-      # blank ISO + disko
-      nixos = nixosSystem "x86_64-linux" "nixos" "lmilius";
+      # FIXME replace with your hostname
+      t480s = nixosSystem "t480s";
+      nix-server = nixosSystem "nix-server";
+      util = nixosSystem "util";
+      # t480s = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   modules = [
+      #     # > Our main nixos configuration file <
+      #     { networking.hostName = "t480s"; }
+      #     ./hosts/t480s
+      #     ./hosts/common/nixos-common.nix
+      #     ./hosts/common/common-packages.nix
+      #   ];
+      # };
     };
   };
-
-
-
-
-
-
-
-  #   overlay = final: prev: let
-  #     unstablePkgs = import unstable { inherit (prev) system; config.allowUnfree = true; };
-  #   in {
-  #     unstable = unstablePkgs;
-  #   };
-
-  #   # lib = nixpkgs.lib;
-  #   # system = "x86_64-linux";
-  #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-
-  #   # Ref: https://github.com/jakubgs/nixos-config/tree/master
-  #   # Overlays-module makes "pkgs.unstable" available in configuration.nix
-  #   overlayModule = ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay ]; });
-  #   # To generate host configurations for all hosts.
-  #   hostnames = builtins.attrNames (builtins.readDir ./hosts);
-  #   # To generate user configurations for home-manager.
-  #   users = builtins.attrNames (builtins.readDir ./users);
-  #   # For future, not all hosts may be x86_64
-  #   systemForHost = hostname: 
-  #     if builtins.elem hostname [] then "aarch64-linux"
-  #     else "x86_64-linux";
-  # in {
-  #   nixosConfigurations = builtins.listToAttrs (builtins.map (host: {
-  #     name = host;
-  #     value = nixpkgs.lib.nixosSystem {
-  #       system = systemForHost host;
-  #       specialArgs.channels = { inherit nixpkgs unstable; };
-  #       modules = [
-  #         overlayModule
-  #         agenix.nixosModules.default
-  #         ./hosts/${host}/configuration.nix
-  #       ];
-  #     };
-  #   }) hostnames);
-
-  #   # nixosConfigurations = {
-  #   #   x1carbon = nixpkgs.lib.nixosSystem {
-  #   #     system = "x86_64-linux";
-  #   #     specialArgs.channels = { inherit nixpkgs unstable; };
-  #   #     modules = [
-  #   #       overlayModule
-  #   #       agenix.nixosModules.default
-  #   #       ./hosts/x1carbon/configuration.nix
-  #   #     ];
-  #   #   };
-  #   # };
-
-
-  #   homeConfigurations = builtins.listToAttrs (builtins.map (user: {
-  #     name = user;
-  #     value = home-manager.lib.homeManagerConfiguration {
-  #       inherit pkgs;
-  #       modules = [
-  #         overlayModule
-  #         ./users/${user}/home.nix
-  #       ];
-  #     };
-  #   }) users);
-
-  #   # homeConfigurations = {
-  #   #   lmilius = home-manager.lib.homeManagerConfiguration {
-  #   #     inherit pkgs;
-  #   #     modules = [ ./home.nix ];
-  #   #   };
-  #   # };
-  # };
-
 }

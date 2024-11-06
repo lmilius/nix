@@ -1,42 +1,71 @@
-{ pkgs, unstablePkgs, lib, inputs, ... }:
-let
-  inherit (inputs) nixpkgs nixpkgs-unstable;
-in
+{ inputs, outputs, lib, config, pkgs, ... }:
+# let
+#   inherit (inputs) nixpkgs nixpkgs-unstable;
+# in
 {
   time.timeZone = "America/Chicago";
-  
 
-  nix = {
-    settings = {
-        experimental-features = [ "nix-command" "flakes" ];
-        warn-dirty = true;
-        
-        # Definte trusted users
-        trusted-users = [
-          "root"
-          "@wheel"
-          "lmilius"
-        ];
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
 
-        # Use local nix cache
-        substituters = [ 
-          "http://10.10.200.8" 
-          # "http://100.69.216.71/" 
-          "" 
-        ];
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+    ];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        # "electron-24.8.6"
+      ];
     };
-    # Automate garbage collection
+  };
+
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
+      warn-dirty = true;
+      
+      # Definte trusted users
+      trusted-users = lib.mkDefault [
+        "root"
+        "@wheel"
+        "lmilius"
+      ];
+      # Opinionated: disable global registry
+      # flake-registry = "";
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
+      # Use local nix cache
+      # Use local nix cache
+      substituters = lib.mkDefault [ 
+        "http://10.10.200.8" 
+        # "http://100.69.216.71/" 
+      ];
+    };
+
+    # Built-in garbage collection
     gc = {
       automatic = false;
       dates = "weekly";
       options = "--delete-older-than 14d";
     };
-  };
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    # "electron-24.8.6"
-  ];
+    # Opinionated: disable channels
+    channel.enable = false;
+
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  };
 
   # environment.systemPackages = with pkgs; [
   #   # intel-gpu-tools
@@ -74,7 +103,7 @@ ServerAliveCountMax 240
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh = {
+  programs.nh = lib.mkDefault {
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 14d --keep 5";
