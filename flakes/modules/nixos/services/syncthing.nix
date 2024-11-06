@@ -9,7 +9,7 @@
     settings = {
       devices = {
         Server = {
-          addresses = [ 
+          addresses = [
             "tcp://sync.miliushome.com:22000"
             "tcp://10.10.200.80:22000"
           ];
@@ -23,8 +23,9 @@
         };
       };
       folders = {
-        "/home/lmilius/syncthing/nix-flake-config" = {
+        "Nix Flake Config" = {
           id = "vccxz-vvrns";
+          path = "/home/lmilius/syncthing/nix-flake-config";
           devices = [
             "Server"
             "x1carbon"
