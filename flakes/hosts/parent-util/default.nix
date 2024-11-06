@@ -15,6 +15,7 @@
 
       inputs.home-manager.nixosModules.home-manager
       outputs.nixosModules.docker_daemon
+      outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
       inputs.agenix.nixosModules.default
     ];
@@ -191,47 +192,47 @@
   };
   programs.virt-manager.enable = true;
 
-  # Syncthing
-  services.syncthing = {
-    enable = true;
-    user = "lmilius";
-    dataDir = "/home/lmilius/syncthing";
-    configDir = "/home/lmilius/Documents/.config/syncthing";
-    guiAddress = "0.0.0.0:8384";
-    settings = {
-      devices = {
-        Server = {
-          addresses = [ 
-            "tcp://sync.miliushome.com:22000"
-            "tcp://10.10.200.80:22000"
-          ];
-          id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
-        };
-        x1carbon = {
-          id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
-        };
-      };
-      folders = {
-        "/home/lmilius/syncthing/nix-flake-config" = {
-          id = "vccxz-vvrns";
-          devices = [
-            "Server"
-            "x1carbon"
-            # "parent-util"
-          ];
-        };
-        "/home/lmilius/syncthing/nix-config" = {
-          id = "lmyem-knmpz";
-          devices = [
-            "Server"
-            "x1carbon"
-            "t480s"
-            # "parent-util"
-          ];
-        };
-      };
-    };
-  };
+  # # Syncthing
+  # services.syncthing = {
+  #   enable = true;
+  #   user = "lmilius";
+  #   dataDir = "/home/lmilius/syncthing";
+  #   configDir = "/home/lmilius/Documents/.config/syncthing";
+  #   guiAddress = "0.0.0.0:8384";
+  #   settings = {
+  #     devices = {
+  #       Server = {
+  #         addresses = [ 
+  #           "tcp://sync.miliushome.com:22000"
+  #           "tcp://10.10.200.80:22000"
+  #         ];
+  #         id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+  #       };
+  #       x1carbon = {
+  #         id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
+  #       };
+  #     };
+  #     folders = {
+  #       "/home/lmilius/syncthing/nix-flake-config" = {
+  #         id = "vccxz-vvrns";
+  #         devices = [
+  #           "Server"
+  #           "x1carbon"
+  #           # "parent-util"
+  #         ];
+  #       };
+  #       "/home/lmilius/syncthing/nix-config" = {
+  #         id = "lmyem-knmpz";
+  #         devices = [
+  #           "Server"
+  #           "x1carbon"
+  #           "t480s"
+  #           # "parent-util"
+  #         ];
+  #       };
+  #     };
+  #   };
+  # };
 
   # QEMU UEFI support
   # environment = {

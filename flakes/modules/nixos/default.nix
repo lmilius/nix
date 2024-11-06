@@ -17,6 +17,7 @@
   cockpit = import ./services/cockpit.nix;
   nix_cache = import ./services/nix_cache.nix;
   ansible = import ./utilities/ansible.nix;
+  syncthing = import ./services/syncthing.nix;
   #TODO
   # Samba
   # docker containers?
