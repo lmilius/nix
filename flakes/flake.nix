@@ -32,6 +32,11 @@
       # inputs.darwin.follows = "";
       # inputs.home-manager.follows = "";
     };
+
+    compose2nix = {
+      url = "github:aksiksi/compose2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -43,6 +48,7 @@
     vscode-server,
     # nixos-06cb-009a-fingerprint-sensor,
     agenix,
+    compose2nix,
     ...
   } @ inputs: let
     inherit (self) outputs;

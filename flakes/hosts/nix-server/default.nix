@@ -1,6 +1,9 @@
 
 { inputs, outputs, lib, config, pkgs, ... }:
-
+let
+  appdata_path = "/tank/appdata";
+  local_domain = "nix.milius.home";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -100,6 +103,7 @@
     distrobox
     virt-manager
     qemu
+    inputs.compose2nix.packages.x86_64-linux.default
   ];
 
   # # Syncthing
@@ -164,17 +168,59 @@
   };
   programs.virt-manager.enable = true;
 
+  age = {
+    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key.pub" ];
+    secrets = {
+      traefik_env = {
+        file = ../../secrets/nix-server/traefik_env.age;
+      };
+      traefik_conf = {
+        file = ../../secrets/nix-server/traefik_conf.age;
+        path = "${appdata_path}/traefik/traefik.yaml";
+      };
+      traefik_rules = {
+        file = ../../secrets/nix-server/traefik_rules.age;
+        path = "${appdata_path}/traefik/rules.yaml";
+      };
+    };
+  };
+
+  virtualisation.docker.daemon.settings.data-root = "/tank/docker-data";
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
+      traefik = {
+        image = "traefik:v2.10.7";
+        ports = [
+          "80:80"
+          "443:443"
+        ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.rule" = "Host(`proxy.${local_domain}`)";
+          "traefik.http.routers.traefik.tls" = "true";
+          "traefik.http.routers.traefik.service" = "api@internal";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+        };
+        volumes = [
+          "${appdata_path}/traefik:/etc/traefik"
+          "/var/run/docker.sock:/var/run/docker.sock:ro"
+        ];
+        environmentFiles = [ config.age.secrets.traefik_env.path ];
+      };
       speedtest = {
         image = "linuxserver/librespeed:latest";
         environment = {
           MODE = "standalone";
         };
-        ports = [
-          "8080:80"
-        ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
+        };
+        # ports = [
+        #   "8080:80"
+        # ];
       };
     };
   };

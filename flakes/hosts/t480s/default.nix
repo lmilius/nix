@@ -324,6 +324,7 @@
     pulseview
     discover
     insomnia
+    inputs.agenix.packages."${system}".default
   ];
 
   services.udev.packages = with pkgs; [

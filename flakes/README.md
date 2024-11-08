@@ -28,3 +28,9 @@ This contains configuration for hosts/users that are using flakes to configure n
 cd flakes/secrets
 nix run github:ryantm/agenix -- -e restic_repo.age -i ~/.ssh/id_ed25519
 ```
+
+or, if agenix is installed:
+
+```bash
+agenix -e restic_repo.age
+```
