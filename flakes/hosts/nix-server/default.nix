@@ -15,9 +15,9 @@ in
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
-      (outputs.nixosModules.nextcloud {
-        trusted_domains = ["10.10.200.91"];
-      })
+      # (outputs.nixosModules.nextcloud {
+      #   trusted_domains = ["10.10.200.91"];
+      # })
 
       inputs.agenix.nixosModules.default
 
@@ -169,7 +169,7 @@ in
   programs.virt-manager.enable = true;
 
   age = {
-    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key.pub" ];
+    # identityPaths = [ "/etc/ssh/ssh_host_ed25519_key.pub" ];
     secrets = {
       traefik_env = {
         file = ../../secrets/nix-server/traefik_env.age;
@@ -192,8 +192,8 @@ in
       traefik = {
         image = "traefik:v2.10.7";
         ports = [
-          "80:80"
-          "443:443"
+          "0.0.0.0:80:80"
+          "0.0.0.0:443:443"
         ];
         labels = {
           "traefik.enable" = "true";
@@ -228,7 +228,7 @@ in
   
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
