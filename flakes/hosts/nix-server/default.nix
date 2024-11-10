@@ -42,6 +42,14 @@ in
 
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
+  #networking.bridges = {
+  #  br0 = {
+  #    interfaces = [
+  #      "eno1"
+  #    ];
+  #  };
+  #};
+
   # services.nextcloud = {
   #   enable = true;
   #   hostName = "localhost";
@@ -103,6 +111,7 @@ in
     distrobox
     virt-manager
     qemu
+    quickemu
     inputs.compose2nix.packages.x86_64-linux.default
   ];
 
@@ -196,6 +205,9 @@ in
   # Virtualization support
   virtualisation.libvirtd = {
     enable = true;
+    #allowedBridges = [
+    #  "br0"
+    #];
   };
   programs.virt-manager.enable = true;
 
@@ -217,44 +229,46 @@ in
   };
 
   virtualisation.docker.daemon.settings.data-root = "/tank/docker-data";
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-      traefik = {
-        image = "traefik:v2.10.7";
-        ports = [
-          "0.0.0.0:80:80"
-          "0.0.0.0:443:443"
-        ];
-        labels = {
-          "traefik.enable" = "true";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.rule" = "Host(`proxy.${local_domain}`)";
-          "traefik.http.routers.traefik.tls" = "true";
-          "traefik.http.routers.traefik.service" = "api@internal";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
-        };
-        volumes = [
-          "${appdata_path}/traefik:/etc/traefik"
-          "/var/run/docker.sock:/var/run/docker.sock:ro"
-        ];
-        environmentFiles = [ config.age.secrets.traefik_env.path ];
-      };
-      speedtest = {
-        image = "linuxserver/librespeed:latest";
-        environment = {
-          MODE = "standalone";
-        };
-        labels = {
-          "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
-        };
-        # ports = [
-        #   "8080:80"
-        # ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   backend = "docker";
+  #   containers = {
+  #     traefik = {
+  #       image = "traefik:v2.10.7";
+  #       ports = [
+  #         "0.0.0.0:80:80"
+  #         "0.0.0.0:443:443"
+  #       ];
+  #       labels = {
+  #         "traefik.enable" = "true";
+  #         "traefik.http.routers.traefik.entrypoints" = "websecure";
+  #         "traefik.http.routers.traefik.rule" = "Host(`proxy.${local_domain}`)";
+  #         "traefik.http.routers.traefik.tls" = "true";
+  #         "traefik.http.routers.traefik.service" = "api@internal";
+  #         "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+  #       };
+  #       volumes = [
+  #         "${appdata_path}/traefik:/etc/traefik"
+  #         "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #       ];
+  #       environmentFiles = [ config.age.secrets.traefik_env.path ];
+  #     };
+  #     speedtest = {
+  #       image = "linuxserver/librespeed:latest";
+  #       environment = {
+  #         MODE = "standalone";
+  #       };
+  #       labels = {
+  #         "traefik.enable" = "true";
+  #         "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
+  #       };
+  #       # ports = [
+  #       #   "8080:80"
+  #       # ];
+  #     };
+  #   };
+  # };
+
+  services.traefik
 
   
 
