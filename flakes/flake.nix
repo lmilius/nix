@@ -99,6 +99,7 @@
       t480s = nixosSystem "t480s";
       nix-server = nixosSystem "nix-server";
       util = nixosSystem "util";
+      parent-util = nixosSystem "parent-util";
       # t480s = nixpkgs.lib.nixosSystem {
       #   specialArgs = {inherit inputs outputs;};
       #   modules = [
