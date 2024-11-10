@@ -34,7 +34,7 @@
     };
   };
 
-  networking.hostName = hostname; # Define your hostname.
+  # networking.hostName = hostname; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -261,6 +261,9 @@
   };
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  networking.localCommands = ''
+    ip rule add to 192.168.88.0/24 priority 2500 lookup main
+  '';
 
   # programs.bash.shellAliases = {
   #   l = "ls -alh";
