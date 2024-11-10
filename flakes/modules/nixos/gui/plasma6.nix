@@ -37,6 +37,7 @@ in
 
   environment.systemPackages = with pkgs.kdePackages; [
     kio-extras
+    kio-fuse
   ];
 
   # KDE apps
