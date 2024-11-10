@@ -282,7 +282,7 @@
     openFirewall = true;
     package = pkgs.unstable.tailscale;
     extraUpFlags = [
-      "--accept-routes=false"
+      "--accept-routes=true"
       "--accept-dns"
       "--advertise-exit-node"
       "--advertise-routes 10.10.200.0/24"
