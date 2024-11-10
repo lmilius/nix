@@ -1,8 +1,8 @@
 
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ inputs, outputs, lib, config, pkgs, hostname, ... }:
 let
   appdata_path = "/tank/appdata";
-  local_domain = "nix.milius.home";
+  local_domain = "nix.miliushome.com";
 in
 {
   imports =
@@ -142,6 +142,37 @@ in
   #     };
   #   };
   # };
+
+  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba = {
+    enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = ${hostname}
+      netbios name = ${hostname}
+      security = user
+      guest ok = no
+      guest account = nobody
+      map to guest = bad user
+      load printers = no
+    '';
+    shares = let
+      mkShare = path: {
+        path = path;
+        browseable = "no";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "lmilius";
+        "force group" = "users";
+      };
+    in {
+      archives = mkShare "/tank/archives";
+      backups = mkShare "/tank/backups";
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

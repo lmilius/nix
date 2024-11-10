@@ -294,6 +294,9 @@
 
   # networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  networking.localCommands = ''
+    ip rule add to 10.10.200.0/24 priority 2500 lookup main
+  '';
 
   # programs.bash.shellAliases = {
   #   l = "ls -alh";

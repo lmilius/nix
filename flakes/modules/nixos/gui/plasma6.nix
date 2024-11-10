@@ -35,6 +35,10 @@ in
     elisa
   ];
 
+  environment.systemPackages = with pkgs.kdePackages; [
+    kio-extras
+  ];
+
   # KDE apps
   programs.partition-manager.enable = true;
   programs.kdeconnect.enable = true;
