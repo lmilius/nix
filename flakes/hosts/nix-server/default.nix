@@ -281,23 +281,6 @@ in
       config.age.secrets.traefik_env.path
     ];
     dataDir = "${appdata_path}/traefik";
-    # staticConfigOptions = {
-    #   entryPoints = {
-    #     web = {
-    #       address = ":80";
-    #       redirections = {
-    #         entryPoint = {
-    #           to = "websecure";
-    #           scheme = "https";
-    #         };
-    #       };
-    #     };
-    #     websecure = {
-    #       address = ":443";
-
-    #     }
-    #   };
-    # };
   };
 
   users.users.traefik = {
