@@ -267,6 +267,7 @@ in
           "traefik.enable" = "true";
           "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
         };
+        hostname = "speedtest.${local_domain}";
         # ports = [
         #   "8080:80"
         # ];
