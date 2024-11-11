@@ -235,9 +235,9 @@ in
   };
 
   virtualisation.docker.daemon.settings.data-root = "/tank/docker-data";
-  # virtualisation.oci-containers = {
-  #   backend = "docker";
-  #   containers = {
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
   #     traefik = {
   #       image = "traefik:v2.10.7";
   #       ports = [
@@ -258,21 +258,21 @@ in
   #       ];
   #       environmentFiles = [ config.age.secrets.traefik_env.path ];
   #     };
-  #     speedtest = {
-  #       image = "linuxserver/librespeed:latest";
-  #       environment = {
-  #         MODE = "standalone";
-  #       };
-  #       labels = {
-  #         "traefik.enable" = "true";
-  #         "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
-  #       };
-  #       # ports = [
-  #       #   "8080:80"
-  #       # ];
-  #     };
-  #   };
-  # };
+      speedtest = {
+        image = "linuxserver/librespeed:latest";
+        environment = {
+          MODE = "standalone";
+        };
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
+        };
+        # ports = [
+        #   "8080:80"
+        # ];
+      };
+    };
+  };
 
   services.traefik = {
     enable = true;
