@@ -265,7 +265,7 @@ in
         };
         labels = {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`speedtest.${local_domain}`)";
+          "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
         };
         # ports = [
         #   "8080:80"
