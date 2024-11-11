@@ -218,12 +218,18 @@ in
         file = ../../secrets/nix-server/traefik_env.age;
       };
       traefik_conf = {
-        file = ../../secrets/nix-server/traefik_conf.age;
-        path = "${appdata_path}/traefik/traefik.yaml";
+        file = ../../secrets/nix-server/traefik_conf_toml.age;
+        path = "${appdata_path}/traefik/traefik.toml";
+        owner = "traefik";
+        group = "traefik";
+        mode = "770";
       };
       traefik_rules = {
-        file = ../../secrets/nix-server/traefik_rules.age;
-        path = "${appdata_path}/traefik/rules.yaml";
+        file = ../../secrets/nix-server/traefik_rules_toml.age;
+        path = "${appdata_path}/traefik/rules.toml";
+        owner = "traefik";
+        group = "traefik";
+        mode = "770";
       };
     };
   };
@@ -268,7 +274,35 @@ in
   #   };
   # };
 
-  services.traefik
+  services.traefik = {
+    enable = true;
+    staticConfigFile = config.age.secrets.traefik_conf.path;
+    environmentFiles = [
+      config.age.secrets.traefik_env.path
+    ];
+    dataDir = "${appdata_path}/traefik";
+    # staticConfigOptions = {
+    #   entryPoints = {
+    #     web = {
+    #       address = ":80";
+    #       redirections = {
+    #         entryPoint = {
+    #           to = "websecure";
+    #           scheme = "https";
+    #         };
+    #       };
+    #     };
+    #     websecure = {
+    #       address = ":443";
+
+    #     }
+    #   };
+    # };
+  };
+
+  users.users.traefik = {
+    extraGroups = [ "docker" ];
+  };
 
   
 
