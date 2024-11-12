@@ -12,6 +12,7 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
+      outputs.nixosModules.mealie
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
@@ -327,6 +328,15 @@ in
         enableACME = false;
         useACMEHost = local_domain;
         forceSSL = true;
+      };
+      "mealie.${local_domain}" = {
+        enableACME = false;
+        useACMEHost = local_domain;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:9000";
+          proxyWebsockets = true;
+        };
       };
     };
   };

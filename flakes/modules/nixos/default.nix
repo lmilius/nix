@@ -18,6 +18,7 @@
   nix_cache = import ./services/nix_cache.nix;
   ansible = import ./utilities/ansible.nix;
   syncthing = import ./services/syncthing.nix;
+  mealie = import ./services/mealie.nix;
   #TODO
   # Samba
   # docker containers?
