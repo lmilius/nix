@@ -15,9 +15,10 @@ in
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
-      # (outputs.nixosModules.nextcloud {
-      #   trusted_domains = ["10.10.200.91"];
-      # })
+      (outputs.nixosModules.nextcloud {
+        hostname = "nextcloud.${local_domain}";
+        pkgs = pkgs;
+      })
 
       inputs.agenix.nixosModules.default
 
@@ -217,20 +218,20 @@ in
       traefik_env = {
         file = ../../secrets/nix-server/traefik_env.age;
       };
-      traefik_conf = {
-        file = ../../secrets/nix-server/traefik_conf_toml.age;
-        path = "${appdata_path}/traefik/traefik.toml";
-        owner = "traefik";
-        group = "traefik";
-        mode = "770";
-      };
-      traefik_rules = {
-        file = ../../secrets/nix-server/traefik_rules_toml.age;
-        path = "${appdata_path}/traefik/rules.toml";
-        owner = "traefik";
-        group = "traefik";
-        mode = "770";
-      };
+      # traefik_conf = {
+      #   file = ../../secrets/nix-server/traefik_conf_toml.age;
+      #   path = "${appdata_path}/traefik/traefik.toml";
+      #   owner = "traefik";
+      #   group = "traefik";
+      #   mode = "770";
+      # };
+      # traefik_rules = {
+      #   file = ../../secrets/nix-server/traefik_rules_toml.age;
+      #   path = "${appdata_path}/traefik/rules.toml";
+      #   owner = "traefik";
+      #   group = "traefik";
+      #   mode = "770";
+      # };
     };
   };
 
@@ -263,32 +264,90 @@ in
         environment = {
           MODE = "standalone";
         };
-        labels = {
-          "traefik.enable" = "true";
-          "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
-        };
+        # labels = {
+        #   "traefik.enable" = "true";
+        #   "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
+        # };
         hostname = "speedtest.${local_domain}";
-        # ports = [
-        #   "8080:80"
-        # ];
+        ports = [
+          "127.0.0.1:8080:80"
+        ];
       };
     };
   };
 
-  services.traefik = {
+  # services.traefik = {
+  #   enable = true;
+  #   staticConfigFile = config.age.secrets.traefik_conf.path;
+  #   environmentFiles = [
+  #     config.age.secrets.traefik_env.path
+  #   ];
+  #   dataDir = "${appdata_path}/traefik";
+  # };
+
+  # users.users.traefik = {
+  #   extraGroups = [ "docker" ];
+  # };
+
+  # systemd.tmpfiles.rules = [
+  #   "d ${appdata_path}/nginx 750 ${config.services.nginx.user} ${config.services.nginx.group} - -"
+  #   "d ${appdata_path}/nginx/certs 750 ${config.services.nginx.user} ${config.services.nginx.group} - -"
+  # ];
+
+  # Allow nginx access to letsencrypt keys
+  users.users."nginx".extraGroups = [ "acme" ];
+
+
+  services.nginx = {
     enable = true;
-    staticConfigFile = config.age.secrets.traefik_conf.path;
-    environmentFiles = [
-      config.age.secrets.traefik_env.path
-    ];
-    dataDir = "${appdata_path}/traefik";
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+    virtualHosts = {
+      "ha.${local_domain}" = {
+        enableACME = false;
+        useACMEHost = local_domain;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://10.10.200.10:8123";
+          proxyWebsockets = true;
+        };
+      };
+      "speedtest.${local_domain}" = {
+        enableACME = false;
+        useACMEHost = local_domain;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8080";
+          proxyWebsockets = true;
+        };
+      };
+      "nextcloud.${local_domain}" = {
+        enableACME = false;
+        useACMEHost = local_domain;
+        forceSSL = true;
+      };
+    };
   };
-
-  users.users.traefik = {
-    extraGroups = [ "docker" ];
-  };
-
   
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = "lmilius12@gmail.com";
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      environmentFile = config.age.secrets.traefik_env.path;
+    };
+    certs."${local_domain}" = {
+      domain = local_domain;
+      extraDomainNames = [ "*.${local_domain}" ];
+      group = config.services.nginx.group;
+      dnsPropagationCheck = true;
+      reloadServices = [ "nginx" ];
+      # directory = "${appdata_path}/nginx/certs";
+    };
+  };
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
