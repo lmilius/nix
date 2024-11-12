@@ -12,7 +12,10 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      outputs.nixosModules.mealie
+      (outputs.nixosModules.mealie {
+        local_domain = local_domain;
+        appdata_path = appdata_path;
+      })
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
