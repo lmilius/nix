@@ -7,6 +7,7 @@
     port = 9000;
     settings = {
       ALLOW_SIGNUP = "false";
+      TZ = "America/Chicago";
     };
   };
 }
