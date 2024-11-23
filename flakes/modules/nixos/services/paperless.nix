@@ -8,7 +8,7 @@
     mediaDir = "${appdata_path}/paperless/media";
     dataDir = "${appdata_path}/paperless/data";
     consumptionDirIsPublic = true;
-    consumeDir = "${appdata_path}/paperless/consume";
+    consumptionDir = "${appdata_path}/paperless/consume";
     settings = {
       PAPERLESS_CONSUMER_IGNORE_PATTERN = [
         ".DS_STORE/*"
@@ -23,7 +23,7 @@
     useACMEHost = domain;
     forceSSL = true;
     locations."/" = {
-      proxyPass = "http://127.0.0.1:${config.services.paperless.port}";
+      proxyPass = "http://127.0.0.1:${ toString config.services.paperless.port}";
       proxyWebsockets = true;
     };
   };

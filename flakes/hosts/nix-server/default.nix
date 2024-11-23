@@ -24,7 +24,14 @@ in
         local_domain = local_domain;
         appdata_path = appdata_path;
       })
-      outputs.nixosModules.paperless
+      (outputs.nixosModules.paperless {
+        # config = config;
+        # pkgs = pkgs;
+        inherit config pkgs;
+        admin_pass_file = config.age.secrets.paperless_admin_pass.path;
+        appdata_path = appdata_path;
+        domain = local_domain;
+      })
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
@@ -232,7 +239,7 @@ in
         file = ../../secrets/nix-server/traefik_env.age;
       };
       paperless_admin_pass = {
-        file = "../../secrets/nix-server/paperless_admin_pass.age";
+        file = ../../secrets/nix-server/paperless_admin_pass.age;
       };
       # traefik_conf = {
       #   file = ../../secrets/nix-server/traefik_conf_toml.age;
@@ -295,11 +302,11 @@ in
     };
   };
 
-  outputs.nixosModules.paperless = {
-    admin_pass_file = config.age.secrets.paperless_admin_pass.path;
-    appdata_path = appdata_path;
-    domain = local_domain;
-  };
+  # outputs.nixosModules.paperless = {
+  #   admin_pass_file = config.age.secrets.paperless_admin_pass.path;
+  #   appdata_path = appdata_path;
+  #   domain = local_domain;
+  # };
 
   # services.traefik = {
   #   enable = true;
