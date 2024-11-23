@@ -19,6 +19,7 @@
   ansible = import ./utilities/ansible.nix;
   syncthing = import ./services/syncthing.nix;
   mealie = import ./services/mealie.nix;
+  paperless = import ./services/paperless.nix;
   #TODO
   # Samba
   # docker containers?

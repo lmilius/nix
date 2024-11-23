@@ -3,6 +3,14 @@
 let
   appdata_path = "/tank/appdata";
   local_domain = "nix.miliushome.com";
+  vHostLocal = {domain, port, }: {
+    enableACME = false;
+    useACMEHost = domain;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${port}";
+      # proxyWebsockets = false;
+    };
+  };
 in
 {
   imports =
@@ -16,6 +24,7 @@ in
         local_domain = local_domain;
         appdata_path = appdata_path;
       })
+      outputs.nixosModules.paperless
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
@@ -222,6 +231,9 @@ in
       traefik_env = {
         file = ../../secrets/nix-server/traefik_env.age;
       };
+      paperless_admin_pass = {
+        file = "../../secrets/nix-server/paperless_admin_pass.age";
+      };
       # traefik_conf = {
       #   file = ../../secrets/nix-server/traefik_conf_toml.age;
       #   path = "${appdata_path}/traefik/traefik.toml";
@@ -272,12 +284,21 @@ in
         #   "traefik.enable" = "true";
         #   "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
         # };
-        hostname = "speedtest.${local_domain}";
         ports = [
           "127.0.0.1:8080:80"
         ];
       };
+      # paperless = {
+      #   image = "ghcr.io/paperless-ngx/paperless-ngx:2.12.1";
+
+      # }
     };
+  };
+
+  outputs.nixosModules.paperless = {
+    admin_pass_file = config.age.secrets.paperless_admin_pass.path;
+    appdata_path = appdata_path;
+    domain = local_domain;
   };
 
   # services.traefik = {
@@ -343,6 +364,8 @@ in
       };
     };
   };
+
+  # services.nginx.virtualHosts = lib.mkMerge vHostLocal "speedtest" local_domain "8080";
   
   security.acme = {
     acceptTerms = true;

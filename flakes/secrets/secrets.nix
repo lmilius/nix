@@ -27,6 +27,7 @@ in
   "nix-server/traefik_rules.age".publicKeys = nixosHosts ++ users;
   "nix-server/traefik_conf_toml.age".publicKeys = nixosHosts ++ users;
   "nix-server/traefik_rules_toml.age".publicKeys = nixosHosts ++ users;
+  "nix-server/paperless_admin_pass.age".publicKeys = nixosHosts ++ users;
   # "cloudflare_dns_credentials.age".publicKeys = [ ssh_key ];
   # "nextcloud_postgres_admin.age".publicKeys = [ ssh_key ];
   # "nextcloud_domain_name.age".publicKeys = [ ssh_key ];
