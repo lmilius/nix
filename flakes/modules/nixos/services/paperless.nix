@@ -1,4 +1,4 @@
-{ admin_pass_file, appdata_path, domain, ... }: 
+{ config, pkgs, admin_pass_file, appdata_path, domain, ... }: 
 {
   services.paperless = {
     enable = true;
