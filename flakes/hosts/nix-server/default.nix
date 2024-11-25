@@ -2,6 +2,7 @@
 { inputs, outputs, lib, config, pkgs, hostname, ... }:
 let
   appdata_path = "/tank/appdata";
+  bitcoin_data_dir = /tank/bitcoin;
   local_domain = "nix.miliushome.com";
   # vHostLocal = {domain, port, }: {
   #   enableACME = false;
@@ -209,8 +210,14 @@ in
       name = "lmilius";
     };
   };
-  services.bitcoind.enable = true;
-  services.clightning.enable = true;
+  services.bitcoind = {
+    enable = true;
+    dataDir = "${bitcoin_data_dir}/bitcoind";
+  };
+  services.clightning = {
+    enable = true;
+    dataDir = "${bitcoin_data_dir}/clightning";
+  };
 
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
