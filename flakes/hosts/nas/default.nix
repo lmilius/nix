@@ -1,8 +1,8 @@
 
 { inputs, outputs, lib, config, pkgs, hostname, ... }:
 let
-  appdata_path = "/tank/appdata";
-  local_domain = "nix.miliushome.com";
+  # appdata_path = "/tank2/appdata";
+  # local_domain = "miliushome.com";
   # vHostLocal = {domain, port, }: {
   #   enableACME = false;
   #   useACMEHost = domain;
@@ -20,8 +20,6 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      inputs.nix-bitcoin.nixosModules.default
-      # (inputs.nix-bitcoin + "/modules/presets/secure-node.nix")
       # (outputs.nixosModules.mealie {
       #   local_domain = local_domain;
       #   appdata_path = appdata_path;
@@ -54,14 +52,41 @@ in
     supportedFilesystems = [ "zfs" ];
     zfs = {
       forceImportRoot = false;
-      extraPools = [ "tank" ];
+      extraPools = [ "tank2" ];
     };
   };
   
-  networking.hostId = "d131645e";
+  # head -c4 /dev/urandom | od -A none -t x4
+  networking.hostId = "dab4ad1d";
   services.zfs.autoScrub.enable = true;
 
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking = {
+    firewall = {
+      enable = false;
+      # allowedTCPPorts = [ 80 443 22 ];
+    };
+    bridges = {
+      br0 = {
+        interfaces = [ "eno1" ];
+      };
+    };
+    interfaces = {
+      br0 = {
+        useDHCP = false;
+        ipv4.addresses = [{
+            address = "10.10.200.90";
+            prefixLength = 24;
+          }];
+      };
+      eno1.useDHCP = false;
+    };
+    defaultGateway = "10.10.200.1";
+    nameservers = [ "10.10.200.1" ];
+    localCommands = ''
+      ip rule add to 10.10.200.0/24 priority 2500 lookup main
+    '';
+  };
+  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   #networking.bridges = {
   #  br0 = {
@@ -199,18 +224,6 @@ in
   #     };
   #   };
   # };
-
-  # Nix-Bitcoin configuration
-  # https://github.com/fort-nix/nix-bitcoin/blob/master/examples/flakes/flake.nix
-  nix-bitcoin = {
-    generateSecrets = true;
-    operator = {
-      enable = true;
-      name = "lmilius";
-    };
-  };
-  services.bitcoind.enable = true;
-  services.clightning.enable = true;
 
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
@@ -438,7 +451,7 @@ in
   # networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  # networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
