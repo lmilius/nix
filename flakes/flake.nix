@@ -37,6 +37,12 @@
       url = "github:aksiksi/compose2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # nix-bitcoin = {
+    #   url = "github:fort-nix/nix-bitcoin/release";
+    #   inputs.nixpkgs.follows = "nix-bitcoin/nixpkgs";
+    #   inputs.nixpkgs-unstable.follows = "nix-bitcoin/nixpkgs-unstable";
+    # };
   };
 
   outputs = {
@@ -49,6 +55,7 @@
     # nixos-06cb-009a-fingerprint-sensor,
     agenix,
     compose2nix,
+    # nix-bitcoin,
     ...
   } @ inputs: let
     inherit (self) outputs;

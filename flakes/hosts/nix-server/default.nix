@@ -3,14 +3,14 @@
 let
   appdata_path = "/tank/appdata";
   local_domain = "nix.miliushome.com";
-  vHostLocal = {domain, port, }: {
-    enableACME = false;
-    useACMEHost = domain;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${port}";
-      # proxyWebsockets = false;
-    };
-  };
+  # vHostLocal = {domain, port, }: {
+  #   enableACME = false;
+  #   useACMEHost = domain;
+  #   locations."/" = {
+  #     proxyPass = "http://127.0.0.1:${port}";
+  #     # proxyWebsockets = false;
+  #   };
+  # };
 in
 {
   imports =
@@ -20,27 +20,26 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      (outputs.nixosModules.mealie {
-        local_domain = local_domain;
-        appdata_path = appdata_path;
-      })
-      (outputs.nixosModules.paperless {
-        # config = config;
-        # pkgs = pkgs;
-        inherit config pkgs;
-        admin_pass_file = config.age.secrets.paperless_admin_pass.path;
-        appdata_path = appdata_path;
-        domain = local_domain;
-      })
+      # inputs.nix-bitcoin.nixosModules.default
+      # (outputs.nixosModules.mealie {
+      #   local_domain = local_domain;
+      #   appdata_path = appdata_path;
+      # })
+      # (outputs.nixosModules.paperless {
+      #   inherit config pkgs;
+      #   admin_pass_file = config.age.secrets.paperless_admin_pass.path;
+      #   appdata_path = appdata_path;
+      #   domain = local_domain;
+      # })
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
 
-      (outputs.nixosModules.nextcloud {
-        hostname = "nextcloud.${local_domain}";
-        pkgs = pkgs;
-      })
+      # (outputs.nixosModules.nextcloud {
+      #   hostname = "nextcloud.${local_domain}";
+      #   pkgs = pkgs;
+      # })
 
-      inputs.agenix.nixosModules.default
+      # inputs.agenix.nixosModules.default
 
     ];
   
@@ -118,11 +117,38 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "libvirtd" "deployer" ]; # Enable ‘sudo’ for the user.
+    openssh.authorizedKeys.keys = [ 
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
+    ];
     #packages = with pkgs; [
     #  tree
     #];
   };
+
+  users.groups.deployer = {
+    gid = 1100;
+  };
+  users.users.deployer = {
+    isNormalUser = true;
+    extraGroups = [ "deployer" "wheel" "docker" "libvirtd" ];
+    createHome = true;
+    uid = 1100;
+    group = "deployer";
+    openssh.authorizedKeys.keys = [ 
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr6u53xcfqXT8h42hTG2S7QEDOavh4AQmqfRVAgOvK6 lmilius@util"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
+    ];
+  };
+  security.sudo.extraRules = [{
+    commands = [
+      {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }
+    ];
+    users = [ "deployer" ];
+  }];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -133,7 +159,7 @@ in
     virt-manager
     qemu
     quickemu
-    inputs.compose2nix.packages.x86_64-linux.default
+    # inputs.compose2nix.packages.x86_64-linux.default
   ];
 
   # # Syncthing
@@ -172,6 +198,18 @@ in
   #     };
   #   };
   # };
+
+  # Nix-Bitcoin configuration
+  # https://github.com/fort-nix/nix-bitcoin/blob/master/examples/flakes/flake.nix
+  # nix-bitcoin = {
+  #   generateSecrets = true;
+  #   operator = {
+  #     enable = true;
+  #     name = "lmilius";
+  #   };
+  # };
+  # services.bitcoind.enable = true;
+  # services.clightning.enable = true;
 
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
@@ -220,6 +258,9 @@ in
 
   programs.nix-ld.enable = true;
 
+  services.fstrim.enable = true;
+  services.fwupd.enable = true;
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
@@ -232,75 +273,75 @@ in
   };
   programs.virt-manager.enable = true;
 
-  age = {
-    # identityPaths = [ "/etc/ssh/ssh_host_ed25519_key.pub" ];
-    secrets = {
-      traefik_env = {
-        file = ../../secrets/nix-server/traefik_env.age;
-      };
-      paperless_admin_pass = {
-        file = ../../secrets/nix-server/paperless_admin_pass.age;
-      };
-      # traefik_conf = {
-      #   file = ../../secrets/nix-server/traefik_conf_toml.age;
-      #   path = "${appdata_path}/traefik/traefik.toml";
-      #   owner = "traefik";
-      #   group = "traefik";
-      #   mode = "770";
-      # };
-      # traefik_rules = {
-      #   file = ../../secrets/nix-server/traefik_rules_toml.age;
-      #   path = "${appdata_path}/traefik/rules.toml";
-      #   owner = "traefik";
-      #   group = "traefik";
-      #   mode = "770";
-      # };
-    };
-  };
+  # age = {
+  #   # identityPaths = [ "/etc/ssh/ssh_host_ed25519_key.pub" ];
+  #   secrets = {
+  #     traefik_env = {
+  #       file = ../../secrets/nix-server/traefik_env.age;
+  #     };
+  #     paperless_admin_pass = {
+  #       file = ../../secrets/nix-server/paperless_admin_pass.age;
+  #     };
+  #     # traefik_conf = {
+  #     #   file = ../../secrets/nix-server/traefik_conf_toml.age;
+  #     #   path = "${appdata_path}/traefik/traefik.toml";
+  #     #   owner = "traefik";
+  #     #   group = "traefik";
+  #     #   mode = "770";
+  #     # };
+  #     # traefik_rules = {
+  #     #   file = ../../secrets/nix-server/traefik_rules_toml.age;
+  #     #   path = "${appdata_path}/traefik/rules.toml";
+  #     #   owner = "traefik";
+  #     #   group = "traefik";
+  #     #   mode = "770";
+  #     # };
+  #   };
+  # };
 
   virtualisation.docker.daemon.settings.data-root = "/tank/docker-data";
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-  #     traefik = {
-  #       image = "traefik:v2.10.7";
-  #       ports = [
-  #         "0.0.0.0:80:80"
-  #         "0.0.0.0:443:443"
-  #       ];
-  #       labels = {
-  #         "traefik.enable" = "true";
-  #         "traefik.http.routers.traefik.entrypoints" = "websecure";
-  #         "traefik.http.routers.traefik.rule" = "Host(`proxy.${local_domain}`)";
-  #         "traefik.http.routers.traefik.tls" = "true";
-  #         "traefik.http.routers.traefik.service" = "api@internal";
-  #         "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+  # virtualisation.oci-containers = {
+  #   backend = "docker";
+  #   containers = {
+  # #     traefik = {
+  # #       image = "traefik:v2.10.7";
+  # #       ports = [
+  # #         "0.0.0.0:80:80"
+  # #         "0.0.0.0:443:443"
+  # #       ];
+  # #       labels = {
+  # #         "traefik.enable" = "true";
+  # #         "traefik.http.routers.traefik.entrypoints" = "websecure";
+  # #         "traefik.http.routers.traefik.rule" = "Host(`proxy.${local_domain}`)";
+  # #         "traefik.http.routers.traefik.tls" = "true";
+  # #         "traefik.http.routers.traefik.service" = "api@internal";
+  # #         "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+  # #       };
+  # #       volumes = [
+  # #         "${appdata_path}/traefik:/etc/traefik"
+  # #         "/var/run/docker.sock:/var/run/docker.sock:ro"
+  # #       ];
+  # #       environmentFiles = [ config.age.secrets.traefik_env.path ];
+  # #     };
+  #     speedtest = {
+  #       image = "linuxserver/librespeed:latest";
+  #       environment = {
+  #         MODE = "standalone";
   #       };
-  #       volumes = [
-  #         "${appdata_path}/traefik:/etc/traefik"
-  #         "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #       # labels = {
+  #       #   "traefik.enable" = "true";
+  #       #   "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
+  #       # };
+  #       ports = [
+  #         "127.0.0.1:8080:80"
   #       ];
-  #       environmentFiles = [ config.age.secrets.traefik_env.path ];
   #     };
-      speedtest = {
-        image = "linuxserver/librespeed:latest";
-        environment = {
-          MODE = "standalone";
-        };
-        # labels = {
-        #   "traefik.enable" = "true";
-        #   "traefik.http.routers.speedtest.rule" = "Host(`speedtest.${local_domain}`)";
-        # };
-        ports = [
-          "127.0.0.1:8080:80"
-        ];
-      };
-      # paperless = {
-      #   image = "ghcr.io/paperless-ngx/paperless-ngx:2.12.1";
+  #     # paperless = {
+  #     #   image = "ghcr.io/paperless-ngx/paperless-ngx:2.12.1";
 
-      # }
-    };
-  };
+  #     # }
+  #   };
+  # };
 
   # outputs.nixosModules.paperless = {
   #   admin_pass_file = config.age.secrets.paperless_admin_pass.path;
@@ -327,73 +368,73 @@ in
   # ];
 
   # Allow nginx access to letsencrypt keys
-  users.users."nginx".extraGroups = [ "acme" ];
+  # users.users."nginx".extraGroups = [ "acme" ];
 
 
-  services.nginx = {
-    enable = true;
-    recommendedOptimisation = true;
-    recommendedTlsSettings = true;
-    recommendedGzipSettings = true;
-    recommendedProxySettings = true;
-    virtualHosts = {
-      "ha.${local_domain}" = {
-        enableACME = false;
-        useACMEHost = local_domain;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://10.10.200.10:8123";
-          proxyWebsockets = true;
-        };
-      };
-      "speedtest.${local_domain}" = {
-        enableACME = false;
-        useACMEHost = local_domain;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8080";
-          proxyWebsockets = true;
-        };
-      };
-      "nextcloud.${local_domain}" = {
-        enableACME = false;
-        useACMEHost = local_domain;
-        forceSSL = true;
-      };
-      "mealie.${local_domain}" = {
-        enableACME = false;
-        useACMEHost = local_domain;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:9000";
-          proxyWebsockets = true;
-        };
-      };
-    };
-  };
+  # services.nginx = {
+  #   enable = true;
+  #   recommendedOptimisation = true;
+  #   recommendedTlsSettings = true;
+  #   recommendedGzipSettings = true;
+  #   recommendedProxySettings = true;
+  #   virtualHosts = {
+  #     "ha.${local_domain}" = {
+  #       enableACME = false;
+  #       useACMEHost = local_domain;
+  #       forceSSL = true;
+  #       locations."/" = {
+  #         proxyPass = "http://10.10.200.10:8123";
+  #         proxyWebsockets = true;
+  #       };
+  #     };
+  #     "speedtest.${local_domain}" = {
+  #       enableACME = false;
+  #       useACMEHost = local_domain;
+  #       forceSSL = true;
+  #       locations."/" = {
+  #         proxyPass = "http://127.0.0.1:8080";
+  #         proxyWebsockets = true;
+  #       };
+  #     };
+  #     "nextcloud.${local_domain}" = {
+  #       enableACME = false;
+  #       useACMEHost = local_domain;
+  #       forceSSL = true;
+  #     };
+  #     "mealie.${local_domain}" = {
+  #       enableACME = false;
+  #       useACMEHost = local_domain;
+  #       forceSSL = true;
+  #       locations."/" = {
+  #         proxyPass = "http://127.0.0.1:9000";
+  #         proxyWebsockets = true;
+  #       };
+  #     };
+  #   };
+  # };
 
-  # services.nginx.virtualHosts = lib.mkMerge vHostLocal "speedtest" local_domain "8080";
+  # # services.nginx.virtualHosts = lib.mkMerge vHostLocal "speedtest" local_domain "8080";
   
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = "lmilius12@gmail.com";
-      dnsProvider = "cloudflare";
-      dnsResolver = "1.1.1.1:53";
-      environmentFile = config.age.secrets.traefik_env.path;
-    };
-    certs."${local_domain}" = {
-      domain = local_domain;
-      extraDomainNames = [ "*.${local_domain}" ];
-      group = config.services.nginx.group;
-      dnsPropagationCheck = true;
-      reloadServices = [ "nginx" ];
-      # directory = "${appdata_path}/nginx/certs";
-    };
-  };
+  # security.acme = {
+  #   acceptTerms = true;
+  #   defaults = {
+  #     email = "lmilius12@gmail.com";
+  #     dnsProvider = "cloudflare";
+  #     dnsResolver = "1.1.1.1:53";
+  #     environmentFile = config.age.secrets.traefik_env.path;
+  #   };
+  #   certs."${local_domain}" = {
+  #     domain = local_domain;
+  #     extraDomainNames = [ "*.${local_domain}" ];
+  #     group = config.services.nginx.group;
+  #     dnsPropagationCheck = true;
+  #     reloadServices = [ "nginx" ];
+  #     # directory = "${appdata_path}/nginx/certs";
+  #   };
+  # };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 443 22 ];
+  # networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
