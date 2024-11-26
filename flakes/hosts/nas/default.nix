@@ -14,11 +14,11 @@ in
 
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.home-manager
-      outputs.nixosModules.cockpit
-      outputs.nixosModules.docker_daemon
+      # outputs.nixosModules.cockpit
+      # outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
       outputs.nixosModules.syncthing
-      outputs.nixosModules.systemd_oom
+      # outputs.nixosModules.systemd_oom
 
       # (outputs.nixosModules.nextcloud {
       #   hostname = "nextcloud.${local_domain}";
@@ -36,16 +36,16 @@ in
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    supportedFilesystems = [ "zfs" ];
-    zfs = {
-      forceImportRoot = false;
-      extraPools = [ "tank2" ];
-    };
+    # supportedFilesystems = [ "zfs" ];
+    # zfs = {
+    #   forceImportRoot = false;
+    #   extraPools = [ "tank2" ];
+    # };
   };
   
   # head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "dab4ad1d";
-  services.zfs.autoScrub.enable = true;
+  # services.zfs.autoScrub.enable = true;
 
   networking = {
     firewall = {
@@ -53,23 +53,23 @@ in
       trustedInterfaces = [ "tailscale0" ];
       # allowedTCPPorts = [ 80 443 22 ];
     };
-    bridges = {
-      br0 = {
-        interfaces = [ "eno1" ];
-      };
-    };
+    # bridges = {
+    #   br0 = {
+    #     interfaces = [ "eno1" ];
+    #   };
+    # };
     interfaces = {
-      br0 = {
-        useDHCP = false;
-        ipv4.addresses = [{
-            address = "10.10.200.90";
-            prefixLength = 24;
-          }];
-      };
-      eno1.useDHCP = false;
+      # br0 = {
+      #   useDHCP = false;
+      #   ipv4.addresses = [{
+      #       address = "10.10.200.90";
+      #       prefixLength = 24;
+      #     }];
+      # };
+      eno1.useDHCP = true;
     };
-    defaultGateway = "10.10.200.1";
-    nameservers = [ "10.10.200.1" ];
+    # defaultGateway = "10.10.200.1";
+    # nameservers = [ "10.10.200.1" ];
     localCommands = ''
       ip rule add to 10.10.200.0/24 priority 2500 lookup main
     '';
@@ -217,7 +217,7 @@ in
         "delete veto files" = "yes";
       };
     in {
-      archives = mkShare "${zfs_tank}/archives";
+      archives = mkShare "/${zfs_tank}/archives";
       backups = mkShare "/${zfs_tank}/backups";
 
       public_share = mkPublicShare "/${zfs_tank}/public_share";
