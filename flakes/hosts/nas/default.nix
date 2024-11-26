@@ -226,7 +226,7 @@ in
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
+  programs.nh.flake = "/home/lmilius/workspace/nix";
 
   programs.nix-ld.enable = true;
   services.fstrim.enable = true;
