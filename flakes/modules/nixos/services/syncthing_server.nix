@@ -1,12 +1,19 @@
 { lib, ... }:
 {
+
+  users.users."syncthing".extraGroups = [ "deployer" ];
+
   # Syncthing
   services.syncthing = {
     enable = lib.mkDefault true;
-    user = lib.mkDefault "lmilius";
-    dataDir = lib.mkDefault "/home/lmilius/syncthing";
-    configDir = lib.mkDefault "/home/lmilius/Documents/.config/syncthing";
+    # user = lib.mkDefault "deployer";
+    # group = lib.mkDefault "deployer";
+    dataDir = lib.mkDefault "/tank2/appdata/syncthing";
+    guiAddress = "0.0.0.0:8384";
     settings = {
+      options = {
+        localAnnounceEnabled = true;
+      };
       devices = {
         Server = {
           addresses = [
@@ -30,10 +37,10 @@
           id = "vccxz-vvrns";
           path = "/home/lmilius/syncthing/nix-flake-config";
           devices = [
-            "Server"
             "x1carbon"
             "t480s"
             "nas"
+            "Server"
           ];
         };
       };

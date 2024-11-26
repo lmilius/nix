@@ -15,9 +15,9 @@ in
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.home-manager
       # outputs.nixosModules.cockpit
-      # outputs.nixosModules.docker_daemon
+      outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      outputs.nixosModules.syncthing
+      outputs.nixosModules.syncthing_server
       # outputs.nixosModules.systemd_oom
 
       # (outputs.nixosModules.nextcloud {
@@ -36,16 +36,16 @@ in
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    # supportedFilesystems = [ "zfs" ];
-    # zfs = {
-    #   forceImportRoot = false;
-    #   extraPools = [ "tank2" ];
-    # };
+    supportedFilesystems = [ "zfs" ];
+    zfs = {
+      forceImportRoot = false;
+      extraPools = [ "tank2" ];
+    };
   };
   
   # head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "dab4ad1d";
-  # services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.enable = true;
 
   networking = {
     firewall = {
@@ -103,7 +103,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "libvirtd" "deployer" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "libvirtd" "deployer" "syncthing" ]; # Enable ‘sudo’ for the user.
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
     ];

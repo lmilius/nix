@@ -18,6 +18,7 @@
   nix_cache = import ./services/nix_cache.nix;
   ansible = import ./utilities/ansible.nix;
   syncthing = import ./services/syncthing.nix;
+  syncthing_server = import ./services/syncthing_server.nix;
   mealie = import ./services/mealie.nix;
   paperless = import ./services/paperless.nix;
   #TODO
