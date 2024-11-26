@@ -21,9 +21,6 @@
         t480s = {
           id = "ZJA3J2Y-B43GBN6-US2DC6M-JJ56R6H-NOOOKOJ-2KD2HCP-WRJTWU2-6NZYBQX";
         };
-        nas = {
-          id = "JD67CKI-PB4NHPU-E7AEKFH-PQXTZ52-WOWKDFX-ED2XRZN-CS6ZKDS-JSDPCAJ";
-        };
       };
       folders = {
         "Nix Flake Config" = {
@@ -33,7 +30,6 @@
             "Server"
             "x1carbon"
             "t480s"
-            "nas"
           ];
         };
       };
