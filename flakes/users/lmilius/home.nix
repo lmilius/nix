@@ -124,8 +124,8 @@ StrictHostKeyChecking no
         hostname = "192.168.88.5";
         user = "lmilius";
       };
-      "pve1" = {
-        hostname = "pve1";
+      "nas" = {
+        hostname = "10.10.200.90";
         user = "root";
       };
       "nix-server" = {
