@@ -126,7 +126,7 @@ StrictHostKeyChecking no
       };
       "nas" = {
         hostname = "10.10.200.90";
-        user = "root";
+        user = "lmilius";
       };
       "nix-server" = {
         hostname = "10.10.200.91";
