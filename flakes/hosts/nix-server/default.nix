@@ -1,8 +1,9 @@
 
 { inputs, outputs, lib, config, pkgs, hostname, ... }:
 let
-  appdata_path = "/tank/appdata";
-  bitcoin_data_dir = /tank/bitcoin;
+  zfs_tank = "tank";
+  appdata_path = "/${zfs_tank}/appdata";
+  bitcoin_data_dir = "/${zfs_tank}/bitcoin";
   local_domain = "nix.miliushome.com";
   # vHostLocal = {domain, port, }: {
   #   enableACME = false;
@@ -21,7 +22,7 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      inputs.nix-bitcoin.nixosModules.default
+      # inputs.nix-bitcoin.nixosModules.default
       # (inputs.nix-bitcoin + "/modules/presets/secure-node.nix")
       # (outputs.nixosModules.mealie {
       #   local_domain = local_domain;
@@ -55,7 +56,7 @@ in
     supportedFilesystems = [ "zfs" ];
     zfs = {
       forceImportRoot = false;
-      extraPools = [ "tank" ];
+      extraPools = [ "${zfs_tank}" ];
     };
   };
   
@@ -203,21 +204,21 @@ in
 
   # Nix-Bitcoin configuration
   # https://github.com/fort-nix/nix-bitcoin/blob/master/examples/flakes/flake.nix
-  nix-bitcoin = {
-    generateSecrets = true;
-    operator = {
-      enable = true;
-      name = "lmilius";
-    };
-  };
-  services.bitcoind = {
-    enable = true;
-    dataDir = "${bitcoin_data_dir}/bitcoind";
-  };
-  services.clightning = {
-    enable = true;
-    dataDir = "${bitcoin_data_dir}/clightning";
-  };
+  # nix-bitcoin = {
+  #   generateSecrets = true;
+  #   operator = {
+  #     enable = true;
+  #     name = "lmilius";
+  #   };
+  # };
+  # services.bitcoind = {
+  #   enable = true;
+  #   dataDir = "${bitcoin_data_dir}/bitcoind";
+  # };
+  # services.clightning = {
+  #   enable = true;
+  #   dataDir = "${bitcoin_data_dir}/clightning";
+  # };
 
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
@@ -227,26 +228,74 @@ in
       workgroup = WORKGROUP
       server string = ${hostname}
       netbios name = ${hostname}
-      security = user
-      guest ok = no
-      guest account = nobody
+
+      server role = standalone server
+      dns proxy = no
+
+      pam password change = yes
       map to guest = bad user
+      usershare allow guests = yes
+      create mask = 0664
+      force create mode = 0664
+      directory mask = 0775
+      force directory mode = 0775
+      follow symlinks = yes
       load printers = no
+      printing = bsd
+      printcap name = /dev/null
+      disable spoolss = yes
+      strict locking = no
+      aio read size = 0
+      aio write size = 0
+      vfs objects = acl_xattr catia fruit streams_xattr
+      inherit permissions = yes
+
+      # Security
+      client ipc max protocol = SMB3
+      client ipc min protocol = SMB2_10
+      client max protocol = SMB3
+      client min protocol = SMB2_10
+      server max protocol = SMB3
+      server min protocol = SMB2_10
     '';
     shares = let
       mkShare = path: {
         path = path;
-        browseable = "no";
+        browseable = "yes";
         "read only" = "no";
-        "guest ok" = "no";
+        "inherit acls" = "yes";
+        # Authenticate Users (space delimited)
+        "valid users" = "lmilius";
+
+        "veto files" = "/.apdisk/.DS_Store/.TemporaryItems/.Trashes/desktop.ini/ehthumbs.db/Network Trash Folder/Temporary Items/Thumbs.db/";
+        "delete veto files" = "yes";
+
+
+        "guest ok" = "yes";
         "create mask" = "0644";
         "directory mask" = "0755";
         "force user" = "lmilius";
         "force group" = "users";
       };
+      mkPublicShare = path: {
+        path = path;
+        browseable = "yes";
+        "read only" = "no";
+        "inherit acls" = "yes";
+
+        # This is public, everybody can access.
+        "guest ok" = "yes";
+        "force user" = "nobody";
+        "force group" = "users";
+
+        "veto files" = "/.apdisk/.DS_Store/.TemporaryItems/.Trashes/desktop.ini/ehthumbs.db/Network Trash Folder/Temporary Items/Thumbs.db/";
+        "delete veto files" = "yes";
+      };
     in {
-      archives = mkShare "/tank/archives";
-      backups = mkShare "/tank/backups";
+      archives = mkShare "${zfs_tank}/archives";
+      backups = mkShare "/${zfs_tank}/backups";
+
+      public_share = mkPublicShare "/${zfs_tank}/public_share";
     };
   };
 
@@ -307,7 +356,7 @@ in
   #   };
   # };
 
-  virtualisation.docker.daemon.settings.data-root = "/tank/docker-data";
+  virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
   # virtualisation.oci-containers = {
   #   backend = "docker";
   #   containers = {
