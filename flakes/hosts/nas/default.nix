@@ -219,6 +219,7 @@ in
     in {
       archives = mkShare "/${zfs_tank}/archives";
       backups = mkShare "/${zfs_tank}/backups";
+      ha_backups = mkShare "/${zfs_tank}/backups/ha";
 
       public_share = mkPublicShare "/${zfs_tank}/public_share";
     };
