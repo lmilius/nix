@@ -10,6 +10,8 @@
     # group = lib.mkDefault "deployer";
     dataDir = lib.mkDefault "/tank2/appdata/syncthing";
     guiAddress = "0.0.0.0:8384";
+    overrideDevices = false;
+    overrideFolders = false;
     settings = {
       options = {
         localAnnounceEnabled = true;

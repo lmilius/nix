@@ -6,6 +6,8 @@
     user = lib.mkDefault "lmilius";
     dataDir = lib.mkDefault "/home/lmilius/syncthing";
     configDir = lib.mkDefault "/home/lmilius/Documents/.config/syncthing";
+    overrideDevices = false;
+    overrideFolders = false;
     settings = {
       devices = {
         nas = {
