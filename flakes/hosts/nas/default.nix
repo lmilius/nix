@@ -76,6 +76,7 @@ in
             address = "10.10.200.90";
             prefixLength = 24;
         }];
+        wakeOnLan.enable = true;
       };
     };
     defaultGateway = "10.10.200.1";
