@@ -1,7 +1,7 @@
 { lib, ... }:
 {
 
-  users.users."syncthing".extraGroups = [ "deployer" ];
+  users.users."syncthing".extraGroups = [ "syncthing" "deployer" ];
 
   # Syncthing
   services.syncthing = {
@@ -15,29 +15,18 @@
         localAnnounceEnabled = true;
       };
       devices = {
-        Server = {
+        nas = {
           addresses = [
             "tcp://sync.miliushome.com:22000"
             "tcp://10.10.200.90:22000"
           ];
-          id = "QK47CRP-FPGZLTG-ZXSVEPB-K2W7VDQ-3TMGB6M-OCJGDYI-FHJFWG5-SDMG6QI";
+          id = "XCFL7W4-CTECDYD-BY52DVC-O7KIAHO-7MISPLT-5CWVBSR-OKNXHXO-WRRSQQ2";
         };
         x1carbon = {
           id = "WB74NAR-CQ6B6YL-SLXZGKT-AMWFL7O-5YA4XSF-756NFZP-ZSVGBRD-IQRZRQL";
         };
         t480s = {
           id = "ZJA3J2Y-B43GBN6-US2DC6M-JJ56R6H-NOOOKOJ-2KD2HCP-WRJTWU2-6NZYBQX";
-        };
-      };
-      folders = {
-        "Nix Flake Config" = {
-          id = "vccxz-vvrns";
-          path = "/home/lmilius/syncthing/nix-flake-config";
-          devices = [
-            "x1carbon"
-            "t480s"
-            "Server"
-          ];
         };
       };
     };
