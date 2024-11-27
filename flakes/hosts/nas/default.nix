@@ -41,6 +41,9 @@ in
       forceImportRoot = false;
       extraPools = [ "tank2" ];
     };
+    kernelModules = [ "drivetemp" ];
+    kernelParams = ["i915.fastboot=1"];
+    kernel.sysctl."net.ipv4.ip_forward" = 1;
   };
   
   # head -c4 /dev/urandom | od -A none -t x4
@@ -66,10 +69,17 @@ in
       #       prefixLength = 24;
       #     }];
       # };
-      eno1.useDHCP = true;
+      eno1 = {
+        # useDHCP = true;
+        useDHCP = false;
+        ipv4.addresses = [{
+            address = "10.10.200.90";
+            prefixLength = 24;
+        }];
+      };
     };
-    # defaultGateway = "10.10.200.1";
-    # nameservers = [ "10.10.200.1" ];
+    defaultGateway = "10.10.200.1";
+    nameservers = [ "10.10.200.1" ];
     localCommands = ''
       ip rule add to 10.10.200.0/24 priority 2500 lookup main
     '';
@@ -137,6 +147,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    hddtemp
     intel-gpu-tools
     distrobox
     virt-manager
