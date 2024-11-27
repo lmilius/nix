@@ -461,7 +461,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
+  # programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
 
   # Enable steam
   programs.steam = {

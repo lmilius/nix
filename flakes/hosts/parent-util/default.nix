@@ -283,7 +283,7 @@
 
   # nix cli helper
   # https://github.com/viperML/nh
-  programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
+  # programs.nh.flake = "/home/lmilius/syncthing/nix-flake-config";
 
   # List services that you want to enable:
 

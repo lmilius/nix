@@ -105,8 +105,11 @@ ServerAliveCountMax 240
   # https://github.com/viperML/nh
   programs.nh = lib.mkDefault {
     enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep-since 14d --keep 5";
+    flake = "/home/lmilius/workspace/nix/flakes";
+    clean = {
+      enable = true;
+      clean.extraArgs = "--keep-since 14d --keep 5";
+    };
   };
 
   security.sudo = {
