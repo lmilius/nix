@@ -108,7 +108,7 @@ ServerAliveCountMax 240
     flake = "/home/lmilius/workspace/nix/flakes";
     clean = {
       enable = true;
-      clean.extraArgs = "--keep-since 14d --keep 5";
+      extraArgs = "--keep-since 14d --keep 5";
     };
   };
 
