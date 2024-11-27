@@ -36,7 +36,7 @@ in
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems = [ "zfs" "btrfs" ];
     zfs = {
       forceImportRoot = false;
       extraPools = [ "tank2" ];
@@ -44,6 +44,11 @@ in
     kernelModules = [ "drivetemp" ];
     kernelParams = ["i915.fastboot=1"];
     kernel.sysctl."net.ipv4.ip_forward" = 1;
+  };
+
+  # External Backup Drive
+  filesystems."/mnt/backups" = {
+    device = "/dev/disk/by-uuid/a6fef221-763e-46d4-88c1-212136d94125";
   };
   
   # head -c4 /dev/urandom | od -A none -t x4
