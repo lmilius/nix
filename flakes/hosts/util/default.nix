@@ -70,7 +70,8 @@
   #   useXkbConfig = true; # use xkbOptions in tty.
   # };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_11;
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
