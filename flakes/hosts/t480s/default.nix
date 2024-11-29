@@ -325,6 +325,7 @@
     discover
     insomnia
     inputs.agenix.packages."${system}".default
+    ipmiview
   ];
 
   services.udev.packages = with pkgs; [
