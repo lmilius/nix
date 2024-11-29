@@ -265,8 +265,14 @@ in
   virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
 
   # syncthing overrides
-  users.users."syncthing".extraGroups = [ "syncthing" "deployer" ];
+  users.groups."syncthing" = {};
+  users.users."syncthing" = {
+    group = "syncthing";
+    extraGroups = [ "syncthing" "deployer" ];
+  };
   services.syncthing = {
+    user = "syncthing";
+    group = "syncthing";
     dataDir = "/${zfs_tank}/appdata/syncthing";
     configDir = "/${zfs_tank}/appdata/syncthing/.config/syncthing";
   };
