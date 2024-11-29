@@ -17,7 +17,7 @@ in
       # outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      outputs.nixosModules.syncthing_server
+      outputs.nixosModules.syncthing
       # outputs.nixosModules.systemd_oom
 
       # (outputs.nixosModules.nextcloud {
@@ -263,6 +263,12 @@ in
   programs.virt-manager.enable = true;
 
   virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
+
+  # syncthing overrides
+  services.syncthing = {
+    dataDir = "/${zfs_tank}/appdata/syncthing";
+    configDir = "/${zfs_tank}/appdata/syncthing/.config/syncthing";
+  };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
