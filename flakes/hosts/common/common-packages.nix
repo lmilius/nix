@@ -21,6 +21,7 @@
     ipmitool
     jq
     kmon
+    lshw
     nmap
     openssl
     pciutils
