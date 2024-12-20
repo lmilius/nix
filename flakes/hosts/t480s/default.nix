@@ -302,7 +302,7 @@
     google-chrome
     # chromium
     ubootTools
-    openscad
+    openscad-unstable
     vlc
     pkgs.unstable.discord
     cups-brother-hl3140cw
