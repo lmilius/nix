@@ -161,46 +161,82 @@ in
     quickemu
   ];
 
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba-wsdd = {
+    enable = true; # make shares visible for windows 10 clients
+    discovery = true;
+    openFirewall = true;
+    hostname = "${hostname}";
+  };
   # Still need to run 'smbpasswd -a <USER>'
   services.samba = {
     enable = true;
     securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = ${hostname}
-      netbios name = ${hostname}
+    openFirewall = true;
+    # settings = {
+    #   global = {
+    #     "workgroup" = "WORKGROUP";
+    #     "server string" = "${hostname}";
+    #     "netbios name" = "${hostname}";
+    #     "security" = "user";
+    #     "hosts allow" = "10.10.200. 127.0.0.1 localhost";
+    #     "hosts deny" = "0.0.0.0/0";
+    #     "guest account" = "nobody";
+    #     "map to guest" = "bad user";
+    #     # "create mask" = "0664";
+    #     # "directory mask" = "0775";
+    #     "follow symlinks" = "yes";
+    #     "inherit permissions" = "yes";
+    #   };
+    # };
+    # extraConfig = ''
+    #   # workgroup = WORKGROUP
+    #   # server string = ${hostname}
+    #   # netbios name = ${hostname}
 
-      server role = standalone server
-      dns proxy = no
+    #   server role = standalone server
+    #   dns proxy = no
 
-      pam password change = yes
-      map to guest = bad user
-      usershare allow guests = yes
-      create mask = 0664
-      force create mode = 0664
-      directory mask = 0775
-      force directory mode = 0775
-      follow symlinks = yes
-      load printers = no
-      printing = bsd
-      printcap name = /dev/null
-      disable spoolss = yes
-      strict locking = no
-      aio read size = 0
-      aio write size = 0
-      vfs objects = acl_xattr catia fruit streams_xattr
-      inherit permissions = yes
+    #   # pam password change = yes
+    #   # map to guest = bad user
+    #   # usershare allow guests = yes
+    #   # create mask = 0664
+    #   # force create mode = 0664
+    #   # directory mask = 0775
+    #   # force directory mode = 0775
+    #   follow symlinks = yes
+    #   load printers = no
+    #   printing = bsd
+    #   printcap name = /dev/null
+    #   disable spoolss = yes
+    #   strict locking = no
+    #   aio read size = 0
+    #   aio write size = 0
+    #   vfs objects = acl_xattr catia fruit streams_xattr
+    #   inherit permissions = yes
 
-      # Security
-      client ipc max protocol = SMB3
-      client ipc min protocol = SMB2_10
-      client max protocol = SMB3
-      client min protocol = SMB2_10
-      server max protocol = SMB3
-      server min protocol = SMB2_10
-    '';
-    shares = let
+    #   # Security
+    #   client ipc max protocol = SMB3
+    #   client ipc min protocol = SMB2_10
+    #   client max protocol = SMB3
+    #   client min protocol = SMB2_10
+    #   server max protocol = SMB3
+    #   server min protocol = SMB2_10
+    # '';
+    settings = let
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "${hostname}";
+        "netbios name" = "${hostname}";
+        "security" = "user";
+        "hosts allow" = "10.10.200. 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        # "create mask" = "0664";
+        # "directory mask" = "0775";
+        "follow symlinks" = "yes";
+        "inherit permissions" = "yes";
+      };
       mkShare = path: {
         path = path;
         browseable = "yes";
@@ -234,11 +270,12 @@ in
         "delete veto files" = "yes";
       };
     in {
-      archives = mkShare "/${zfs_tank}/archives";
-      backups = mkShare "/${zfs_tank}/backups";
-      ha_backups = mkShare "/${zfs_tank}/backups/ha";
+      "global" = global;
+      "archives" = mkShare "/${zfs_tank}/archives";
+      "backups" = mkShare "/${zfs_tank}/backups";
+      "ha_backups" = mkShare "/${zfs_tank}/backups/ha";
 
-      public_share = mkPublicShare "/${zfs_tank}/public_share";
+      "public_share" = mkPublicShare "/${zfs_tank}/public_share";
     };
   };
 
