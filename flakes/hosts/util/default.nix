@@ -325,43 +325,43 @@
   services.openssh.enable = true;
 
   # Makes shares visible for Windows 10 clients
-  services.samba-wsdd = {
-    enable = true;
-    openFirewall = true;
-  };
+  # services.samba-wsdd = {
+  #   enable = true;
+  #   openFirewall = true;
+  # };
 
   # Enable Samba (SMB) file shares
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    # securityType = "user";
+  # services.samba = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   # securityType = "user";
 
-    # You will still need to set up the user accounts to begin with:
-    # $ sudo smbpasswd -a yourusername
+  #   # You will still need to set up the user accounts to begin with:
+  #   # $ sudo smbpasswd -a yourusername
 
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = ${hostname}
-      netbios name = ${hostname}
-      security = user
-      guest ok = no
-      guest account = nobody
-      map to guest = bad user
-      load printers = no
-    '';
-    shares = {
-      test = {
-        path = "/home/lmilius";
-        browsable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        # "force user" = "lmilius";
-        # "force group" = "users";
-      };
-    };
-  };
+  #   settings = {
+  #     "workgroup" = "WORKGROUP";
+  #     server string = ${hostname}
+  #     netbios name = ${hostname}
+  #     security = user
+  #     guest ok = no
+  #     guest account = nobody
+  #     map to guest = bad user
+  #     load printers = no
+  #   '';
+  #   shares = {
+  #     test = {
+  #       path = "/home/lmilius";
+  #       browsable = "yes";
+  #       "read only" = "no";
+  #       "guest ok" = "no";
+  #       "create mask" = "0644";
+  #       "directory mask" = "0755";
+  #       # "force user" = "lmilius";
+  #       # "force group" = "users";
+  #     };
+  #   };
+  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
