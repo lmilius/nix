@@ -326,7 +326,7 @@
     insomnia
     inputs.agenix.packages."${system}".default
     ipmiview
-    orca-slicer
+    pkgs.unstable.orca-slicer
   ];
 
   services.udev.packages = with pkgs; [
