@@ -288,7 +288,7 @@ in
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
     /export           10.10.200.92(rw,sync,nohide,insecure,no_subtree_check,crossmnt,fsid=0)
-    /export/pve_data  10.10.200.92(rw,sync,nohide,insecure,no_root_squash,no_subtree_check)
+    /export/pve_data  10.10.200.92(rw,sync,nohide,insecure,no_subtree_check)
   '';
   # /export           192.168.1.10(rw,fsid=0,no_subtree_check) 192.168.1.15(rw,fsid=0,no_subtree_check)
 
