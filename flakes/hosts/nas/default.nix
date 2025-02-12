@@ -279,6 +279,19 @@ in
     };
   };
 
+  # NFS
+  fileSystems."/export/pve_data" = {
+    device = "/tank2/pve_data";
+    options = [ "bind" ];
+  };
+
+  services.nfs.server.enable = true;
+  services.nfs.server.exports = ''
+    /export/pve_data  10.10.200.92(rw,nohide,insecure,no_subtree_check)
+  '';
+  # /export           192.168.1.10(rw,fsid=0,no_subtree_check) 192.168.1.15(rw,fsid=0,no_subtree_check)
+
+
   # nix cli helper
   # https://github.com/viperML/nh
   # programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
