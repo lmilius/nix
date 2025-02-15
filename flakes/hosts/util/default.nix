@@ -100,6 +100,9 @@
     # desktopManager.xfce.enable = true;
   # };
 
+  environment.systemPackages = with pkgs; [
+    python311Packages.paho-mqtt
+  ];
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
