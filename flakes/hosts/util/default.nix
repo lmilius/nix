@@ -318,7 +318,7 @@
         serviceConfig = {
           Type = "oneshot";
           User = "lmilius";
-        }
+        };
     };
   };
 
