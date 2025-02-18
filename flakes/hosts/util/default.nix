@@ -22,7 +22,7 @@
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
-      outputs.nixosMoudles.py2mqtt
+      outputs.nixosModules.py2mqtt
 
       inputs.agenix.nixosModules.default
     ];
