@@ -320,12 +320,14 @@
       };
     };
     services."img2mqtt-10min" = {
-        script = ''
-          /home/lmilius/workspace/py2mqtt/image_to_mqtt.sh cam_saylorville cam_i35 spc_activity mesonet_outlook mesonet_radar iowa_precip winter_roads winter_snowfall winter_midwest_snowfall winter_windchill winter_snowdepth wssi expected_snow expected_ice
-        '';
+        # script = ''
+        #   /home/lmilius/workspace/py2mqtt/image_to_mqtt.sh cam_saylorville cam_i35 spc_activity mesonet_outlook mesonet_radar iowa_precip winter_roads winter_snowfall winter_midwest_snowfall winter_windchill winter_snowdepth wssi expected_snow expected_ice
+        # '';
+        ExecStart = "${import py2mqtt.nix {}}/bin/python image_to_mqtt.sh cam_saylorville";
         serviceConfig = {
           Type = "oneshot";
           User = "lmilius";
+          WorkingDirectory = "/home/lmilius/workspace/py2mqtt";
         };
     };
   };
