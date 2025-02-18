@@ -21,6 +21,7 @@
   syncthing_server = import ./services/syncthing_server.nix;
   mealie = import ./services/mealie.nix;
   paperless = import ./services/paperless.nix;
+  py2mqtt = import ./services/py2mqtt.nix;
   #TODO
   # Samba
   # docker containers?
