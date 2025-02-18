@@ -134,13 +134,6 @@
     #];
   };
 
-  environment.systemPackages = with pkgs; [
-    python311Packages.paho-mqtt_2
-    python311Packages.requests
-    python311Packages.ruamel-yaml
-    python311Packages.pytz
-  ];
-
   # # Docker setup
   # virtualisation.docker = {
   #   enable = true;
@@ -304,6 +297,14 @@
   networking.localCommands = ''
     ip rule add to 10.10.200.0/24 priority 2500 lookup main
   '';
+
+  environment.systemPackages = with pkgs; [
+    python311
+    python311Packages.paho-mqtt_2
+    python311Packages.requests
+    python311Packages.ruamel-yaml
+    python311Packages.pytz
+  ];
 
   # To check calendar times: 
   # systemd-analyze calendar "*-*-* *:00:00" --iterations=10
