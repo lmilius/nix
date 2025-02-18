@@ -134,6 +134,13 @@
     #];
   };
 
+  environment.systemPackages = with pkgs; [
+    python311Packages.paho-mqtt
+    python311Packages.requests
+    python311Packages.ruamel-yaml
+    python311Packages.pytz
+  ];
+
   # # Docker setup
   # virtualisation.docker = {
   #   enable = true;
