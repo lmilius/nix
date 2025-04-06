@@ -72,7 +72,7 @@
   # };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_6_11;
+  boot.kernelPackages = pkgs.linuxPackages_6_12;
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
