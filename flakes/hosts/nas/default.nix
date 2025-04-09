@@ -44,6 +44,7 @@ in
     kernelModules = [ "drivetemp" ];
     kernelParams = ["i915.fastboot=1"];
     kernel.sysctl."net.ipv4.ip_forward" = 1;
+    kernelPackages = pkgs.linuxPackages_6_12;
   };
 
   # External Backup Drive
