@@ -58,6 +58,7 @@ in
       forceImportRoot = false;
       extraPools = [ "${zfs_tank}" ];
     };
+    kernelPackages = pkgs.linuxPackages_6_12;
   };
   
   networking.hostId = "d131645e";
