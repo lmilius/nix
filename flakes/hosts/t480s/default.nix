@@ -298,6 +298,7 @@
     yubikey-personalization
     yubikey-personalization-gui
     pinentry-tty
+    pinentry-qt
     steam
     nextcloud-client
     google-chrome
