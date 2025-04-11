@@ -332,6 +332,7 @@
 
   services.udev.packages = with pkgs; [
     yubikey-personalization
+    libu2f-host
   ];
 
   # services.fprintd.enable = true;
@@ -433,9 +434,9 @@
   services.flatpak.enable = true;
 
   # Yubikey setup for GPG and SSH
-  # services.yubikey-agent.enable = true;
+  services.pcscd.enable = true;
+  services.yubikey-agent.enable = true;
   # hardware.gpgSmartcards.enable = true;
-  # services.udev.packages = [ pkgs.yubikey-personalization ];
   #environment.shellInit = ''
   #  export GPG_TTY="$(tty)"
   #  gpg-connect-agent /bye

@@ -57,7 +57,8 @@ in
     username = "lmilius";
     homeDirectory = "/home/lmilius";
     packages = with pkgs; [
-      
+      yubikey-manager
+      yubikey-personalization
     ];
   };
 
