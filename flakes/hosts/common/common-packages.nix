@@ -16,6 +16,7 @@
     git
     gparted
     htop
+    inetutils
     iotop
     iperf3
     ipmitool

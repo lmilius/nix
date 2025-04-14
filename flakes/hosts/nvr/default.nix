@@ -8,7 +8,13 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ inputs.disko.nixosModules.disko
+
+      (import ./disko-config.nix {
+        disks = [ "/dev/nvme0n1" ];
+      })
+      
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.home-manager
       outputs.nixosModules.cockpit
