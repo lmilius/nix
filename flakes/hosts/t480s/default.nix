@@ -438,7 +438,6 @@
   # Yubikey setup for GPG and SSH
   services.pcscd.enable = true;
   services.yubikey-agent.enable = true;
-  programs.gnupg.agent.pinentryPackage = [pkgs.pinentry-tty];
   # hardware.gpgSmartcards.enable = true;
   #environment.shellInit = ''
   #  export GPG_TTY="$(tty)"
