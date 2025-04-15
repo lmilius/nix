@@ -78,7 +78,7 @@
         content = {
           type = "gpt";
           partitions = {
-            root = {
+            storage_root = {
               size = "100%";
               content = {
                 type = "btrfs";
