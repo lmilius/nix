@@ -72,6 +72,33 @@
           };
         };
       };
+      storage = {
+        device = "/dev/sda";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            root = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ];
+                subvolumes = {
+                  "@" = {};
+                  "@/frigate" = {
+                    mountpoint = "/storage/frigate";
+                    mountOptions = [ "compress=zstd" ];
+                  };
+                  "@/appdata" = {
+                    mountpoint = "/storage/appdata";
+                    mountOptions = [ "compress=zstd" ];
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
     };
   };
 }
