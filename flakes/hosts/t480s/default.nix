@@ -291,14 +291,8 @@
     bitwarden
     moonlight-qt
     teamviewer
-    yubico-piv-tool
-    yubikey-agent
-    yubikey-manager
-    yubikey-manager-qt
-    yubikey-personalization
+    yubioath-flutter
     yubikey-personalization-gui
-    pinentry-tty
-    pinentry-qt
     steam
     nextcloud-client
     google-chrome
@@ -436,8 +430,8 @@
   services.flatpak.enable = true;
 
   # Yubikey setup for GPG and SSH
-  services.pcscd.enable = true;
-  services.yubikey-agent.enable = true;
+  # services.pcscd.enable = true;
+  # services.yubikey-agent.enable = true;
   # hardware.gpgSmartcards.enable = true;
   #environment.shellInit = ''
   #  export GPG_TTY="$(tty)"
