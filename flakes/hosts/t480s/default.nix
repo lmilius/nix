@@ -429,8 +429,8 @@
   # Flatpak Support
   services.flatpak.enable = true;
 
-  # Yubikey setup for GPG and SSH
-  # services.pcscd.enable = true;
+  # Yubikey setup for SSH
+  services.pcscd.enable = true;
   # services.yubikey-agent.enable = true;
   # hardware.gpgSmartcards.enable = true;
   #environment.shellInit = ''
