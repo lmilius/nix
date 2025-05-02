@@ -85,7 +85,7 @@ ServerAliveCountMax 240
 
   programs.bash.shellAliases = {
     l = "ls -alh";
-    ll = "ls -l";
+    ll = "ls -lh";
     ls = "ls --color=tty";
     dcp = "docker-compose ";
     dlog = "docker logs -f ";
