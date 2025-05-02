@@ -326,6 +326,7 @@
     # pkgs.unstable.orca-slicer
     orca-slicer
     pkgs.unstable.onedrive
+    onedrivegui
   ];
 
   services.udev.packages = with pkgs; [
