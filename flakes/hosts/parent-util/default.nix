@@ -273,19 +273,6 @@
     ip rule add to 192.168.88.0/24 priority 2500 lookup main
   '';
 
-  # programs.bash.shellAliases = {
-  #   l = "ls -alh";
-  #   ll = "ls -l";
-  #   ls = "ls --color=tty";
-  #   dcp = "docker-compose ";
-  #   dlog = "docker logs -f ";
-  #   dtop = "docker run --name ctop -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop ";
-  #   nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
-  #   nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
-  #   nix-optimize = "sudo nix-store --optimize";
-  #   rebuild = "sudo nixos-rebuild";
-  # };
-
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
 
