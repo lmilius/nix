@@ -132,6 +132,7 @@
     networkmanager = {
       enable = true;
       # wifi.backend = "iwd";
+      wifi.powersave = false;
     };
     # wireless = {
     #   # enable = true;  # Enables wireless support via wpa_supplicant.
