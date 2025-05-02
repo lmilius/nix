@@ -325,7 +325,7 @@
     ipmiview
     # pkgs.unstable.orca-slicer
     orca-slicer
-    onedrive
+    pkgs.unstable.onedrive
   ];
 
   services.udev.packages = with pkgs; [
