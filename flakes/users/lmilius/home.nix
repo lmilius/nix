@@ -158,6 +158,14 @@ StrictHostKeyChecking no
         hostname = "storj";
         user = "root";
       };
+      "ctcrouter" = {
+        hostname = "192.168.8.1";
+        user = "root";
+        extraOptions = {
+          HostkeyAlgorithms = "+ssh-rsa";
+          PubkeyAcceptedAlgorithms = "+ssh-rsa";
+        };
+      };
     };
   }; 
   programs.tmux = {
