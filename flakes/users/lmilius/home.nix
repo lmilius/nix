@@ -107,9 +107,11 @@ in
     userEmail = "lmilius12@gmail.com";
     userName = "Luke Milius";
     diff-so-fancy.enable = true;
-    extraConfig = ''
-      init.defaultBranch = "main"
-    '';
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+    };
   };
   programs.home-manager.enable = true;
   programs.ssh = {
