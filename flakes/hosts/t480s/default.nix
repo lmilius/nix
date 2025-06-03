@@ -437,6 +437,9 @@
     enableExtensionPack = true;
     addNetworkInterface = false;
   };
+  # VirtualBox USB support
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
   
   # Flatpak Support
   services.flatpak.enable = true;
