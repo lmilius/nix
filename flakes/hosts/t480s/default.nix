@@ -436,6 +436,7 @@
     enableWebService = true;
     enableKvm = true;
     enableExtensionPack = true;
+    addNetworkInterface = false;
   };
   
   # Flatpak Support
