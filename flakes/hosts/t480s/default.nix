@@ -307,7 +307,6 @@
     distrobox
     exfatprogs
     virt-manager
-    virtualbox
     qemu
     openssl
     wineWowPackages.full # wine
