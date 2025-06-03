@@ -31,6 +31,7 @@
     python311Packages.virtualenv
     python311Packages.pip
     restic
+    s-tui
     smartmontools
     # unstablePkgs.tailscale
     tmux

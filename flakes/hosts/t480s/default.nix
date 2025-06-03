@@ -307,6 +307,7 @@
     distrobox
     exfatprogs
     virt-manager
+    virtualbox
     qemu
     openssl
     wineWowPackages.full # wine
@@ -428,6 +429,14 @@
   #       "$@"
   #   )
   # };
+
+  # VirtualBox support
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableWebService = true;
+    enableKvm = true;
+    enableExtensionPack = true;
+  };
   
   # Flatpak Support
   services.flatpak.enable = true;
