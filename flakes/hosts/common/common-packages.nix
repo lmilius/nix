@@ -23,6 +23,7 @@
     ipmitool
     jq
     kmon
+    lazydocker
     lshw
     nmap
     openssl
