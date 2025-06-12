@@ -171,6 +171,10 @@ StrictHostKeyChecking no
           PubkeyAcceptedAlgorithms = "+ssh-rsa";
         };
       };
+      "ctcserver" = {
+        hostname = "192.168.8.10";
+        user = "lmilius";
+      };
     };
   }; 
   programs.tmux = {

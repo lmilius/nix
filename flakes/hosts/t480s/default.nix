@@ -246,7 +246,6 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ]; # dialout used for serial devices
     packages = with pkgs; [
       firefox
-      kate
       pkgs.unstable.vscode
       # vscode extensions
       (vscode-with-extensions.override {
@@ -327,6 +326,7 @@
     orca-slicer
     pkgs.unstable.onedrive
     onedrivegui
+    samba
   ];
 
   services.udev.packages = with pkgs; [
@@ -552,12 +552,14 @@
       80 # nix-cache nginx
       # config.services.tailscale.port
       # 41641 # tailscale
+      44445 # nc
     ]; 
     allowedUDPPorts = [ 
       22000 # Syncthing
       80 # nix-cache nginx
       # 41641 # tailscale
       # config.services.tailscale.port
+      44445 # nc
     ]; 
     allowedTCPPortRanges = [ 
       { from = 1714; to = 1764; } # KDE Connect

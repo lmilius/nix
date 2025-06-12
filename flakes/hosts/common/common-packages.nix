@@ -5,6 +5,7 @@
     autorestic
     bitwarden-cli
     btop
+    ctop
     curl
     dig
     docker-compose
