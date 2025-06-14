@@ -327,6 +327,7 @@
     pkgs.unstable.onedrive
     onedrivegui
     samba
+    libreoffice-qt6-fresh
   ];
 
   services.udev.packages = with pkgs; [
