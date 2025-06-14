@@ -195,7 +195,10 @@
   # };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.cups-brother-hl3140cw ];
+  };
   ## enable printer auto discovery
   services.avahi = {
     enable = true;
@@ -301,7 +304,6 @@
     openscad-unstable
     vlc
     pkgs.unstable.discord
-    cups-brother-hl3140cw
     lm_sensors
     distrobox
     exfatprogs
