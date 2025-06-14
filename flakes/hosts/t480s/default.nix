@@ -328,6 +328,8 @@
     onedrivegui
     samba
     libreoffice-qt6-fresh
+    hunspell # spellcheck libreoffice
+    hunspellDicts.en_US # spellcheck libreoffice
   ];
 
   services.udev.packages = with pkgs; [
