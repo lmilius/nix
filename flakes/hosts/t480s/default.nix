@@ -320,7 +320,7 @@
     wayland-utils
     btrfs-assistant
     pulseview
-    discover
+    kdePackages.discover
     insomnia
     inputs.agenix.packages."${system}".default
     ipmiview
