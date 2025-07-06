@@ -21,7 +21,7 @@ in
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
       outputs.nixosModules.syncthing
-      outputs.nixosModules.systemd_oom
+      # outputs.nixosModules.systemd_oom
     ];
   
 

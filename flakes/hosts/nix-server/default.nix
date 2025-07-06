@@ -35,7 +35,7 @@ in
       #   domain = local_domain;
       # })
       outputs.nixosModules.syncthing
-      outputs.nixosModules.systemd_oom
+      # outputs.nixosModules.systemd_oom
 
       # (outputs.nixosModules.nextcloud {
       #   hostname = "nextcloud.${local_domain}";

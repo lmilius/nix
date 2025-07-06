@@ -30,7 +30,7 @@
       outputs.nixosModules.intel_gpu
       outputs.nixosModules.pipewire
       outputs.nixosModules.plasma6
-      outputs.nixosModules.systemd_oom
+      # outputs.nixosModules.systemd_oom
 
       inputs.agenix.nixosModules.default
 
