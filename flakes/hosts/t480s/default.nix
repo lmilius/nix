@@ -303,6 +303,7 @@
     ubootTools
     openscad-unstable
     vlc
+    mpv
     pkgs.unstable.discord
     lm_sensors
     distrobox
@@ -414,11 +415,6 @@
   #   };
   # };
 
-  # VirtualBox support
-  # virtualisation.virtualbox.host.enable = true;
-  # boot.kernelParams = [ "vboxdrv.load_state=1" ];
-  # boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" "vboxpci" ];
-
   # Virtualization support
   virtualisation.libvirtd = {
     enable = true;
@@ -433,18 +429,18 @@
   #   )
   # };
 
-  # VirtualBox support
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableWebService = true;
-    enableKvm = true;
-    enableExtensionPack = true;
-    addNetworkInterface = false;
-  };
-  # VirtualBox USB support
-  users.extraGroups.vboxusers.members = [ "lmilius" ];
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
+  # # VirtualBox support
+  # virtualisation.virtualbox.host = {
+  #   enable = true;
+  #   enableWebService = true;
+  #   enableKvm = true;
+  #   enableExtensionPack = true;
+  #   addNetworkInterface = false;
+  # };
+  # # VirtualBox USB support
+  # users.extraGroups.vboxusers.members = [ "lmilius" ];
+  # services.gvfs.enable = true;
+  # services.udisks2.enable = true;
   
   # Flatpak Support
   services.flatpak.enable = true;
