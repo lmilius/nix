@@ -9,6 +9,7 @@
     configDir = lib.mkDefault "/home/lmilius/Documents/.config/syncthing";
     overrideDevices = false;
     overrideFolders = false;
+    openDefaultPorts = true;
     settings = {
       options = {
         localAnnounceEnabled = true;
