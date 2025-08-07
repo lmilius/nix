@@ -482,8 +482,9 @@
   # Enable steam
   programs.steam = {
     enable = true;
-    # remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    # dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for local network game transfers
   };
   hardware.steam-hardware.enable = true;
   environment.sessionVariables = rec {
@@ -550,7 +551,7 @@
     enable = true;
     allowedTCPPorts = [ 
       22000 # Syncthing
-      27036 # steam
+      # 27036 # steam
       80 # nix-cache nginx
       # config.services.tailscale.port
       # 41641 # tailscale
@@ -558,7 +559,7 @@
     ]; 
     allowedUDPPorts = [ 
       22000 # Syncthing
-      27036 # steam
+      # 27036 # steam
       80 # nix-cache nginx
       # 41641 # tailscale
       # config.services.tailscale.port
