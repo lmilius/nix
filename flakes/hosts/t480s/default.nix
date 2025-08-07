@@ -206,6 +206,12 @@
     openFirewall = true;
   };
 
+  # Thinkpad power management/monitoring
+  services.tlp.enable = true;
+
+  # Battery power management
+  services.upower.enable = true;
+
   # # Enable sound with pipewire.
   # sound.enable = true;
   # hardware.pulseaudio.enable = false;
