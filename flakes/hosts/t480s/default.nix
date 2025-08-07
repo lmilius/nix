@@ -550,6 +550,7 @@
     enable = true;
     allowedTCPPorts = [ 
       22000 # Syncthing
+      27036 # steam
       80 # nix-cache nginx
       # config.services.tailscale.port
       # 41641 # tailscale
@@ -557,6 +558,7 @@
     ]; 
     allowedUDPPorts = [ 
       22000 # Syncthing
+      27036 # steam
       80 # nix-cache nginx
       # 41641 # tailscale
       # config.services.tailscale.port
