@@ -207,7 +207,7 @@
   };
 
   # Thinkpad power management/monitoring
-  services.tlp.enable = true;
+  # services.tlp.enable = true; # Conflicts with servies.power-profiles-daemon.enable = true;
 
   # Battery power management
   services.upower.enable = true;
