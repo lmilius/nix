@@ -167,15 +167,15 @@
           "443:8443"
         ];
       };
-  #     speedtest = {
-  #       image = "linuxserver/librespeed:latest";
-  #       environment = {
-  #         MODE = "standalone";
-  #       };
-  #       ports = [
-  #         "8080:80"
-  #       ];
-  #     };
+      speedtest = {
+        image = "linuxserver/librespeed:latest";
+        environment = {
+          MODE = "standalone";
+        };
+        ports = [
+          "8080:80"
+        ];
+      };
       # Omada uses the following ports: 8088/8043 for the webUI, 
       omada = {
         image = "mbentley/omada-controller:5.15.24.18";
