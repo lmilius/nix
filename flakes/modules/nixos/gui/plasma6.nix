@@ -38,10 +38,10 @@ in
   environment.systemPackages = with pkgs.kdePackages; [
     kio-extras
     kio-fuse
+    plasma-nm
   ];
 
   # KDE apps
   programs.partition-manager.enable = true;
   programs.kdeconnect.enable = true;
-  programs.plasma-nm.enable = true;
 }
