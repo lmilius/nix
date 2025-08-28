@@ -43,4 +43,5 @@ in
   # KDE apps
   programs.partition-manager.enable = true;
   programs.kdeconnect.enable = true;
+  programs.plasma-nm.enable = true;
 }
