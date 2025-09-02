@@ -127,6 +127,7 @@
   # Enable networking
   # networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
+  hardware.enableRedistributableFirmware = true;
   networking = {
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
