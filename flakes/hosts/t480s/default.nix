@@ -517,7 +517,7 @@
     paths = "/home/lmilius/Documents";
     encryption.mode = "none";
     environment.BORG_RSH = "ssh -i /home/lmilius/.ssh/id_ed25519";
-    repo = "ssh://borgwarehouse@borg.miliushome.com:2222/./t480s/documents-lmilius";
+    repo = "ssh://borgwarehouse@borg.miliushome.com:2222/./t480s-lmilius-documents";
     compression = "auto,zstd";
     startAt = "daily";
   };
