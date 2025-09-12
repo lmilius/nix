@@ -515,7 +515,7 @@
   # Borg Backups
   services.borgbackup.jobs.documents-lmilius = {
     paths = "/home/lmilius/Documents";
-    encryption.mode = "repokey-blake2";
+    encryption.mode = "none";
     environment.BORG_RSH = "ssh -i /home/lmilius/.ssh/id_ed25519";
     repo = "ssh://borgwarehouse@borg.miliushome.com:2222/./t480s/documents-lmilius";
     compression = "auto,zstd";
