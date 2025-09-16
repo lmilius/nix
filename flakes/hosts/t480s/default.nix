@@ -115,7 +115,8 @@
     };
     kernel.sysctl = { "vm.swappiness" = 10; };
     # kernelPackages = pkgs.unstable.linuxPackages_latest;
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
   };
 
 
