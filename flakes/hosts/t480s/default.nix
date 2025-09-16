@@ -119,6 +119,11 @@
     kernelPackages = pkgs.linuxPackages_zen;
   };
 
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 30;
+  };
 
   services.btrfs.autoScrub = {
     enable = true;
