@@ -517,6 +517,13 @@
 
   programs.kdeconnect.enable = true;
 
+  # Hyprland Desktop
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true; # recommended for most users
+    xwayland.enable = true; # Xwayland can be disabled.
+  };
+
 
   # Borg Backups
   services.borgbackup.jobs.documents-lmilius = {
