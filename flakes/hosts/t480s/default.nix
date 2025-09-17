@@ -171,8 +171,6 @@
 
   services.fstrim.enable = true;
 
-  services.blueman.enable = true;
-
   services.gvfs.enable = true;
   services.davfs2.enable = true;
 
