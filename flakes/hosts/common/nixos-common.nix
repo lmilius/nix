@@ -30,6 +30,7 @@
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
+      auto-optimize-store = true;
       # Enable flakes and new 'nix' command
       experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
       warn-dirty = true;
@@ -54,9 +55,9 @@
 
     # Built-in garbage collection
     gc = {
-      automatic = false;
+      automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 14d";
+      options = "--delete-older-than 15d";
     };
 
     # Opinionated: disable channels

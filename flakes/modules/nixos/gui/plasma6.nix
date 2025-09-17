@@ -36,8 +36,13 @@ in
   ];
 
   environment.systemPackages = with pkgs.kdePackages; [
+    kio-admin
     kio-extras
     kio-fuse
+    kdenetwork-filesharing
+    ffmpegthumbs
+    kdegraphics-thumbnailers
+    kimage-formats
     plasma-nm
   ];
 

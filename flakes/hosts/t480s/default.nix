@@ -69,36 +69,6 @@
   #   };
   # };
 
-  # nix = let
-  #   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  # in {
-  #   settings = {
-  #     # Enable flakes and new 'nix' command
-  #     # experimental-features = "nix-command flakes";
-  #     # Opinionated: disable global registry
-  #     # flake-registry = "";
-  #     # Workaround for https://github.com/NixOS/nix/issues/9574
-  #     nix-path = config.nix.nixPath;
-  #     # Use local nix cache
-  #     # substituters = [ 
-  #     #   "http://10.10.200.8" 
-  #     #   # "http://100.69.216.71/" 
-  #     # ];
-  #   };
-  #   # Opinionated: disable channels
-  #   channel.enable = false;
-
-  #   # Opinionated: make flake registry and nix path match flake inputs
-  #   registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-  #   nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-  # };
-
-  # Use local nix cache
-  # nix.settings.substituters = [ 
-  #   "http://10.10.200.8" 
-  #   # "http://100.69.216.71/" 
-  # ];
-
   # Boot
   boot = {
     # kernelParams = [ "quiet" "loglevel=3" ];
@@ -134,11 +104,18 @@
   # Enable networking
   # networking.networkmanager.enable = true;
   # networking.networkmanager.dns = "systemd-resolved";
-  hardware.enableRedistributableFirmware = true;
+  hardware = {
+    enableRedistributableFirmware = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true; # used for wine
+    }
+  };
   networking = {
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
       enable = true;
+      dns = "systemd-resolved";
       # wifi.backend = "iwd";
       wifi.powersave = false;
     };
@@ -180,28 +157,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # # OOM configuration:
-  # systemd = {
-  #   # Create a separate slice for nix-daemon that is
-  #   # memory-managed by the userspace systemd-oomd killer
-  #   slices."nix-daemon".sliceConfig = {
-  #     ManagedOOMMemoryPressure = "kill";
-  #     ManagedOOMMemoryPressureLimit = "95%";
-  #   };
-  #   services = {
-  #     "nix-daemon".serviceConfig = {
-  #       Slice = "nix-daemon.slice";
-
-  #       # If a kernel-level OOM event does occur anyway,
-  #       # strongly prefer killing nix-daemon child processes
-  #       OOMScoreAdjust = 1000;
-  #     };
-  #     # Refer to: https://github.com/NixOS/nixpkgs/issues/59603
-  #     # and: https://github.com/NixOS/nixpkgs/issues/180175
-  #     NetworkManager-wait-online.enable = false;
-  #   };
-  # };
-
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
@@ -214,34 +169,32 @@
     openFirewall = true;
   };
 
+  services.fstrim.enable = true;
+
+  services.blueman.enable = true;
+
+  services.gvfs.enable = true;
+  services.davfs2.enable = true;
+
+  services.atuin = {
+    enable = true;
+    # Optional: Configure a server for sync (uncomment and configure if needed)
+    # server = {
+    #   enable = true;
+    #   host = "0.0.0.0";
+    #   port = 8888;
+    # };
+  };
+
+  # Auto Tune
+  services.bpftune.enable = true;
+  programs.bcc.enable = true;
+
   # Thinkpad power management/monitoring
   # services.tlp.enable = true; # Conflicts with servies.power-profiles-daemon.enable = true;
 
   # Battery power management
   services.upower.enable = true;
-
-  # # Enable sound with pipewire.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = false;
-  # security.rtkit.enable = true;
-  # services.pipewire = {
-  #   enable = true;
-  #   alsa.enable = true;
-  #   alsa.support32Bit = true;
-  #   pulse.enable = true;
-  # #   # If you want to use JACK applications, uncomment this
-  # #   #jack.enable = true;
-
-  # #   # use the example session manager (no others are packaged yet so this is enabled by default,
-  # #   # no need to redefine it in your config for now)
-  # #   #media-session.enable = true;
-  # };
-
-  # hardware.bluetooth = {
-  #   enable = true;
-  #   powerOnBoot = true;
-  # };
-
   hardware.flipperzero.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -262,7 +215,7 @@
     description = "Luke Milius";
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ]; # dialout used for serial devices
     packages = with pkgs; [
-      firefox
+      # firefox
       pkgs.unstable.vscode
       # vscode extensions
       (vscode-with-extensions.override {
@@ -282,21 +235,6 @@
     ];
   };
 
-  # # Intel GPU
-  # nixpkgs.config.packageOverrides = pkgs: {
-  #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  # };
-  # hardware.opengl = {
-  #   enable = true;
-  #   extraPackages = with pkgs; [
-  #     # intel-compute-runtime
-  #     intel-media-driver
-  #     vaapiIntel
-  #     vaapiVdpau
-  #     libvdpau-va-gl
-  #   ];
-  # };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -304,8 +242,10 @@
     # unstable.vscode
     # vscode
     # plasma5Packages.plasma-thunderbolt
+    firefox
     intel-gpu-tools
     bitwarden
+    steam-run
     moonlight-qt
     teamviewer
     yubioath-flutter
@@ -322,7 +262,7 @@
     lm_sensors
     distrobox
     exfatprogs
-    virt-manager
+    # virt-manager
     qemu
     openssl
     wineWowPackages.full # wine
@@ -399,6 +339,12 @@
   #   port = 9090;
   # };
 
+  # Security
+  security = {
+    rtkit.enable = true;
+    polkit.enable = true;
+  };
+
   # Enable fingerprint reader.
   # services.open-fprintd.enable = true;
   # services.python-validity.enable = true; # service failing to start 6/12
@@ -434,7 +380,7 @@
   virtualisation.libvirtd = {
     enable = true;
   };
-  programs.dconf.enable = true;
+  
   # QEMU UEFI support
   # environment = {
   #   (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" 
@@ -515,7 +461,12 @@
     ];
   };
 
-  programs.kdeconnect.enable = true;
+  programs = {
+    kdeconnect.enable = true;
+    virt-manager.enable = true;
+    dconf.enable = true;
+  };
+
 
   # Hyprland Desktop
   programs.hyprland = {
