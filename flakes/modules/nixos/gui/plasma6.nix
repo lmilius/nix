@@ -42,7 +42,7 @@ in
     kdenetwork-filesharing
     ffmpegthumbs
     kdegraphics-thumbnailers
-    kimage-formats
+    kimageformats
     plasma-nm
   ];
 

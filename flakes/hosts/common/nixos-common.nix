@@ -30,7 +30,7 @@
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
-      auto-optimize-store = true;
+      auto-optimise-store = true;
       # Enable flakes and new 'nix' command
       experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
       warn-dirty = true;
