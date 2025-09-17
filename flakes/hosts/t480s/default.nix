@@ -109,7 +109,7 @@
     graphics = {
       enable = true;
       enable32Bit = true; # used for wine
-    }
+    };
   };
   networking = {
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
