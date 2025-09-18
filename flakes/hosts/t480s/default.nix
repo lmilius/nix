@@ -286,6 +286,7 @@
     hunspell # spellcheck libreoffice
     hunspellDicts.en_US # spellcheck libreoffice
     wirelesstools
+    ffmpeg-full
   ];
 
   services.udev.packages = with pkgs; [
