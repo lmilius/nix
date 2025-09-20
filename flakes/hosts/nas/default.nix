@@ -62,11 +62,11 @@ in
       trustedInterfaces = [ "tailscale0" ];
       # allowedTCPPorts = [ 80 443 22 ];
     };
-    bridges = {
-      br0 = {
-        interfaces = [ "eno1" ];
-      };
-    };
+    # bridges = {
+    #   br0 = {
+    #     interfaces = [ "eno1" ];
+    #   };
+    # };
     interfaces = {
       # br0 = {
       #   useDHCP = false;
@@ -230,7 +230,7 @@ in
         "server string" = "${hostname}";
         "netbios name" = "${hostname}";
         "security" = "user";
-        "hosts allow" = "10.10.200. 127.0.0.1 localhost";
+        "hosts allow" = "10.10.200. 192.168.122. 127.0.0.1 localhost";
         "hosts deny" = "0.0.0.0/0";
         "guest account" = "nobody";
         "map to guest" = "bad user";
