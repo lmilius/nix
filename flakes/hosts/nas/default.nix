@@ -62,11 +62,11 @@ in
       trustedInterfaces = [ "tailscale0" ];
       # allowedTCPPorts = [ 80 443 22 ];
     };
-    # bridges = {
-    #   br0 = {
-    #     interfaces = [ "eno1" ];
-    #   };
-    # };
+    bridges = {
+      br0 = {
+        interfaces = [ "eno1" ];
+      };
+    };
     interfaces = {
       # br0 = {
       #   useDHCP = false;
@@ -75,7 +75,7 @@ in
       #       prefixLength = 24;
       #     }];
       # };
-      eno1 = {
+      br0 = {
         # useDHCP = true;
         useDHCP = false;
         ipv4.addresses = [{
@@ -319,6 +319,8 @@ in
   programs.virt-manager.enable = true;
 
   virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
+
+  
 
   # syncthing overrides
   users.groups."syncthing" = {};
