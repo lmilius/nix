@@ -62,11 +62,11 @@ in
       trustedInterfaces = [ "tailscale0" ];
       # allowedTCPPorts = [ 80 443 22 ];
     };
-    # bridges = {
-    #   br0 = {
-    #     interfaces = [ "eno1" ];
-    #   };
-    # };
+    bridges = {
+      br0 = {
+        interfaces = [ "eno1" ];
+      };
+    };
     interfaces = {
       # br0 = {
       #   useDHCP = false;
