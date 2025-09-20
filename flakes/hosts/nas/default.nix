@@ -307,11 +307,14 @@ in
   services.openssh.enable = true;
 
   # Virtualization support
-  virtualisation.libvirtd = {
-    enable = true;
-    #allowedBridges = [
-    #  "br0"
-    #];
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      #allowedBridges = [
+      #  "br0"
+      #];
+    };
+    spiceUSBRedirection.enable = true;
   };
   programs.virt-manager.enable = true;
 

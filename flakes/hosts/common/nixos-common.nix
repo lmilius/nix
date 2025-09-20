@@ -54,11 +54,11 @@
     };
 
     # Built-in garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 15d";
-    };
+    # gc = {
+    #   automatic = true;
+    #   dates = "weekly";
+    #   options = "--delete-older-than 15d";
+    # };
 
     # Opinionated: disable channels
     channel.enable = false;

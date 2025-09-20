@@ -260,7 +260,6 @@
     lm_sensors
     distrobox
     exfatprogs
-    # virt-manager
     qemu
     openssl
     wineWowPackages.full # wine
@@ -376,8 +375,14 @@
   # };
 
   # Virtualization support
-  virtualisation.libvirtd = {
-    enable = true;
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      #allowedBridges = [
+      #  "br0"
+      #];
+    };
+    spiceUSBRedirection.enable = true;
   };
   
   # QEMU UEFI support
