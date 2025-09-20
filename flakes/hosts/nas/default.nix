@@ -172,7 +172,7 @@ in
   # Still need to run 'smbpasswd -a <USER>'
   services.samba = {
     enable = true;
-    securityType = "user";
+    # securityType = "user";
     openFirewall = true;
     # settings = {
     #   global = {
