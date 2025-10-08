@@ -115,7 +115,8 @@
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
+      # dns = "systemd-resolved";
+      dns = "dnsmasq";
       # wifi.backend = "iwd";
       wifi.powersave = false;
     };
