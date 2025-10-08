@@ -138,7 +138,7 @@
     # dhcpd.enable = true;
   };
 
-  services.resolved.enable = true;
+  # services.resolved.enable = true;
 
   # Enable tailscale service
   services.tailscale = {
