@@ -148,7 +148,7 @@
     package = pkgs.unstable.tailscale;
     extraUpFlags = [
       "--accept-routes=false"
-      "--accept-dns"
+      # "--accept-dns"
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"
     ];
