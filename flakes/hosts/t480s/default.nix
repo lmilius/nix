@@ -276,7 +276,7 @@
     kdePackages.discover
     insomnia
     inputs.agenix.packages."${system}".default
-    ipmiview
+    # ipmiview
     # pkgs.unstable.orca-slicer
     orca-slicer
     pkgs.unstable.onedrive
