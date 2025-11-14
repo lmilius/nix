@@ -64,7 +64,7 @@ in
     };
     bridges = {
       br0 = {
-        interfaces = [ "eno1" ];
+        interfaces = [ "enp1s0" ];
       };
     };
     interfaces = {
