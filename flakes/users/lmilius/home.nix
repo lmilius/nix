@@ -123,7 +123,7 @@ StrictHostKeyChecking no
     '';
     matchBlocks = {
       "util" = {
-        hostname = "util.milius.home";
+        hostname = "util.lan.internal";
         user = "lmilius";
       };
       "parent-util" = {
@@ -139,11 +139,11 @@ StrictHostKeyChecking no
         user = "lmilius";
       };
       "pve3" = {
-        hostname = "pve3";
+        hostname = "pve3.lan.internal";
         user = "root";
       };
       "ha" = {
-        hostname = "homeassistant";
+        hostname = "homeassistant.lan.internal";
         user = "root";
         port = 22222;
       };

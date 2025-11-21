@@ -287,6 +287,7 @@
     hunspellDicts.en_US # spellcheck libreoffice
     wirelesstools
     ffmpeg-full
+    winbox4
   ];
 
   services.udev.packages = with pkgs; [
