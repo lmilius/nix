@@ -114,6 +114,8 @@ ServerAliveCountMax 240
     };
   };
 
+  programs.dconf.enable = true;
+
   security.sudo = {
     enable = true;
     extraRules = [{
