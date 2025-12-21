@@ -284,18 +284,18 @@ in
     };
   };
 
-  users.groups.borg = {
-    name = "borg";
-  };
-  users.users.borg = {
-    isSystemUser = true;
-    group = "borg";
-  };
+  # users.groups.borg = {
+  #   name = "borg";
+  # };
+  # users.users.borg = {
+  #   isSystemUser = true;
+  #   group = "borg";
+  # };
 
   age.secrets = {
     "borg/passphrase" = {
       file = ../../secrets/borgbackup_passphrase.age;
-      owner = "borg";
+      # owner = "borg";
     };
   };
 
@@ -311,7 +311,6 @@ in
         repo = "/tank2/backups/borgbackups/immich";
         compression = "zstd,10";
         startAt = "daily";
-        user = "borg";
       };
     };
   };
