@@ -294,7 +294,7 @@ in
 
   age.secrets = {
     "borg/passphrase" = {
-      file = "../../secrets/borgbackup_passphrase.age";
+      file = ../../secrets/borgbackup_passphrase.age;
       owner = "borg";
     };
   };
