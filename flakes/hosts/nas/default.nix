@@ -25,7 +25,7 @@ in
       #   pkgs = pkgs;
       # })
 
-      # inputs.agenix.nixosModules.default
+      inputs.agenix.nixosModules.default
 
     ];
   
