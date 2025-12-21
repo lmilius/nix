@@ -284,6 +284,38 @@ in
     };
   };
 
+  users.groups.borg = {
+    name = "borg";
+  };
+  users.users.borg = {
+    isSystemUser = true;
+    group = "borg";
+  };
+
+  age.secrets = {
+    "borg/passphrase" = {
+      file = "../../secrets/borgbackup_passphrase.age";
+      owner = "borg";
+    };
+  };
+
+  # Backups
+  services.borgbackup = {
+    jobs = {
+      immich = {
+        paths = "/tank2/immich";
+        encryption = {
+          mode = "repokey-blake2";
+          passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
+        };
+        repo = "/tank2/backups/borgbackups/immich";
+        compression = "zstd,10";
+        startAt = "daily";
+        user = "borg";
+      };
+    };
+  };
+
   # NFS
   # fileSystems."/export/pve_data" = {
   #   device = "/tank2/pve_data";

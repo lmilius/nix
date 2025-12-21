@@ -13,6 +13,12 @@ This contains configuration for hosts/users that are using flakes to configure n
 
 `sudo nixos-rebuild switch --flake .`
 
+### Or using nh:
+
+`nh os switch`
+or
+`nh os boot`
+
 ## Build home-manager configuration
 
 `home-manager switch --flake .`
@@ -33,6 +39,12 @@ or, if agenix is installed:
 
 ```bash
 agenix -e restic_repo.age
+```
+
+### Rekey all secrets with host keys:
+
+```bash
+agenix -r
 ```
 
 ## New System Setup
