@@ -317,19 +317,19 @@ in
         startAt = "daily";
         # user = "borg";
       };
-      # appdata = {
-      #   paths = [
-      #     "/tank2/appdata"
-      #     "/tank2/cont_data"
-      #   ];
-      #   encryption = {
-      #     mode = "repokey-blake2";
-      #     passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
-      #   };
-      #   repo = "/tank2/backups/borgbackups/appdata";
-      #   compression = "zstd,10";
-      #   startAt = "daily";
-      # };
+      appdata = {
+        paths = [
+          "/tank2/appdata"
+          "/tank2/cont_data"
+        ];
+        encryption = {
+          mode = "repokey-blake2";
+          passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
+        };
+        repo = "/tank2/backups/borgbackups/appdata";
+        compression = "zstd,10";
+        startAt = "daily";
+      };
     };
   };
 
