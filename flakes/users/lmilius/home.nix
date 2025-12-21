@@ -104,18 +104,24 @@ in
   };
   programs.git = {
     enable = true;
-    userEmail = "lmilius12@gmail.com";
-    userName = "Luke Milius";
-    diff-so-fancy.enable = true;
-    extraConfig = {
+    settings = {
+      user = {
+        email = "lmilius12@gmail.com";
+        name = "Luke Milius";
+      };
       init = {
         defaultBranch = "main";
       };
     };
   };
+  programs.diff-so-fancy = {
+    enable = true;
+    enableGitIntegration = true;
+  };
   programs.home-manager.enable = true;
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     serverAliveInterval = 60;
     serverAliveCountMax = 240;
     extraConfig = ''
