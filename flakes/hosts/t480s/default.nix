@@ -243,12 +243,11 @@
     # plasma5Packages.plasma-thunderbolt
     firefox
     intel-gpu-tools
-    bitwarden
+    bitwarden-desktop
     steam-run
     moonlight-qt
     teamviewer
     yubioath-flutter
-    yubikey-personalization-gui
     steam
     nextcloud-client
     google-chrome
@@ -275,7 +274,7 @@
     pulseview
     kdePackages.discover
     insomnia
-    inputs.agenix.packages."${system}".default
+    inputs.agenix.packages."${stdenv.hostPlatform.system}".default
     # ipmiview
     # pkgs.unstable.orca-slicer
     orca-slicer

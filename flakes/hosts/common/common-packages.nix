@@ -13,7 +13,7 @@
     difftastic # Modern Unix `diff`
     dua # Modern Unix `du`
     duf # Modern Unix `df`
-    du-dust # Modern Unix `du`
+    dust # Modern Unix `du`
     git
     gparted
     htop
@@ -29,9 +29,6 @@
     openssl
     pciutils
     powertop
-    python311Full
-    python311Packages.virtualenv
-    python311Packages.pip
     restic
     s-tui
     smartmontools
