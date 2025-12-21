@@ -122,12 +122,14 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    serverAliveInterval = 60;
-    serverAliveCountMax = 240;
     extraConfig = ''
 StrictHostKeyChecking no
     '';
     matchBlocks = {
+      "*" = {
+        serverAliveInterval = 60;
+        serverAliveCountMax = 240;
+      };
       "util" = {
         hostname = "util.lan.internal";
         user = "lmilius";
