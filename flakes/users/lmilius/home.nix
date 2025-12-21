@@ -167,10 +167,6 @@ StrictHostKeyChecking no
         hostname = "gateway.miliusfam.com";
         user = "root";
       };
-      "storj" = {
-        hostname = "storj";
-        user = "root";
-      };
       "ctcrouter" = {
         hostname = "192.168.8.1";
         user = "root";
