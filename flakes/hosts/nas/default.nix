@@ -284,37 +284,44 @@ in
     };
   };
 
-  users.groups.borg = {
-    name = "borg";
-  };
-  users.users.borg = {
-    isSystemUser = true;
-    group = "borg";
-  };
+  # users.groups.borg = {
+  #   name = "borg";
+  # };
+  # users.users.borg = {
+  #   isSystemUser = true;
+  #   group = "borg";
+  # };
 
   age.secrets = {
     "borg/passphrase" = {
       file = ../../secrets/borgbackup_passphrase.age;
-      owner = "borg";
+      # owner = "borg";
     };
   };
 
   # Backups
   services.borgbackup = {
     jobs = {
-      immich = {
-        paths = "/tank2/immich";
+      photos = {
+        paths = [
+          "/tank2/immich"
+          "/tank2/media_photos"
+          "/tank2/photoprism"
+        ];
         encryption = {
           mode = "repokey-blake2";
           passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
         };
-        repo = "/tank2/backups/borgbackups/immich";
+        repo = "/tank2/backups/borgbackups/photos";
         compression = "zstd,10";
         startAt = "daily";
-        user = "borg";
+        # user = "borg";
       };
       # appdata = {
-      #   paths = "/tank2/appdata";
+      #   paths = [
+      #     "/tank2/appdata"
+      #     "/tank2/cont_data"
+      #   ];
       #   encryption = {
       #     mode = "repokey-blake2";
       #     passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
