@@ -308,6 +308,9 @@ in
           "/tank2/media_photos"
           "/tank2/photoprism"
         ];
+        exclude = [
+          "*.log"
+        ];
         encryption = {
           mode = "repokey-blake2";
           passCommand = "cat ${config.age.secrets."borg/passphrase".path}";
@@ -320,7 +323,9 @@ in
       appdata = {
         paths = [
           "/tank2/appdata"
-          "/tank2/cont_data"
+        ];
+        exclude = [
+          "*.log"
         ];
         encryption = {
           mode = "repokey-blake2";
