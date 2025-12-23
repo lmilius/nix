@@ -158,6 +158,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    backblaze-b2
     hddtemp
     intel-gpu-tools
     distrobox
@@ -337,6 +338,9 @@ in
       };
     };
   };
+
+  ## Remote Backups
+
 
   # NFS
   # fileSystems."/export/pve_data" = {
