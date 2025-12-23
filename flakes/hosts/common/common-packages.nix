@@ -29,6 +29,7 @@
     openssl
     pciutils
     powertop
+    python314 # python is needed for ansible on the target
     restic
     s-tui
     smartmontools
