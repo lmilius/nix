@@ -298,6 +298,15 @@ in
       file = ../../secrets/borgbackup_passphrase.age;
       # owner = "borg";
     };
+    "restic/b2repo" = {
+      file = ../../secrets/restic_repo_b2.age;
+    };
+    "restic/b2pass" = {
+      file = ../../secrets/restic_password_b2.age;
+    };
+    "restic/b2env" = {
+      file = ../../secrets/restic_env_b2.age;
+    };
   };
 
   # Backups
@@ -340,7 +349,20 @@ in
   };
 
   ## Remote Backups
-
+  services.restic.backups.b2 = {
+    initialize = true;
+    repositoryFile = config.age.secrets."restic/b2repo".path;
+    passwordFile = config.age.secrets."restic/b2pass".path;
+    environmentFile = config.age.secrets."restic/b2env".path;
+    paths = [
+      "/tank2/backups/borgbackups/appdata"
+    ];
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 5"
+      "--keep-monthly 12"
+    ];
+  };
 
   # NFS
   # fileSystems."/export/pve_data" = {
