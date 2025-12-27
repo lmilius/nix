@@ -328,7 +328,8 @@
     rules."50-tailscale" = {
       onState = [ "routable" ];
       script = ''
-        "${pkgs.ethtool} NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ") | -K br0 rx-udp-gro-forwarding on rx-gro-list off
+        NETDEV="$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")"
+        "${pkgs.ethtool}/sbin/ethtool" -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
       '';
     };
   };
