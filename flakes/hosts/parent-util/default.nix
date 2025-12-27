@@ -136,8 +136,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     android-tools
-    ethtool # tailscale exit node, udp-gro-forwarding
-    networkd-dispatcher # tailscale exit node, udp-gro-forwarding
+    # ethtool # tailscale exit node, udp-gro-forwarding
+    # networkd-dispatcher # tailscale exit node, udp-gro-forwarding
   ];
 
   home-manager = {
@@ -320,7 +320,7 @@
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"
     ];
-    interfaceName = "br0";
+    # interfaceName = "br0";
   };
 
   # services.networkd-dispatcher = {
@@ -333,7 +333,7 @@
   #     '';
   #   };
   # };
-  
+
   # networking.firewall.checkReversePath = "loose";
 
   # Allows vscode remote ssh server to work when this machine is the server
