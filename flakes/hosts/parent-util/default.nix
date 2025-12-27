@@ -41,7 +41,32 @@
   networking.networkmanager.unmanaged = ["tailscale0"];
   systemd.services.NetworkManager-wait-online.enable = false;
   # networking.networkmanager.dns = "systemd-resolved";
-  # networking = {
+  networking = {
+    firewall = {
+      enable = false;
+      trustedInterfaces = [ "tailscale0" ];
+    };
+    bridges = {
+      br0 = {
+        interfaces = [ "enp1s0" ];
+      };
+    };
+    interfaces = {
+      br0 = {
+        useDHCP = false;
+        ipv4.addresses = [{
+          address = "192.168.88.5";
+          prefixLength = 24;
+        }];
+        wakeOnLan.enable = true;
+      };
+    };
+    defaultGateway = "192.168.88.1";
+    nameservers = [ "192.168.88.1" ];
+    localCommands = ''
+      ip rule add to 10.10.200.0/24 priority 2500 lookup main
+    '';
+  };
   #   usePredictableInterfaceNames = false;
   #   interfaces.enp1s0.ipv4.addresses = [{
   #     address = "192.168.88.5";
@@ -138,6 +163,30 @@
     #];
   };
 
+  users.groups.deployer = {
+    gid = 1100;
+  };
+  users.users.deployer = {
+    isNormalUser = true;
+    extraGroups = [ "deployer" "wheel" "docker" "libvirtd" ];
+    createHome = true;
+    uid = 1100;
+    group = "deployer";
+    openssh.authorizedKeys.keys = [ 
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr6u53xcfqXT8h42hTG2S7QEDOavh4AQmqfRVAgOvK6 lmilius@util"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
+    ];
+  };
+  security.sudo.extraRules = [{
+    commands = [
+      {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }
+    ];
+    users = [ "deployer" ];
+  }];
+
   # # Docker setup
   # virtualisation.docker = {
   #   enable = true;
@@ -195,8 +244,11 @@
   # };
 
   # Virtualization support
-  virtualisation.libvirtd = {
-    enable = true;
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+    };
+    spiceUSBRedirection.enable = true;
   };
   programs.virt-manager.enable = true;
 
@@ -268,10 +320,6 @@
     ];
   };
   # networking.firewall.checkReversePath = "loose";
-  networking.firewall.trustedInterfaces = [ "tailscale0" ];
-  networking.localCommands = ''
-    ip rule add to 192.168.88.0/24 priority 2500 lookup main
-  '';
 
   # Allows vscode remote ssh server to work when this machine is the server
   programs.nix-ld.enable = true;
@@ -289,7 +337,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  # networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
