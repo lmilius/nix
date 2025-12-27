@@ -326,7 +326,7 @@
   services.networkd-dispatcher = {
     enable = true;
     rules."50-tailscale" = {
-      onState = [ "routeable" ];
+      onState = [ "routable" ];
       script = ''
         "${pkgs.ethtool} NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ") | -K br0 rx-udp-gro-forwarding on rx-gro-list off
       '';
