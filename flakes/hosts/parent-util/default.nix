@@ -313,7 +313,7 @@
       "--accept-routes"
       "--accept-dns"
       "--advertise-exit-node"
-      "--advertise-routes 192.168.88.0/24"
+      "--advertise-routes 192.168.88.0/23"
       "--ssh"
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"
