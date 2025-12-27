@@ -105,7 +105,7 @@ in
       "--accept-routes=true"
       "--accept-dns"
       "--advertise-exit-node"
-      "--advertise-routes 10.10.200.0/24"
+      "--advertise-routes 10.10.200.0/23"
       "--ssh"
     ];
   };

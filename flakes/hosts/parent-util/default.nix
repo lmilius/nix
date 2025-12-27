@@ -136,6 +136,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     android-tools
+    ethtool # tailscale exit node, udp-gro-forwarding
+    networkd-dispatcher # tailscale exit node, udp-gro-forwarding
   ];
 
   home-manager = {
@@ -318,6 +320,17 @@
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"
     ];
+    interfaceName = "br0";
+  };
+
+  services.networkd-dispatcher = {
+    enable = true;
+    rules."50-tailscale" = {
+      onState = [ "routeable" ];
+      script = ''
+        "${pkgs.ethtool} NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ") | -K br0 rx-udp-gro-forwarding on rx-gro-list off
+      '';
+    };
   };
   # networking.firewall.checkReversePath = "loose";
 

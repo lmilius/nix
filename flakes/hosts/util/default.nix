@@ -287,7 +287,7 @@
       "--accept-routes=true"
       "--accept-dns"
       "--advertise-exit-node"
-      "--advertise-routes 10.10.200.0/24"
+      "--advertise-routes 10.10.200.0/23"
       "--ssh"
       # "--exit-node gateway"
       # "--exit-node-allow-lan-access"
