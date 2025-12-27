@@ -64,7 +64,7 @@
     defaultGateway = "192.168.88.1";
     nameservers = [ "192.168.88.1" ];
     localCommands = ''
-      ip rule add to 10.10.200.0/24 priority 2500 lookup main
+      ip rule add to 192.168.88.0/24 priority 2500 lookup main
     '';
   };
   #   usePredictableInterfaceNames = false;
