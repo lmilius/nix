@@ -57,7 +57,16 @@ in
   
   # head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "dab4ad1d";
-  services.zfs.autoScrub.enable = true;
+  services.zfs = {
+    autoScrub.enable = true;
+    autoSnapshot = {
+      enable = true;
+      flags = "-k -p --utc";
+      daily = 7;
+      weekly = 5;
+      monthly = 12;
+    };
+  };
 
   networking = {
     firewall = {
@@ -285,18 +294,9 @@ in
     };
   };
 
-  # users.groups.borg = {
-  #   name = "borg";
-  # };
-  # users.users.borg = {
-  #   isSystemUser = true;
-  #   group = "borg";
-  # };
-
   age.secrets = {
     "borg/passphrase" = {
       file = ../../secrets/borgbackup_passphrase.age;
-      # owner = "borg";
     };
     "restic/b2repo" = {
       file = ../../secrets/restic_repo_b2.age;
@@ -328,7 +328,6 @@ in
         repo = "/tank2/backups/borgbackups/photos";
         compression = "zstd,10";
         startAt = "daily";
-        # user = "borg";
       };
       appdata = {
         paths = [
@@ -347,6 +346,54 @@ in
       };
     };
   };
+
+  # services.borgmatic = {
+  #   enable = true;
+  #   configurations = {
+  #     appdata = {
+  #       repositories = [
+  #         {
+  #           label = "appdata";
+  #           path = "/tank2/backups/borgbackups/appdata";
+  #         }
+  #       ];
+  #       source_directories = [
+  #         "/tank2/appdata"
+  #       ];
+  #     };
+  #     photos = {
+  #       repositories = [
+  #         {
+  #           label = "photos";
+  #           path = "/tank2/backups/borgbackups/photos";
+  #         }
+  #       ];
+  #       source_directories = [
+  #         "/tank2/immich"
+  #         "/tank2/media_photos"
+  #         "/tank2/photoprism"
+  #       ];
+  #     };
+  #     # zfs = {};
+  #   };
+  # };
+
+  # systemd.services.borgmatic = {
+  #   path = [ config.boot.zfs.package pkgs.util-linux ];
+  #   serviceConfig = {
+  #     NoNewPrivileges = false;
+  #     PrivateDevices = false;
+  #     CapabilityBoundingSet = [
+  #       "CAP_SYS_ADMIN"
+  #       "CAP_SYS_RAWIO"
+  #       "CAP_DAC_OVERRIDE"
+  #     ];
+  #     ReadWritePaths= [ "/etc/zfs" ];
+  #     # this next line is included in latest upstream, should become unnecessary
+  #     SystemCallFilter = [ "@system-service" "@mount" ];
+  #     LoadCredentialEncrypted = "";
+  #   };
+  # };
 
   ## Remote Backups
   services.restic.backups.b2 = {
