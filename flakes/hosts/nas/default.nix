@@ -415,7 +415,7 @@ in
       ];
     };
     local = {
-      initalize = true;
+      initialize = true;
       repository = "/mnt/backups/BACKUPS/restic/local";
       passwordFile = config.age.secrets."restic/localpass";
       paths = [
