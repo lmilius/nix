@@ -35,6 +35,7 @@ in
   "restic_env_b2.age".publicKeys = nixosHosts ++ users;
   "restic_repo_b2.age".publicKeys = nixosHosts ++ users;
   "restic_password_b2.age".publicKeys = nixosHosts ++ users;
+  "restic_password_local.age".publicKeys = nixosHosts ++ users;
   # "cloudflare_dns_credentials.age".publicKeys = [ ssh_key ];
   # "nextcloud_postgres_admin.age".publicKeys = [ ssh_key ];
   # "nextcloud_domain_name.age".publicKeys = [ ssh_key ];

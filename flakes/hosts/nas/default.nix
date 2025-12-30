@@ -307,6 +307,9 @@ in
     "restic/b2env" = {
       file = ../../secrets/restic_env_b2.age;
     };
+    "restic/localpass" = {
+      file = ../../secrets/restic_password_local.age;
+    };
   };
 
   # Backups
@@ -396,19 +399,34 @@ in
   # };
 
   ## Remote Backups
-  services.restic.backups.b2 = {
-    initialize = true;
-    repositoryFile = config.age.secrets."restic/b2repo".path;
-    passwordFile = config.age.secrets."restic/b2pass".path;
-    environmentFile = config.age.secrets."restic/b2env".path;
-    paths = [
-      "/tank2/backups/borgbackups/appdata"
-    ];
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 5"
-      "--keep-monthly 12"
-    ];
+  services.restic.backups = {
+    b2 = {
+      initialize = true;
+      repositoryFile = config.age.secrets."restic/b2repo".path;
+      passwordFile = config.age.secrets."restic/b2pass".path;
+      environmentFile = config.age.secrets."restic/b2env".path;
+      paths = [
+        "/tank2/backups/borgbackups/appdata"
+      ];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+    };
+    local = {
+      initalize = true;
+      repository = "/mnt/backups/BACKUPS/restic/local";
+      passwordFile = config.age.secrets."restic/localpass";
+      paths = [
+        "/tank2/backups"
+      ];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+    };
   };
 
   # NFS
