@@ -417,7 +417,7 @@ in
     local = {
       initialize = true;
       repository = "/mnt/backups/BACKUPS/restic/local";
-      passwordFile = config.age.secrets."restic/localpass";
+      passwordFile = config.age.secrets."restic/localpass".path;
       paths = [
         "/tank2/backups"
       ];
