@@ -18,7 +18,7 @@
     gparted
     htop
     inetutils
-    iotop
+    iotop-c
     iperf3
     ipmitool
     jq

@@ -46,7 +46,10 @@ in
       "i915.fastboot=1"
       "i915.disable_display=1"
     ];
-    kernel.sysctl."net.ipv4.ip_forward" = 1;
+    kernel.sysctl = {
+      "net.ipv4.ip_forward" = 1;
+      "kernel.task_delayacct" = 1;
+    };
     kernelPackages = pkgs.linuxPackages_6_12;
   };
 
