@@ -424,6 +424,12 @@ in
       paths = [
         "/tank2/backups"
       ];
+      exclude = [
+        "ZZ_old_nvr/*"
+        "Emma/*"
+        "lmilius/*"
+        "GAME-PC/*"
+      ];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 5"
