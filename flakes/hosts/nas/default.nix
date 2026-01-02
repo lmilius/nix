@@ -292,6 +292,8 @@ in
       "archives" = mkShare "/${zfs_tank}/archives";
       "backups" = mkShare "/${zfs_tank}/backups";
       "ha_backups" = mkShare "/${zfs_tank}/backups/ha";
+      "nvr" = mkShare "/${zfs_tank}/nvr";
+      "isos" = mkShare "/${zfs_tank}/isos/template/iso";
 
       "public_share" = mkPublicShare "/${zfs_tank}/public_share";
     };
