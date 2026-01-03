@@ -343,6 +343,7 @@ in
         ];
         exclude = [
           "*.log"
+          "ZZ_OLD/*"
         ];
         encryption = {
           mode = "repokey-blake2";
