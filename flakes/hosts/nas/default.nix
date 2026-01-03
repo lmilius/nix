@@ -343,6 +343,7 @@ in
         exclude = [
           "*.log"
           "ZZ_OLD/*"
+          "jellyfin/transcodes/*"
         ];
         encryption = {
           mode = "repokey-blake2";
@@ -477,7 +478,7 @@ in
   };
   programs.virt-manager.enable = true;
 
-  virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
+  # virtualisation.docker.daemon.settings.data-root = "/${zfs_tank}/docker-data";
 
   
 
