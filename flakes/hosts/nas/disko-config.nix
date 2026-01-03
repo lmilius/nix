@@ -50,7 +50,7 @@
                     mountpoint = "/home";
                     mountOptions = [ "compress=zstd" ];
                   };
-                  "@/appdata" = {
+                  "appdata" = {
                     mountpoint = "/appdata";
                     mountOptions = [ "compress=zstd" ];
                   };
