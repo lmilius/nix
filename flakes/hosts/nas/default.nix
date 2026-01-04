@@ -338,7 +338,7 @@ in
       };
       appdata = {
         paths = [
-          "/tank2/appdata"
+          "/home/deployer/appdata"
         ];
         exclude = [
           "*.log"
