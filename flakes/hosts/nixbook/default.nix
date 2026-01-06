@@ -21,6 +21,7 @@
       outputs.nixosModules.intel_gpu
       outputs.nixosModules.pipewire
       outputs.nixosModules.systemd_oom
+      outputs.nixosModules.xfce
 
       inputs.agenix.nixosModules.default
     ];
@@ -68,16 +69,6 @@
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_12;
   boot.kernelPackages = pkgs.linuxPackages_zen;
-
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    # videoDrivers = [ "amdgpu" ];
-
-    # Enable the XFCE4 Desktop Environment
-    displayManager.lightdm.enable = true;
-    desktopManager.xfce.enable = true;
-  };
 
   # Enable CUPS to print documents.
   services.printing = {

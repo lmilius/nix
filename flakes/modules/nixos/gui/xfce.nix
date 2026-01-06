@@ -8,10 +8,10 @@ in
     enable = true;
 
     # Configure keymap in X11
-    layout = "us";
+    xkb.layout = "us";
     xkbVariant = "";
 
-    Enable XFCE4
+    # Enable XFCE4
     displayManager.lightdm.enable = true;
     desktopManager.xfce.enable = true;
   };
