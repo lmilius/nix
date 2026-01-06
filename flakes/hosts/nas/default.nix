@@ -323,7 +323,7 @@ in
         paths = [
           "/tank2/immich"
           "/tank2/media_photos"
-          "/tank2/photoprism"
+          # "/tank2/photoprism" # Mostly doubled duplicates of what is in immich
         ];
         exclude = [
           "*.log"
