@@ -18,6 +18,8 @@
 
       inputs.home-manager.nixosModules.home-manager
       # outputs.nixosModules.docker_daemon
+      outputs.nixosModules.intel_gpu
+      outputs.nixosModules.pipewire
       outputs.nixosModules.systemd_oom
 
       inputs.agenix.nixosModules.default
@@ -35,6 +37,12 @@
     };
   };
 
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 30;
+  };
+
   # networking.hostName = hostname; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -48,6 +56,14 @@
   #   keyMap = "us";
   #   useXkbConfig = true; # use xkbOptions in tty.
   # };
+
+  services.fstrim.enable = true;
+
+  # Auto Tune
+  services.bpftune.enable = true;
+  programs.bcc.enable = true;
+  # Battery power management
+  services.upower.enable = true;
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_12;
@@ -64,7 +80,16 @@
   };
 
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.cups-brother-hl3140cw ];
+  };
+  ## enable printer auto discovery
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   # Enable sound.
   # sound.enable = true;
@@ -92,11 +117,84 @@
       "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIGxP4uuwDHt55l/TjdJNnS+legL8oUgk/3FFtev/NBvsAAAABHNzaDo= Yubikey Personal SSH Key"
     ];
     initialHashedPassword = "$y$j9T$pIpVsIB6vvgo3wh6aRTbT.$lSwdItSLTZcEEg/KxCWR1FZZUDduWkYgrc4nZ/zusI2";
-    #packages = with pkgs; [
-    #  firefox
-    #  tree
-    #];
+    packages = with pkgs; [
+      # firefox
+      pkgs.unstable.vscode
+      # vscode extensions
+      (vscode-with-extensions.override {
+        vscodeExtensions = with vscode-extensions; [
+          mkhl.direnv
+          njpwerner.autodocstring
+          ms-vscode.cpptools
+          ms-vscode.cmake-tools
+          ms-vscode-remote.remote-ssh
+          ms-vscode-remote.remote-containers
+          ms-python.python
+          ms-python.vscode-pylance
+          njpwerner.autodocstring
+          tailscale.vscode-tailscale
+        ];
+      })
+    ];
   };
+
+  environment.systemPackages = with pkgs; [
+    # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    # unstable.vscode
+    # vscode
+    # plasma5Packages.plasma-thunderbolt
+    firefox
+    intel-gpu-tools
+    bitwarden-desktop
+    # steam-run
+    # moonlight-qt
+    # teamviewer
+    yubioath-flutter
+    # steam
+    nextcloud-client
+    google-chrome
+    # chromium
+    ubootTools
+    # openscad-unstable
+    vlc
+    mpv
+    # pkgs.unstable.discord
+    lm_sensors
+    # distrobox
+    exfatprogs
+    # qemu
+    openssl
+    # wineWowPackages.full # wine
+    # kmon
+    # keepassxc
+    # freetube
+    xwayland
+    trayscale
+    thonny
+    wayland-utils
+    # btrfs-assistant
+    # pulseview
+    # kdePackages.discover
+    # insomnia
+    # inputs.agenix.packages."${stdenv.hostPlatform.system}".default
+    # ipmiview
+    # pkgs.unstable.orca-slicer
+    # orca-slicer
+    # pkgs.unstable.onedrive
+    # onedrivegui
+    # samba
+    # libreoffice-qt6-fresh
+    # hunspell # spellcheck libreoffice
+    # hunspellDicts.en_US # spellcheck libreoffice
+    wirelesstools
+    # ffmpeg-full
+    winbox4
+  ];
+
+  services.udev.packages = with pkgs; [
+    yubikey-personalization
+    libu2f-host
+  ];
 
   programs.virt-manager.enable = true;
 
