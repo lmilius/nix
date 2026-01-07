@@ -130,6 +130,21 @@ in
         ../../users/lmilius/home.nix 
       ]; 
     };
+    programs.rclone = {
+      enable = true;
+      remotes = {
+        b2-backup = {
+          config = {
+            type = "b2";
+            hard_delete = true;
+          };
+          secrets = {
+            account = config.age.secrets."b2/accountid".path;
+            key = config.age.secrets."b2/key".path;
+          };
+        };
+      };
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -447,22 +462,6 @@ in
     };
   };
 
-  programs.rclone = {
-    enable = true;
-    remotes = {
-      b2-backup = {
-        config = {
-          type = "b2";
-          hard_delete = true;
-        };
-        secrets = {
-          account = config.age.secrets."b2/accountid".path;
-          key = config.age.secrets."b2/key".path;
-        };
-      };
-    };
-  };
-
   systemd.user.services."rclone-b2-appdata" = {
     Service = {
       Type = "oneshot";
@@ -473,14 +472,14 @@ in
     };
   };
 
-  systemd.user.timers."rclone-b2-appdata" = {
-    Install.WantedBy = [ "timers.target" ];
-    Unit.PartOf = "rclone-b2-appdata.service";
-    Timer = {
-      OnCalendar = "daily";
-      Unit = "rclone-b2-appdata.service";
-    };
-  };
+  # systemd.user.timers."rclone-b2-appdata" = {
+  #   Install.WantedBy = [ "timers.target" ];
+  #   Unit.PartOf = "rclone-b2-appdata.service";
+  #   Timer = {
+  #     OnCalendar = "daily";
+  #     Unit = "rclone-b2-appdata.service";
+  #   };
+  # };
 
   # NFS
   # fileSystems."/export/pve_data" = {
