@@ -311,6 +311,12 @@ in
     "restic/b2env" = {
       file = ../../secrets/restic_env_b2.age;
     };
+    "b2/accountid" = {
+      file = ../../secrets/b2_account_id.age;
+    };
+    "b2/key" = {
+      file = ../../secrets/b2_account_key.age;
+    };
     "restic/localpass" = {
       file = ../../secrets/restic_password_local.age;
     };
@@ -438,6 +444,41 @@ in
         "--keep-weekly 5"
         "--keep-monthly 12"
       ];
+    };
+  };
+
+  programs.rclone = {
+    enable = true;
+    remotes = {
+      b2-backup = {
+        config = {
+          type = "b2";
+          hard_delete = true;
+        };
+        secrets = {
+          account = config.age.secrets."b2/accountid".path;
+          key = config.age.secrets."b2/key".path;
+        };
+      };
+    };
+  };
+
+  systemd.user.services."rclone-b2-appdata" = {
+    Service = {
+      Type = "oneshot";
+      # Initial setup:
+      # - Insert config manually 
+      # - rclone bisync --resync b2-backup:/dest/path /source/path
+      ExecStart = "${pkgs.rclone}/bin/rclone sync --fast-list "/tank2/backups/borgbackups/appdata" b2-backup:lmilius-backups/appdata/";
+    };
+  };
+
+  systemd.user.timers."rclone-b2-appdata" = {
+    Install.WantedBy = [ "timers.target" ];
+    Unit.PartOf = "rclone-b2-appdata.service";
+    Timer = {
+      OnCalendar = "daily";
+      Unit = "rclone-b2-appdata.service";
     };
   };
 
