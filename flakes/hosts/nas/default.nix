@@ -129,18 +129,18 @@ in
       imports = [
         ../../users/lmilius/home.nix 
       ]; 
-    };
-    programs.rclone = {
-      enable = true;
-      remotes = {
-        b2-backup = {
-          config = {
-            type = "b2";
-            hard_delete = true;
-          };
-          secrets = {
-            account = config.age.secrets."b2/accountid".path;
-            key = config.age.secrets."b2/key".path;
+      programs.rclone = {
+        enable = true;
+        remotes = {
+          b2-backup = {
+            config = {
+              type = "b2";
+              hard_delete = true;
+            };
+            secrets = {
+              account = config.age.secrets."b2/accountid".path;
+              key = config.age.secrets."b2/key".path;
+            };
           };
         };
       };
