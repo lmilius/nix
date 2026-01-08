@@ -346,11 +346,11 @@ in
     };
     "b2/accountid" = {
       file = ../../secrets/b2_account_id.age;
-      path = "${config.home.homeDirectory}/.config/rclone/accountid"
+      path = "${config.home.homeDirectory}/.config/rclone/accountid";
     };
     "b2/key" = {
       file = ../../secrets/b2_account_key.age;
-      path = "${config.home.homeDirectory}/.config/rclone/key"
+      path = "${config.home.homeDirectory}/.config/rclone/key";
     };
     "restic/localpass" = {
       file = ../../secrets/restic_password_local.age;
