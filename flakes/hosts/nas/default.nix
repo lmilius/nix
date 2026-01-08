@@ -144,6 +144,24 @@ in
           };
         };
       };
+      # systemd.user.services."rclone-b2-appdata" = {
+      #   Service = {
+      #     Type = "oneshot";
+      #     # Initial setup:
+      #     # - Insert config manually 
+      #     # - rclone bisync --resync b2-backup:/dest/path /source/path
+      #     ExecStart = "${pkgs.rclone}/bin/rclone sync --fast-list "/tank2/backups/borgbackups/appdata" b2-backup:lmilius-backups/appdata/";
+      #   };
+      # };
+
+      # systemd.user.timers."rclone-b2-appdata" = {
+      #   Install.WantedBy = [ "timers.target" ];
+      #   Unit.PartOf = "rclone-b2-appdata.service";
+      #   Timer = {
+      #     OnCalendar = "daily";
+      #     Unit = "rclone-b2-appdata.service";
+      #   };
+      # };
     };
   };
 
@@ -461,25 +479,6 @@ in
       ];
     };
   };
-
-  systemd.user.services."rclone-b2-appdata" = {
-    Service = {
-      Type = "oneshot";
-      # Initial setup:
-      # - Insert config manually 
-      # - rclone bisync --resync b2-backup:/dest/path /source/path
-      ExecStart = "${pkgs.rclone}/bin/rclone sync --fast-list "/tank2/backups/borgbackups/appdata" b2-backup:lmilius-backups/appdata/";
-    };
-  };
-
-  # systemd.user.timers."rclone-b2-appdata" = {
-  #   Install.WantedBy = [ "timers.target" ];
-  #   Unit.PartOf = "rclone-b2-appdata.service";
-  #   Timer = {
-  #     OnCalendar = "daily";
-  #     Unit = "rclone-b2-appdata.service";
-  #   };
-  # };
 
   # NFS
   # fileSystems."/export/pve_data" = {
