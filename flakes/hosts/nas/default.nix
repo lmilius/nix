@@ -132,7 +132,7 @@ in
       programs.rclone = {
         enable = true;
         remotes = {
-          b2 = {
+          b2-backup = {
             config = {
               type = "b2";
               hard_delete = true;
@@ -347,10 +347,12 @@ in
     "b2/accountid" = {
       file = ../../secrets/b2_account_id.age;
       path = "${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/accountid";
+      owner = "lmilius";
     };
     "b2/key" = {
       file = ../../secrets/b2_account_key.age;
       path = "${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/key";
+      owner = "lmilius";
     };
     "restic/localpass" = {
       file = ../../secrets/restic_password_local.age;
