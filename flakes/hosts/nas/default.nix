@@ -131,6 +131,7 @@ in
       ];
       programs.rclone = {
         enable = true;
+        package = pkgs.rclone;
         remotes = {
           b2 = {
             config = {
@@ -145,24 +146,24 @@ in
         };
       };
     };
-    users.root = {
-      programs.home-manager.enable = true;
-      home.stateVersion = "25.11";
-      programs.rclone = {
-        enable = true;
-        remotes = {
-          b2 = {
-            config = {
-              type = "b2";
-              hard_delete = true;
-            };
-            secrets = {
-              account = config.age.secrets."b2/accountid".path;
-              key = config.age.secrets."b2/key".path;
-            };
-          };
-        };
-      };
+    # users.root = {
+    #   programs.home-manager.enable = true;
+    #   home.stateVersion = "25.11";
+    #   programs.rclone = {
+    #     enable = true;
+    #     remotes = {
+    #       b2 = {
+    #         config = {
+    #           type = "b2";
+    #           hard_delete = true;
+    #         };
+    #         secrets = {
+    #           account = config.age.secrets."b2/accountid".path;
+    #           key = config.age.secrets."b2/key".path;
+    #         };
+    #       };
+    #     };
+    #   };
       # systemd.user.services."rclone-b2-appdata" = {
       #   Service = {
       #     Type = "oneshot";
@@ -181,7 +182,7 @@ in
       #     Unit = "rclone-b2-appdata.service";
       #   };
       # };
-    };
+    # };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -229,6 +230,7 @@ in
     virt-manager
     qemu
     quickemu
+    rclone
   ];
 
   services.samba-wsdd = {
