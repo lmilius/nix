@@ -487,22 +487,22 @@ in
     };
   };
 
-  systemd.services."rclone-b2-appdata" = {
+  systemd.services.rclone-b2-appdata = {
     enable = true;
     after = [ "network.target" ];
     description = "Rclone backups to B2 BackBlaze for appdata.";
-    path = [ pkgs.rclone ];
+    # path = [ pkgs.rclone ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list "/tank2/backups/borgbackups/appdata" b2:lmilius-backups/appdata/";
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/'';
     };
   };
 
-  systemd.timers."rclone-b2-appdata" = {
-    Install.WantedBy = [ "timers.target" ];
-    Unit.PartOf = "rclone-b2-appdata.service";
+  systemd.timers.rclone-b2-appdata = {
+    wantedBy = [ "timers.target" ];
+    partOf = [ "rclone-b2-appdata.service" ];
     timerConfig = {
-      OnCalendar = "daily";
+      OnCalendar = "10:00 UTC";
       Unit = "rclone-b2-appdata.service";
     };
   };
