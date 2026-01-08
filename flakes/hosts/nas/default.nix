@@ -128,11 +128,30 @@ in
     users.lmilius = { 
       imports = [
         ../../users/lmilius/home.nix 
-      ]; 
+      ];
       programs.rclone = {
         enable = true;
         remotes = {
-          b2-backup = {
+          b2 = {
+            config = {
+              type = "b2";
+              hard_delete = true;
+            };
+            secrets = {
+              account = config.age.secrets."b2/accountid".path;
+              key = config.age.secrets."b2/key".path;
+            };
+          };
+        };
+      };
+    };
+    users.root = {
+      programs.home-manager.enable = true;
+      home.stateVersion = "25.11";
+      programs.rclone = {
+        enable = true;
+        remotes = {
+          b2 = {
             config = {
               type = "b2";
               hard_delete = true;
