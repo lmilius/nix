@@ -503,7 +503,6 @@ in
     enable = true;
     after = [ "network.target" ];
     description = "Rclone backups to B2 BackBlaze for appdata.";
-    # path = [ pkgs.rclone ];
     serviceConfig = {
       Type = "oneshot";
       ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/'';
@@ -516,6 +515,25 @@ in
     timerConfig = {
       OnCalendar = "10:00 UTC";
       Unit = "rclone-b2-appdata.service";
+    };
+  };
+
+  systemd.services.rclone-b2-photos = {
+    enable = true;
+    after = [ "network.target" ];
+    description = "Rclone backups to B2 BackBlaze for photos.";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/photos b2:lmilius-backups/photos/'';
+    };
+  };
+
+  systemd.timers.rclone-b2-photos = {
+    wantedBy = [ "timers.target" ];
+    partOf = [ "rclone-b2-photos.service" ];
+    timerConfig = {
+      OnCalendar = "09:00 UTC";
+      Unit = "rclone-b2-photos.service";
     };
   };
 
