@@ -338,15 +338,15 @@ in
     "borg/passphrase" = {
       file = ../../secrets/borgbackup_passphrase.age;
     };
-    "restic/b2repo" = {
-      file = ../../secrets/restic_repo_b2.age;
-    };
-    "restic/b2pass" = {
-      file = ../../secrets/restic_password_b2.age;
-    };
-    "restic/b2env" = {
-      file = ../../secrets/restic_env_b2.age;
-    };
+    # "restic/b2repo" = {
+    #   file = ../../secrets/restic_repo_b2.age;
+    # };
+    # "restic/b2pass" = {
+    #   file = ../../secrets/restic_password_b2.age;
+    # };
+    # "restic/b2env" = {
+    #   file = ../../secrets/restic_env_b2.age;
+    # };
     "b2/accountid" = {
       file = ../../secrets/b2_account_id.age;
       path = "${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/accountid";
