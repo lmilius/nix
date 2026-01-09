@@ -385,7 +385,7 @@ in
           within = "1d"; # keep all archives from the last day
           daily = 7;
           weekly = 5;
-          monthly = 12;
+          monthly = -1; # Keep at least one archive for each month
         };
       };
       appdata = {
@@ -408,7 +408,7 @@ in
           within = "1d"; # keep all archives from the last day
           daily = 7;
           weekly = 5;
-          monthly = 12;
+          monthly = -1; # Keep at least one archive for each month
         };
       };
     };
