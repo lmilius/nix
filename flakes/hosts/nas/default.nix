@@ -381,6 +381,12 @@ in
         repo = "/tank2/backups/borgbackups/photos";
         compression = "zstd,10";
         startAt = "daily";
+        prune.keep = {
+          within = "1d"; # keep all archives from the last day
+          daily = 7;
+          weekly = 5;
+          monthly = 12;
+        };
       };
       appdata = {
         paths = [
@@ -398,6 +404,12 @@ in
         repo = "/tank2/backups/borgbackups/appdata";
         compression = "zstd,10";
         startAt = "daily";
+        prune.keep = {
+          within = "1d"; # keep all archives from the last day
+          daily = 7;
+          weekly = 5;
+          monthly = 12;
+        };
       };
     };
   };
