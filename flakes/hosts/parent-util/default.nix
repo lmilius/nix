@@ -15,7 +15,7 @@
 
       inputs.home-manager.nixosModules.home-manager
       outputs.nixosModules.docker_daemon
-      outputs.nixosModules.syncthing
+      # outputs.nixosModules.syncthing
       outputs.nixosModules.systemd_oom
       inputs.agenix.nixosModules.default
     ];

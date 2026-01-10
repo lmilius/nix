@@ -17,7 +17,7 @@ in
       # outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      outputs.nixosModules.syncthing
+      # outputs.nixosModules.syncthing
       # outputs.nixosModules.systemd_oom
 
       # (outputs.nixosModules.nextcloud {
@@ -170,7 +170,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lmilius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "libvirtd" "deployer" "syncthing" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "libvirtd" "deployer" ]; # Enable ‘sudo’ for the user.
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
       "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIGxP4uuwDHt55l/TjdJNnS+legL8oUgk/3FFtev/NBvsAAAABHNzaDo= Yubikey Personal SSH Key"
@@ -580,18 +580,18 @@ in
 
   
 
-  # syncthing overrides
-  users.groups."syncthing" = {};
-  users.users."syncthing" = {
-    group = "syncthing";
-    extraGroups = [ "syncthing" "deployer" ];
-  };
-  services.syncthing = {
-    user = "syncthing";
-    group = "syncthing";
-    dataDir = "/${zfs_tank}/appdata/syncthing";
-    configDir = "/${zfs_tank}/appdata/syncthing/.config/syncthing";
-  };
+  # # syncthing overrides
+  # users.groups."syncthing" = {};
+  # users.users."syncthing" = {
+  #   group = "syncthing";
+  #   extraGroups = [ "syncthing" "deployer" ];
+  # };
+  # services.syncthing = {
+  #   user = "syncthing";
+  #   group = "syncthing";
+  #   dataDir = "/${zfs_tank}/appdata/syncthing";
+  #   configDir = "/${zfs_tank}/appdata/syncthing/.config/syncthing";
+  # };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

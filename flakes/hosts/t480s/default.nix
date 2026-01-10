@@ -433,13 +433,13 @@
   services.teamviewer.enable = true;
 
   # Syncthing (port 8384 web gui)
-  services.syncthing = {
-    enable = true;
-    user = "lmilius";
-    dataDir = "/home/lmilius/Documents";
-    configDir = "/home/lmilius/Documents/.config/syncthing";
-    openDefaultPorts = true;
-  };
+  # services.syncthing = {
+  #   enable = true;
+  #   user = "lmilius";
+  #   dataDir = "/home/lmilius/Documents";
+  #   configDir = "/home/lmilius/Documents/.config/syncthing";
+  #   openDefaultPorts = true;
+  # };
 
   # nix cli helper
   # https://github.com/viperML/nh
@@ -537,7 +537,7 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 
-      22000 # Syncthing
+      # 22000 # Syncthing
       # 27036 # steam
       80 # nix-cache nginx
       # config.services.tailscale.port
@@ -545,7 +545,7 @@
       44445 # nc
     ]; 
     allowedUDPPorts = [ 
-      22000 # Syncthing
+      # 22000 # Syncthing
       # 27036 # steam
       80 # nix-cache nginx
       # 41641 # tailscale
