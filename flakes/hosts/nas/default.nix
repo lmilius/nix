@@ -507,7 +507,7 @@ in
     description = "Rclone backups to B2 BackBlaze for appdata.";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/ && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/ajm0eAzDCi?status=up&msg=OK&ping='';
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/''; # && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/ajm0eAzDCi?status=up&msg=OK&ping='';
     };
   };
 
@@ -526,7 +526,7 @@ in
     description = "Rclone backups to B2 BackBlaze for photos.";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/photos b2:lmilius-backups/photos/ && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/tpkzEiTwhY?status=up&msg=OK&ping='';
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/photos b2:lmilius-backups/photos/''; # && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/tpkzEiTwhY?status=up&msg=OK&ping='';
     };
   };
 
