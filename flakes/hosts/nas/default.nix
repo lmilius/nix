@@ -50,7 +50,7 @@ in
       "net.ipv4.ip_forward" = 1;
       "kernel.task_delayacct" = 1;
     };
-    kernelPackages = pkgs.linuxPackages_6_12;
+    # kernelPackages = pkgs.linuxPackages_6_12;
   };
 
   # External Backup Drive
@@ -387,6 +387,7 @@ in
           weekly = 5;
           monthly = -1; # Keep at least one archive for each month
         };
+        postHook = ''${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/cbUhYoqn8k?status=up&msg=OK&ping='';
       };
       appdata = {
         paths = [
@@ -410,6 +411,7 @@ in
           weekly = 5;
           monthly = -1; # Keep at least one archive for each month
         };
+        postHook = ''${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/e58FJH5LJM?status=up&msg=OK&ping='';
       };
     };
   };
@@ -505,7 +507,7 @@ in
     description = "Rclone backups to B2 BackBlaze for appdata.";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/'';
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/appdata b2:lmilius-backups/appdata/ && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/ajm0eAzDCi?status=up&msg=OK&ping='';
     };
   };
 
@@ -524,7 +526,7 @@ in
     description = "Rclone backups to B2 BackBlaze for photos.";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/photos b2:lmilius-backups/photos/'';
+      ExecStart = ''${pkgs.rclone}/bin/rclone --config ${config.home-manager.users.lmilius.home.homeDirectory}/.config/rclone/rclone.conf sync --progress --fast-list /tank2/backups/borgbackups/photos b2:lmilius-backups/photos/ && ${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/tpkzEiTwhY?status=up&msg=OK&ping='';
     };
   };
 
