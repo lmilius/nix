@@ -9,7 +9,7 @@
 }: 
 let
   myAliases = {
-    ll = "ls -alF";
+    ll = "ls -alFh";
     la = "ls -A";
     l = "ls -CF";
     ".." = "cd ..";
