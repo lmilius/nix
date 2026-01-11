@@ -95,7 +95,8 @@
     users.lmilius = { 
       imports = [
         ../../users/lmilius/home.nix 
-      ]; 
+      ];
+      services.udiskie.enable = true; 
     };
   };
 
@@ -161,7 +162,7 @@
     # freetube
     xwayland
     trayscale
-    thonny
+    # thonny
     wayland-utils
     # btrfs-assistant
     # pulseview
@@ -180,7 +181,46 @@
     wirelesstools
     # ffmpeg-full
     winbox4
+
+    # Sway
+    grim
+    slurp
+    wl-clipboard
+    mako
+    slurp
+    flameshot
   ];
+
+  # Sway
+  services.gnome.gnome-keyring.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+  programs.waybar.enable = true;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";
+      };
+    };
+  };
+  services.udisks2.enable = true;
+  # xdg portal + pipewire = screensharing
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+  };
+
+
+  
 
   services.udev.packages = with pkgs; [
     yubikey-personalization
