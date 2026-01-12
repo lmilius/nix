@@ -51,7 +51,6 @@ agenix -r
 
 ```bash
 export hostname=<hostname here>
-nix-shell -p git
 git clone https://github.com/lmilius/nix.git /tmp/nix
 sudo nix --extra-experimental-features 'flakes nix-command' run github:nix-community/disko -- --mode destroy,format,mount "/tmp/nix/flakes/hosts/$hostname/disko-config.nix"
 sudo nixos-install --root /mnt --flake "/tmp/nix/flakes#$hostname"

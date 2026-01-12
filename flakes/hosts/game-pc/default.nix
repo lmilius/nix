@@ -110,7 +110,17 @@
       enable = true;
       enable32Bit = true; # used for wine
     };
+    nvidia = {
+      open = false; # GTX 10 series is too old for open-source drivers
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      modesetting.enable = true;
+      powerManagement.enable = false; # may fix graphical corruption and system crashes on suspend/resume if set to true
+    };
   };
+
+  # if Nvidia powerManagement is enabled, may need to move tmp path
+  # boot.kernelParams = [ "nvidia.NVreg_TemporaryFilePath=/var/tmp" ];
+
   networking = {
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
