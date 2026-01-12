@@ -110,6 +110,7 @@
       nas = nixosSystem "nas";
       nvr = nixosSystem "nvr";
       nixbook = nixosSystem "nixbook";
+      game-pc = nixosSystem "game-pc";
       # t480s = nixpkgs.lib.nixosSystem {
       #   specialArgs = {inherit inputs outputs;};
       #   modules = [
