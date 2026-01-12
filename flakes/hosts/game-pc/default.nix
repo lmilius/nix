@@ -125,17 +125,19 @@
     # hostName = outputs.hostname; # Define your hostname. (defined from flake.nix)
     networkmanager = {
       enable = true;
-      # dns = "systemd-resolved";
-      dns = "dnsmasq";
+    #   # dns = "systemd-resolved";
+    #   dns = "dnsmasq";
+
     };
     useDHCP = false;
     # useNetworkd = true;
+    # dhcpd.enable = false;
     # nftables.enable = true;
-    interfaces = {
-      enp7s0 = {
-        useDHCP = true;
-      };
-    };
+    # interfaces = {
+    #   enp7s0 = {
+    #     useDHCP = true;
+    #   };
+    # };
   };
 
   # services.resolved.enable = true;
