@@ -115,8 +115,12 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = true;
       powerManagement.enable = false; # may fix graphical corruption and system crashes on suspend/resume if set to true
+      nvidiaSettings = true;
     };
   };
+
+  # Load nvidia driver for Xorg and Wayland
+  services.xserver.videoDrivers = ["nvidia"];
 
   # if Nvidia powerManagement is enabled, may need to move tmp path
   # boot.kernelParams = [ "nvidia.NVreg_TemporaryFilePath=/var/tmp" ];
@@ -289,7 +293,7 @@
     ffmpeg-full
     winbox4
     # Nvidia utilities
-    nvtop
+    nvtopPackages.nvidia
   ];
 
   services.udev.packages = with pkgs; [
