@@ -289,9 +289,6 @@
     ffmpeg-full
     winbox4
     # Nvidia utilities
-    nvidia-x11
-    nvidia-settings
-    nvidia-persistenced
     nvtop
   ];
 
