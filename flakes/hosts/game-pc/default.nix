@@ -288,6 +288,11 @@
     wirelesstools
     ffmpeg-full
     winbox4
+    # Nvidia utilities
+    nvidia-x11
+    nvidia-settings
+    nvidia-persistenced
+    nvtop
   ];
 
   services.udev.packages = with pkgs; [
