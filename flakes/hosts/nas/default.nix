@@ -362,6 +362,24 @@ in
     };
   };
 
+  # # Send notification on status of backup job
+  # systemd.services.backup-notification = {
+  #   description = "Send notification on backup run";
+  #   after = [ "network-online.target" ];
+  #   wants = [ "network-online.target" ];
+  #   # environment = {
+  #   #   APPRISE_TOKEN = "";
+  #   # };
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     ExecStart = ''${pkgs.curl}/bin/curl https://status.miliushome.com/api/push/cbUhYoqn8k?status=up&msg=OK&ping='';
+  #     # EnvironmentFile = ;
+  #   };
+  # } // flip mapAttrs' config.services.borgbackup.jobs ( name: value:
+  #   nameValuePair "borgbackup-job-photos" {
+  #     unitConfig.OnFailure = "backup-notification.service";
+  # });
+
   # Backups
   services.borgbackup = {
     jobs = {

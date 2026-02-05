@@ -154,6 +154,14 @@
     ];
   };
 
+  services.nebula.networks.mesh = {
+    enable = true;
+    isLighthouse = false;
+    cert = "/etc/nebula/t480s.crt";
+    key = "/etc/nebula/t480s.key";
+    ca = "/etc/nebula/ca.crt";
+  };
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
