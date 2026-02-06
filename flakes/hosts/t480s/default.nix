@@ -184,6 +184,18 @@
         }
       ];
     };
+    settings = {
+      cipher = "aes";
+      local_allow_list = [
+        {
+          interfaces = {
+            "docker.*" = false;
+            "tailscale*" = false;
+          };
+          "10.10.200.0/24" = true;
+        }
+      ];
+    };
   };
 
   # Configure network proxy if necessary
