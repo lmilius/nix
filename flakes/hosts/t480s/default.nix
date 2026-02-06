@@ -160,6 +160,30 @@
     cert = "/etc/nebula/t480s.crt";
     key = "/etc/nebula/t480s.key";
     ca = "/etc/nebula/ca.crt";
+    lighthouses = [
+      "10.100.100.1"
+    ];
+    staticHostMap = {
+      "10.100.100.1" = [
+        "gateway.miliusfam.com:4242"
+      ];
+    };
+    firewall = {
+      outbound = [
+        {
+          host = "any";
+          port = "any";
+          proto = "any";
+        }
+      ];
+      inbound = [
+        {
+          host = "any";
+          port = "any";
+          proto = "icmp";
+        }
+      ];
+    };
   };
 
   # Configure network proxy if necessary
