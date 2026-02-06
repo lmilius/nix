@@ -328,6 +328,11 @@
           port = "any";
           proto = "icmp";
         }
+        {
+          host = "any";
+          port = "8080";
+          proto = "any";
+        }
       ];
     };
   };
