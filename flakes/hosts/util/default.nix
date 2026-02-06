@@ -300,6 +300,38 @@
     ip rule add to 10.10.200.0/24 priority 2500 lookup main
   '';
 
+  services.nebula.networks.mesh = {
+    enable = true;
+    isLighthouse = false;
+    cert = "/etc/nebula/util.crt";
+    key = "/etc/nebula/util.key";
+    ca = "/etc/nebula/ca.crt";
+    lighthouses = [
+      "10.100.100.1"
+    ];
+    staticHostMap = {
+      "10.100.100.1" = [
+        "gateway.miliusfam.com:4242"
+      ];
+    };
+    firewall = {
+      outbound = [
+        {
+          host = "any";
+          port = "any";
+          proto = "any";
+        }
+      ];
+      inbound = [
+        {
+          host = "any";
+          port = "any";
+          proto = "icmp";
+        }
+      ];
+    };
+  };
+
   # # environment.systemPackages = with pkgs; [
   # #   python311
   # #   python311Packages.paho-mqtt_2
