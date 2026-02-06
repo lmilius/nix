@@ -337,15 +337,16 @@
     };
     settings = {
       cipher = "aes";
-      local_allow_list = [
-        {
-          interfaces = {
-            "docker.*" = false;
-            "tailscale*" = false;
-          };
-          "10.10.200.0/24" = true;
-        }
-      ];
+      local_allow_list = {
+        "10.0.0.0/8" = false;
+        "172.16.0.0/12" = false;
+        "192.168.0.0/16" = false;
+        interfaces = {
+          "docker.*" = false;
+          "tailscale*" = false;
+        };
+        "10.10.200.0/24" = true;
+      };
     };
   };
 
