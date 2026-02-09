@@ -356,6 +356,13 @@
   # Enable the teamviewer service
   services.teamviewer.enable = true;
 
+  services.ollama = {
+    enable = true;
+    # Optional: preload models, see https://ollama.com/library
+    loadModels = [ "llama3.2:3b" ];
+    package = pkgs.ollama-cuda;
+  };
+
   # nix cli helper
   # https://github.com/viperML/nh
   # programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
