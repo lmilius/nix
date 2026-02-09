@@ -423,6 +423,7 @@
       # config.services.tailscale.port
       # 41641 # tailscale
       # 44445 # nc
+      8080 # openwebui
     ]; 
     allowedUDPPorts = [ 
       # 22000 # Syncthing
@@ -431,6 +432,7 @@
       # 41641 # tailscale
       # config.services.tailscale.port
       # 44445 # nc
+      8080 # openwebui
     ]; 
     allowedTCPPortRanges = [ 
       { from = 1714; to = 1764; } # KDE Connect
