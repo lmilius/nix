@@ -366,6 +366,7 @@
     loadModels = [ "llama3.2:3b" ];
     package = pkgs.ollama-cuda;
   };
+  services.open-webui.enable = true;
 
   # nix cli helper
   # https://github.com/viperML/nh
