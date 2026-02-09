@@ -299,6 +299,10 @@
     winbox4
     # Nvidia utilities
     nvtopPackages.nvidia
+    # Minikube
+    minikube
+    kubectl
+    docker-machine-kvm2
   ];
 
   services.udev.packages = with pkgs; [
