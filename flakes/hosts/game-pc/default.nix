@@ -364,7 +364,11 @@
     enable = true;
     # Optional: preload models, see https://ollama.com/library
     loadModels = [ "llama3.2:3b" ];
-    package = pkgs.ollama-cuda;
+    package = pkgs.ollama-cuda.override {
+      # nvidia-smi --query-gpu=compute_cap --format=csv
+      cudaArches = [ "61" ];
+    };
+    acceleration = "cuda";
   };
   services.open-webui.enable = true;
 
