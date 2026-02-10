@@ -424,6 +424,8 @@
       # 41641 # tailscale
       # 44445 # nc
       8080 # openwebui
+      11434 # ollama api
+      3389 # rdp
     ]; 
     allowedUDPPorts = [ 
       # 22000 # Syncthing
@@ -433,6 +435,8 @@
       # config.services.tailscale.port
       # 44445 # nc
       8080 # openwebui
+      11434 # ollama api
+      3389 # rdp
     ]; 
     allowedTCPPortRanges = [ 
       { from = 1714; to = 1764; } # KDE Connect
