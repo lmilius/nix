@@ -363,7 +363,7 @@
   services.ollama = {
     enable = true;
     # Optional: preload models, see https://ollama.com/library
-    loadModels = [ "llama3.2:3b" ];
+    loadModels = [ "llama3.2:3b" "gemma3:4b" "qwen2.5:7b" "qwen3:8b" "phi3:14b" "llava:7b" "qwen2.5-coder:7b" "mistral-nemo:12b" "codegemma:7b" ];
     package = pkgs.ollama-cuda.override {
       # nvidia-smi --query-gpu=compute_cap --format=csv
       cudaArches = [ "61" ];
