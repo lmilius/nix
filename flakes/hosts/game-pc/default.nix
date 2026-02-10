@@ -369,8 +369,14 @@
       cudaArches = [ "61" ];
     };
     acceleration = "cuda";
+    host = "0.0.0.0";
+    openFirewall = true;
   };
-  services.open-webui.enable = true;
+  services.open-webui = {
+    enable = true;
+    host = "0.0.0.0";
+    openFirewall = true;
+  };
 
   # nix cli helper
   # https://github.com/viperML/nh
@@ -423,8 +429,6 @@
       # config.services.tailscale.port
       # 41641 # tailscale
       # 44445 # nc
-      8080 # openwebui
-      11434 # ollama api
       3389 # rdp
     ]; 
     allowedUDPPorts = [ 
@@ -434,8 +438,6 @@
       # 41641 # tailscale
       # config.services.tailscale.port
       # 44445 # nc
-      8080 # openwebui
-      11434 # ollama api
       3389 # rdp
     ]; 
     allowedTCPPortRanges = [ 
