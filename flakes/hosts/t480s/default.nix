@@ -261,7 +261,7 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ]; # dialout used for serial devices
     packages = with pkgs; [
       # firefox
-      pkgs.unstable.vscode
+      pkgs.unstable.vscode.fhs
       # vscode extensions
       (vscode-with-extensions.override {
         vscodeExtensions = with vscode-extensions; [
