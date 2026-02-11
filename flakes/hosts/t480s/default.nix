@@ -192,8 +192,9 @@
         "192.168.0.0/16" = false;
         interfaces = {
           "docker.*" = false;
-          "tailscale*" = false;
+          "tailscale.*" = false;
         };
+        # "0.0.0.0/0" = false;
         "10.10.200.0/24" = true;
       };
     };
@@ -274,6 +275,7 @@
           ms-python.vscode-pylance
           njpwerner.autodocstring
           tailscale.vscode-tailscale
+          github.copilot-chat
         ];
       })
     ];
