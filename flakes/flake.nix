@@ -43,6 +43,10 @@
       # inputs.nixpkgs.follows = "nix-bitcoin/nixpkgs";
       # inputs.nixpkgs-unstable.follows = "nix-bitcoin/nixpkgs-unstable";
     };
+
+    openclaw = {
+      url = "github:Scout-DJ/openclaw-nix";
+    };
   };
 
   outputs = {
@@ -56,6 +60,7 @@
     agenix,
     compose2nix,
     nix-bitcoin,
+    openclaw,
     ...
   } @ inputs: let
     inherit (self) outputs;

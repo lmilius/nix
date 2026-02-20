@@ -381,20 +381,21 @@ in
   # });
 
   # https://github.com/VTimofeenko/monorepo-machine-config/tree/master/nixosModules/services/nut-client
-  power.ups = {
-    enable = true;
-    mode = "netclient";
-    upsmon = {
-      enable = true;
-      monitor = {
-        rack_ups = {
-          system = "myups@10.10.200.10";
-          user = "nas";
-          type = "slave";
-        };
-      };
-    };
-  };
+  # power.ups = {
+  #   enable = true;
+  #   mode = "netclient";
+  #   upsmon = {
+  #     enable = true;
+  #     monitor = {
+  #       rack_ups = {
+  #         system = "myups@10.10.200.10";
+  #         passwordFile = /dev/null;
+  #         user = "nas";
+  #         type = "slave";
+  #       };
+  #     };
+  #   };
+  # };
 
   # Backups
   services.borgbackup = {

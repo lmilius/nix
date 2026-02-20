@@ -33,6 +33,7 @@
       # outputs.nixosModules.systemd_oom
 
       inputs.agenix.nixosModules.default
+      inputs.openclaw.nixosModules.default
 
       # (outputs.nixosModules.restic_home_backup {
       #   config = config;
@@ -372,6 +373,31 @@
     host = "0.0.0.0";
     openFirewall = true;
   };
+
+  services.openclaw = {
+    enable = true;
+    domain = "";
+
+    # Model provider
+    modelProvider = "ollama";
+    modelApiKeyFile = "/dev/null";
+
+    # Telegram bot
+    telegram = {
+      enable = true;
+      tokenFile = "/home/lmilius/.config/claw_telegram_bot_token";
+    };
+
+    # Tool security (defaults shown — you don't need to set these)
+    toolSecurity = "allowlist";
+    toolAllowlist = [
+      "read" "write" "edit"
+      "web_search" "web_fetch"
+      "message" "tts"
+    ];
+    openFirewall = true;
+  };
+  
   # services.open-webui = {
   #   enable = true;
   #   host = "0.0.0.0";
