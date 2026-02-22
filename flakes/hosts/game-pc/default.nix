@@ -378,7 +378,7 @@
   };
 
   services.openclaw = {
-    enable = true;
+    enable = false;
     domain = "";
 
     # Model provider
