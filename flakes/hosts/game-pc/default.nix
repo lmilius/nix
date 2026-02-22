@@ -398,8 +398,6 @@
     openFirewall = true;
   };
 
-  services.
-
   nix.settings.sandbox = "relaxed"; # needed for openclaw to call external tools, see https://github.com/Scout-DJ/openclaw-nix/pull/2
   
   # services.open-webui = {
