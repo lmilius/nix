@@ -365,7 +365,7 @@
     enable = true;
     # Optional: preload models, see https://ollama.com/library
     loadModels = [ "llama3.2:3b" "gemma3:4b" "qwen2.5:7b" "qwen3:8b" "phi3:14b" "llava:7b" "qwen2.5-coder:7b" "mistral-nemo:12b" "codegemma:7b" "phi4-mini:3.8b" "phi3.5:3.8b" ];
-    package = pkgs.ollama-cuda.override {
+    package = pkgs.unstable.ollama-cuda.override {
       # nvidia-smi --query-gpu=compute_cap --format=csv
       cudaArches = [ "61" ];
     };
@@ -375,7 +375,7 @@
   };
 
   services.openclaw = {
-    enable = true;
+    enable = false;
     domain = "";
 
     # Model provider
@@ -397,6 +397,8 @@
     ];
     openFirewall = true;
   };
+
+  services.
 
   nix.settings.sandbox = "relaxed"; # needed for openclaw to call external tools, see https://github.com/Scout-DJ/openclaw-nix/pull/2
   
