@@ -275,7 +275,7 @@
           ms-python.vscode-pylance
           njpwerner.autodocstring
           tailscale.vscode-tailscale
-          github.copilot-chat
+          saoudrizwan.claude-dev
         ];
       })
     ];
