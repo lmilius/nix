@@ -372,6 +372,9 @@
     acceleration = "cuda";
     host = "0.0.0.0";
     openFirewall = true;
+    environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "64000";
+    };
   };
 
   services.openclaw = {
