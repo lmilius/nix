@@ -422,15 +422,15 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1770954143,
-        "narHash": "sha256-w/zxCV7sthrHDWO2an+CpJ7WpJvy1kwFFSJ9aTX66dw=",
-        "owner": "Scout-DJ",
+        "lastModified": 1771153268,
+        "narHash": "sha256-48beITj77W06Kz+TRuLXuLipIP3G/jSpjjsbEPJVjuY=",
+        "owner": "Lillecarl",
         "repo": "openclaw-nix",
-        "rev": "1b97ee479fc8417aa7288087faa08eac39d11e93",
+        "rev": "a56c7a79aee71456cc8f1c3bc98307ae4bc6b8d2",
         "type": "github"
       },
       "original": {
-        "owner": "Scout-DJ",
+        "owner": "Lillecarl",
         "repo": "openclaw-nix",
         "type": "github"
       }
