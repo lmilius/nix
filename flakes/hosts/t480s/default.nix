@@ -324,7 +324,7 @@
     inputs.agenix.packages."${stdenv.hostPlatform.system}".default
     # ipmiview
     # pkgs.unstable.orca-slicer
-    orca-slicer
+    # orca-slicer
     pkgs.unstable.onedrive
     onedrivegui
     samba
