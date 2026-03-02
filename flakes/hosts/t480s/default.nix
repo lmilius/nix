@@ -335,6 +335,7 @@
     ffmpeg-full
     winbox4
     pkgs.unstable.whosthere
+    weylus
   ];
 
   services.udev.packages = with pkgs; [
