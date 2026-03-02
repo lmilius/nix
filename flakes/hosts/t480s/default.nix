@@ -334,6 +334,7 @@
     wirelesstools
     ffmpeg-full
     winbox4
+    pkgs.unstable.whosthere
   ];
 
   services.udev.packages = with pkgs; [
