@@ -334,8 +334,8 @@
     wirelesstools
     ffmpeg-full
     winbox4
-    pkgs.unstable.whosthere
-    weylus
+    pkgs.unstable.whosthere # tui tool to see who's on your network
+    weylus # Wayland remote desktop client for tablet use
   ];
 
   services.udev.packages = with pkgs; [
