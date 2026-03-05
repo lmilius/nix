@@ -276,6 +276,7 @@
           njpwerner.autodocstring
           tailscale.vscode-tailscale
           saoudrizwan.claude-dev
+          sst-dev.opencode
         ];
       })
     ];
@@ -336,6 +337,7 @@
     winbox4
     pkgs.unstable.whosthere # tui tool to see who's on your network
     weylus # Wayland remote desktop client for tablet use
+    opencode
   ];
 
   services.udev.packages = with pkgs; [
