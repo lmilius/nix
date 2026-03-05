@@ -276,7 +276,6 @@
           njpwerner.autodocstring
           tailscale.vscode-tailscale
           saoudrizwan.claude-dev
-          sst-dev.opencode
         ];
       })
     ];
