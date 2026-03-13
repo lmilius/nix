@@ -377,31 +377,31 @@
     };
   };
 
-  services.openclaw = {
-    enable = false;
-    domain = "";
+  # services.openclaw = {
+  #   enable = false;
+  #   domain = "";
 
-    # Model provider
-    modelProvider = "ollama";
-    modelApiKeyFile = "/dev/null";
+  #   # Model provider
+  #   modelProvider = "ollama";
+  #   modelApiKeyFile = "/dev/null";
 
-    # Telegram bot
-    telegram = {
-      enable = true;
-      tokenFile = "/home/lmilius/.config/claw_telegram_bot_token";
-    };
+  #   # Telegram bot
+  #   telegram = {
+  #     enable = true;
+  #     tokenFile = "/home/lmilius/.config/claw_telegram_bot_token";
+  #   };
 
-    # Tool security (defaults shown — you don't need to set these)
-    toolSecurity = "allowlist";
-    toolAllowlist = [
-      "read" "write" "edit"
-      "web_search" "web_fetch"
-      "message" "tts"
-    ];
-    openFirewall = true;
-  };
+  #   # Tool security (defaults shown — you don't need to set these)
+  #   toolSecurity = "allowlist";
+  #   toolAllowlist = [
+  #     "read" "write" "edit"
+  #     "web_search" "web_fetch"
+  #     "message" "tts"
+  #   ];
+  #   openFirewall = true;
+  # };
 
-  nix.settings.sandbox = "relaxed"; # needed for openclaw to call external tools, see https://github.com/Scout-DJ/openclaw-nix/pull/2
+  # nix.settings.sandbox = "relaxed"; # needed for openclaw to call external tools, see https://github.com/Scout-DJ/openclaw-nix/pull/2
   
   # services.open-webui = {
   #   enable = true;
@@ -412,6 +412,11 @@
   # nix cli helper
   # https://github.com/viperML/nh
   # programs.nh.flake = "/home/lmilius/workspace/nix/flakes";
+
+  services.rustdesk-server = {
+    enable = true;
+    openFirewall = true;
+  };
 
   # Enable steam
   programs.steam = {
