@@ -11,7 +11,7 @@ in
     layout = "us";
     xkbVariant = "";
 
-    Enable the Gnome Desktop Environment.
+    # Enable the Gnome Desktop Environment.
     desktopManager.gnome.enable = true;
     displayManager.gdm.enable = true;
   };

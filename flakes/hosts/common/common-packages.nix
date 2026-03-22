@@ -1,46 +1,45 @@
-{ pkgs, unstablePkgs, ... }:
+{ pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    autorestic
-    bitwarden-cli
-    btop
-    ctop
-    curl
-    dig
-    docker-compose
-    diffr # Modern Unix `diff`
-    difftastic # Modern Unix `diff`
-    dua # Modern Unix `du`
-    duf # Modern Unix `df`
-    dust # Modern Unix `du`
-    git
-    gparted
-    htop
-    inetutils
-    iotop-c
-    iperf3
-    ipmitool
-    jq
-    kmon
-    lazydocker
-    lshw
-    nmap
-    openssl
-    pciutils
-    powertop
-    python314 # python is needed for ansible on the target
-    restic
-    s-tui
-    smartmontools
-    # unstablePkgs.tailscale
-    tmux
-    traceroute
-    trippy
-    unzip
-    usbutils
-    vim
-    watch
-    wget
+  environment.systemPackages = [
+    pkgs.autorestic
+    pkgs.bitwarden-cli
+    pkgs.btop
+    pkgs.ctop
+    pkgs.curl
+    pkgs.dig
+    pkgs.docker-compose
+    pkgs.diffr
+    pkgs.difftastic
+    pkgs.dua
+    pkgs.duf
+    pkgs.dust
+    pkgs.git
+    pkgs.gparted
+    pkgs.htop
+    pkgs.inetutils
+    pkgs.iotop-c
+    pkgs.iperf3
+    pkgs.ipmitool
+    pkgs.jq
+    pkgs.kmon
+    pkgs.lazydocker
+    pkgs.lshw
+    pkgs.nmap
+    pkgs.openssl
+    pkgs.pciutils
+    pkgs.powertop
+    pkgs.python314
+    pkgs.restic
+    pkgs.s-tui
+    pkgs.smartmontools
+    pkgs.tmux
+    pkgs.traceroute
+    pkgs.trippy
+    pkgs.unzip
+    pkgs.usbutils
+    pkgs.vim
+    pkgs.watch
+    pkgs.wget
   ];
 }

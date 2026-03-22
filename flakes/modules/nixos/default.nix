@@ -1,8 +1,4 @@
-# Add your reusable NixOS modules to this directory, on their own file (https://nixos.wiki/wiki/Module).
-# These should be stuff you would like to share with others, not your personal configurations.
 {
-  # List your module files here
-  # my-module = import ./my-module.nix;
   gnome = import ./gui/gnome.nix;
   plasma = import ./gui/plasma.nix;
   plasma6 = import ./gui/plasma6.nix;
@@ -22,7 +18,9 @@
   mealie = import ./services/mealie.nix;
   paperless = import ./services/paperless.nix;
   py2mqtt = import ./services/py2mqtt.nix;
-  #TODO
-  # Samba
-  # docker containers?
+  shared_server = import ./utilities/shared-server.nix;
+  remote_build_client = import ./utilities/remote-build-client.nix;
+  remote_build_server = import ./utilities/remote-build-server.nix;
+  lmilius_user = import ./users/lmilius.nix;
+  deployer_user = import ./users/deployer.nix;
 }
