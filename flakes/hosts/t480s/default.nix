@@ -65,6 +65,7 @@
       enable32Bit = true;
     };
   };
+  services.hardware.bolt.enable = true;
 
   networking = {
     networkmanager = {

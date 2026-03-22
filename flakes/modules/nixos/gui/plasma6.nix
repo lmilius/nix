@@ -44,6 +44,7 @@ in
     kdegraphics-thumbnailers
     kimageformats
     plasma-nm
+    plasma-thunderbolt
   ];
 
   # KDE apps
