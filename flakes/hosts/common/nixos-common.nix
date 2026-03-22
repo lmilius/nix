@@ -38,12 +38,15 @@
         "@wheel"
         "lmilius"
       ];
+      trusted-public-keys = lib.mkDefault [
+        "nvr:Ee2q/WjGhJnUklA2Dxpt9Sd0z/IbmM09nowZ6YUiC84="
+      ];
       # Opinionated: disable global registry
       # flake-registry = "";
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
       substituters = lib.mkDefault [
-        "http://10.10.200.93"
+        "ssh-ng://nixbuilder@10.10.200.93"
       ];
     };
 

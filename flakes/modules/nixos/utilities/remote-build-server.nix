@@ -24,6 +24,7 @@ in
   config = lib.mkIf cfg.enable {
     nix.settings = {
       trusted-users = [ "nixbuilder" "@wheel" ];
+      secret-key-files = /home/nixbuilder/cache-priv-key.pem;
     };
 
     users.users.nixbuilder = {
