@@ -20,6 +20,9 @@ in
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
+      ( outputs.nixosModules.nix_cache {
+        ip_address = "10.10.200.93";
+      })
       # outputs.nixosModules.syncthing
       # outputs.nixosModules.systemd_oom
     ];
