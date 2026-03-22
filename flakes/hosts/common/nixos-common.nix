@@ -1,7 +1,4 @@
 { inputs, outputs, lib, config, pkgs, ... }:
-# let
-#   inherit (inputs) nixpkgs nixpkgs-unstable;
-# in
 {
   time.timeZone = "America/Chicago";
 
@@ -45,12 +42,8 @@
       # flake-registry = "";
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
-      # Use local nix cache
-      # Use local nix cache
-      substituters = lib.mkDefault [ 
-        # "http://10.10.200.8" 
+      substituters = lib.mkDefault [
         "http://10.10.200.93"
-        # "http://100.69.216.71/" 
       ];
     };
 
@@ -156,16 +149,4 @@ ServerAliveCountMax 240
     LC_TIME = "en_US.UTF-8";
   };
 
-  ## pins to stable as unstable updates very often
-  # nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  # nix.registry = {
-  #   n.to = {
-  #     type = "path";
-  #     path = inputs.nixpkgs;
-  #   };
-  #   u.to = {
-  #     type = "path";
-  #     path = inputs.nixpkgs-unstable;
-  #   };
-  # };
 }

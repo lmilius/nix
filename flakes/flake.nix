@@ -27,10 +27,8 @@
     };
 
     agenix = {
-      url   = "github:ryantm/agenix";
+      url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.darwin.follows = "";
-      # inputs.home-manager.follows = "";
     };
 
     compose2nix = {
@@ -40,8 +38,6 @@
 
     nix-bitcoin = {
       url = "github:fort-nix/nix-bitcoin/release";
-      # inputs.nixpkgs.follows = "nix-bitcoin/nixpkgs";
-      # inputs.nixpkgs-unstable.follows = "nix-bitcoin/nixpkgs-unstable";
     };
 
     openclaw = {
@@ -64,13 +60,8 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
-    # Supported systems for your flake packages, shell, etc.
     systems = [
-      # "aarch64-linux"
-      # "i686-linux"
       "x86_64-linux"
-      # "aarch64-darwin"
-      # "x86_64-darwin"
     ];
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
@@ -88,26 +79,10 @@
         ];
       };
   in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    # packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${stdenv.hostPlatform.system});
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    # formatter = forAllSystems (system: nixpkgs.legacyPackages.${stdenv.hostPlatform.system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
     nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    # homeManagerModules = import ./modules/home-manager;
 
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      # FIXME replace with your hostname
       t480s = nixosSystem "t480s";
       nix-server = nixosSystem "nix-server";
       util = nixosSystem "util";
@@ -116,16 +91,6 @@
       nvr = nixosSystem "nvr";
       nixbook = nixosSystem "nixbook";
       game-pc = nixosSystem "game-pc";
-      # t480s = nixpkgs.lib.nixosSystem {
-      #   specialArgs = {inherit inputs outputs;};
-      #   modules = [
-      #     # > Our main nixos configuration file <
-      #     { networking.hostName = "t480s"; }
-      #     ./hosts/t480s
-      #     ./hosts/common/nixos-common.nix
-      #     ./hosts/common/common-packages.nix
-      #   ];
-      # };
     };
   };
 }
