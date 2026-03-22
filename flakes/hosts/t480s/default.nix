@@ -248,6 +248,7 @@
     pkgs.unstable.whosthere
     pkgs.weylus
     pkgs.opencode
+    pkgs.curl
   ];
 
   services.udev.packages = [

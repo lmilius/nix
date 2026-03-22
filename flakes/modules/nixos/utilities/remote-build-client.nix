@@ -45,7 +45,6 @@ in
         protocol = "ssh-ng";
         maxJobs = cfg.maxJobs;
         speedFactor = cfg.speedFactor;
-        supportedFeatures = [ "kvm" "big-parallel" ];
       }
     ];
   };
