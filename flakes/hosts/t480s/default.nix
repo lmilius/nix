@@ -336,9 +336,12 @@
   };
 
   # Use NVR as remote build host
-  nix-remote-build = {
+  lmilius-remote-build-client = {
     enable = true;
-    builder = "nixbuilder@10.10.200.93";
+    builderHost = "10.10.200.93";
+    sshUser = "nixbuilder";
+    maxJobs = 8;
+    speedFactor = 2;
   };
 
   system.stateVersion = "24.05";

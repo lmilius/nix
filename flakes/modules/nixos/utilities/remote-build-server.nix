@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 let
-  cfg = config.nix-remote-build-server;
+  cfg = config.lmilius-remote-build-server;
 in
 {
-  options.nix-remote-build-server = {
+  options.lmilius-remote-build-server = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -19,21 +19,14 @@ in
       default = 8;
       description = "Maximum concurrent builds";
     };
-    supportedSystems = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ "x86_64-linux" ];
-      description = "Systems this builder supports";
-    };
   };
 
   config = lib.mkIf cfg.enable {
-    # Nix daemon settings for serving builds
     nix.settings = {
       accept-flake-configs = true;
       trusted-users = [ "nixbuilder" "@wheel" ];
     };
 
-    # Build user - used by remote hosts to connect
     users.users.nixbuilder = {
       isNormalUser = true;
       description = "Nix Remote Builder";
@@ -43,10 +36,8 @@ in
       ];
     };
 
-    # Create nixbld group if it doesn't exist
     users.groups.nixbld = {};
 
-    # Ensure SSH is configured for remote connections
     services.openssh = {
       enable = true;
       settings = {
@@ -55,11 +46,9 @@ in
       };
     };
 
-    # Firewall - allow SSH from local network
     networking.firewall = {
       enable = true;
-      allowedTCPPPorts = [ cfg.sshPort ];
-      trustedInterfaces = [ "tailscale0" ];
+      allowedTCPPorts = [ cfg.sshPort ];
     };
   };
 }

@@ -16,6 +16,7 @@
       outputs.nixosModules.nix_cache
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
+      outputs.nixosModules.remote_build_server
     ];
 
   boot = {
@@ -32,10 +33,9 @@
   };
 
   # Remote build server configuration
-  nix-remote-build-server = {
+  lmilius-remote-build-server = {
     enable = true;
     maxJobs = 8;
-    supportedSystems = [ "x86_64-linux" ];
   };
 
   home-manager = {
