@@ -132,8 +132,8 @@
     ];
   };
 
-  users.users.lmilius.packages = [
-    pkgs.unstable.vscode
+  users.users.lmilius.packages = with pkgs; [
+    unstable.vscode
     (vscode-with-extensions.override {
       vscodeExtensions = with vscode-extensions; [
         mkhl.direnv
@@ -181,7 +181,7 @@
     pkgs.pulseview
     pkgs.kdePackages.discover
     pkgs.insomnia
-    inputs.agenix.packages."${stdenv.hostPlatform.system}".default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     pkgs.unstable.onedrive
     pkgs.onedrivegui
     pkgs.samba

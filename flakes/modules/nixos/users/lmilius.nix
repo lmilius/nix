@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 let
   sshKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
@@ -17,6 +17,4 @@ in
     ];
     openssh.authorizedKeys.keys = sshKeys;
   };
-
-  users.defaultUserShell = lib.mkDefault "/run/current-system/sw/bin/bash";
 }
