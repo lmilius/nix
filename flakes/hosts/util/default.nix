@@ -13,6 +13,8 @@
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
+      # Remote build client - use NVR as build server
+      outputs.nixosModules.remote_build_client
 
       inputs.agenix.nixosModules.default
     ];
@@ -182,6 +184,15 @@
   programs.nix-ld.enable = true;
   services.openssh.enable = true;
   networking.firewall.enable = false;
+
+  # Use NVR as remote build host
+  lmilius-remote-build-client = {
+    enable = true;
+    builderHost = "10.10.200.93";
+    sshUser = "nixbuilder";
+    maxJobs = 12;
+    speedFactor = 2;
+  };
 
   system.stateVersion = "23.05";
 }

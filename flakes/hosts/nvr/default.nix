@@ -37,7 +37,7 @@
   # Remote build server configuration
   lmilius-remote-build-server = {
     enable = true;
-    maxJobs = 8;
+    maxJobs = 12;
   };
 
   home-manager = {

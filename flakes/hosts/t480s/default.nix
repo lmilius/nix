@@ -342,7 +342,7 @@
     enable = true;
     builderHost = "10.10.200.93";
     sshUser = "nixbuilder";
-    maxJobs = 8;
+    maxJobs = 12;
     speedFactor = 2;
   };
 

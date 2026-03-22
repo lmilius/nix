@@ -22,6 +22,8 @@
       outputs.nixosModules.pipewire
       outputs.nixosModules.systemd_oom
       outputs.nixosModules.xfce
+      # Remote build client - use NVR as build server
+      outputs.nixosModules.remote_build_client
 
       inputs.agenix.nixosModules.default
     ];
@@ -246,6 +248,15 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Use NVR as remote build host
+  lmilius-remote-build-client = {
+    enable = true;
+    builderHost = "10.10.200.93";
+    sshUser = "nixbuilder";
+    maxJobs = 12;
+    speedFactor = 2;
+  };
 
   networking.firewall.enable = false;
 

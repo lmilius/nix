@@ -17,6 +17,8 @@ in
       outputs.nixosModules.intel_gpu
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
+      # Remote build client - use NVR as build server
+      outputs.nixosModules.remote_build_client
 
       inputs.agenix.nixosModules.default
     ];
@@ -385,6 +387,15 @@ in
 
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
+
+  # Use NVR as remote build host
+  lmilius-remote-build-client = {
+    enable = true;
+    builderHost = "10.10.200.93";
+    sshUser = "nixbuilder";
+    maxJobs = 12;
+    speedFactor = 2;
+  };
 
   system.stateVersion = "24.05";
 }
