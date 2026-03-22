@@ -48,7 +48,7 @@
       # Use local nix cache
       # Use local nix cache
       substituters = lib.mkDefault [ 
-        "http://10.10.200.8" 
+        # "http://10.10.200.8" 
         "http://10.10.200.93"
         # "http://100.69.216.71/" 
       ];

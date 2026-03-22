@@ -12,9 +12,9 @@
       })
       ./hardware-configuration.nix
 
-      ( outputs.nixosModules.nix_cache {
-        ip_address = "10.10.200.8";
-      })
+      # ( outputs.nixosModules.nix_cache {
+      #   ip_address = "10.10.200.8";
+      # })
 
       inputs.home-manager.nixosModules.home-manager
       # outputs.nixosModules.ansible
