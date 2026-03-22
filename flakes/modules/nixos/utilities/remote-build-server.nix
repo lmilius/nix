@@ -23,7 +23,6 @@ in
 
   config = lib.mkIf cfg.enable {
     nix.settings = {
-      accept-flake-configs = true;
       trusted-users = [ "nixbuilder" "@wheel" ];
     };
 
