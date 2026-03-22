@@ -306,12 +306,12 @@
   hardware.steam-hardware.enable = true;
 
   environment.sessionVariables = {
-    XDG_CACHE_HOME = "${HOME}/.cache";
-    XDG_CONFIG_HOME = "${HOME}/.config";
-    XDG_BIN_HOME = "${HOME}/.local/bin";
-    XDG_DATA_HOME = "${HOME}/.local/share";
-    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${HOME}/.steam/root/compatibilitytools.d";
-    PATH = [ "${XDG_BIN_HOME}" ];
+    XDG_CACHE_HOME = "~/.cache";
+    XDG_CONFIG_HOME = "~/.config";
+    XDG_BIN_HOME = "~/.local/bin";
+    XDG_DATA_HOME = "~/.local/share";
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "~/.steam/root/compatibilitytools.d";
+    PATH = [ "~/.local/bin" ];
   };
 
   programs = {

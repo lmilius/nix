@@ -13,7 +13,9 @@
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      outputs.nixosModules.nix_cache
+      (outputs.nixosModules.nix_cache {
+        ip_address = "10.10.200.93";
+      })
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
       outputs.nixosModules.remote_build_server
@@ -73,15 +75,6 @@
     enable = true;
     allowedTCPPorts = [ 22 ];
     trustedInterfaces = [ "tailscale0" "docker0" "br0" ];
-    # Allow all traffic from local network for nix daemon builds
-    interfaces = {
-      "tailscale0" = {
-        trusted = true;
-      };
-      "br0" = {
-        trusted = true;
-      };
-    };
   };
 
   system.stateVersion = "24.05";
