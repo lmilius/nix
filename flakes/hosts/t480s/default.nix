@@ -19,6 +19,9 @@
       outputs.nixosModules.plasma6
       outputs.nixosModules.lmilius_user
 
+      # Remote build client - use NVR as build server
+      outputs.nixosModules.remote_build_client
+
       inputs.agenix.nixosModules.default
 
       (outputs.nixosModules.restic_home_backup {
@@ -195,7 +198,7 @@
         ms-python.python
         ms-python.vscode-pylance
         tailscale.vscode-tailscale
-        saoudrizwan.claude-dev
+        # saoudrizwan.claude-dev
       ];
     })
   ];
@@ -330,6 +333,12 @@
       { from = 1714; to = 1764; } # KDE Connect
     ];
     trustedInterfaces = [ "tailscale0" ];
+  };
+
+  # Use NVR as remote build host
+  nix-remote-build = {
+    enable = true;
+    builder = "nixbuilder@10.10.200.93";
   };
 
   system.stateVersion = "24.05";

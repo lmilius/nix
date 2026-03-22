@@ -13,9 +13,7 @@
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      ( outputs.nixosModules.nix_cache {
-        ip_address = "10.10.200.93";
-      })
+      outputs.nixosModules.nix_cache
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
     ];
@@ -31,6 +29,13 @@
   networking = {
     hostId = "e324fe9f";
     networkmanager.enable = true;
+  };
+
+  # Remote build server configuration
+  nix-remote-build-server = {
+    enable = true;
+    maxJobs = 8;
+    supportedSystems = [ "x86_64-linux" ];
   };
 
   home-manager = {
@@ -53,7 +58,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAtjRZRmD5R38oShBAtJ0XjXdJWtz38Z6Vj6F1l0pYF lmilius@x1carbon"
   ];
 
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     pkgs.vim
     pkgs.intel-gpu-tools
   ];
@@ -62,7 +67,22 @@
   services.fstrim.enable = true;
   services.fwupd.enable = true;
   services.openssh.enable = true;
-  networking.firewall.enable = false;
+
+  # Firewall: allow SSH from local network for builds
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 ];
+    trustedInterfaces = [ "tailscale0" "docker0" "br0" ];
+    # Allow all traffic from local network for nix daemon builds
+    interfaces = {
+      "tailscale0" = {
+        trusted = true;
+      };
+      "br0" = {
+        trusted = true;
+      };
+    };
+  };
 
   system.stateVersion = "24.05";
 }

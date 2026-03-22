@@ -42,3 +42,10 @@ notes:
   - Build commands require sudo for system-level changes
   - Use `nh os switch` as alternative to nixos-rebuild
   - Home manager config: flakes/users/lmilius/home.nix
+
+remote-build:
+  builder: nvr (10.10.200.93)
+  user: nixbuilder
+  server-module: outputs.nixosModules.remote_build_server
+  client-module: outputs.nixosModules.remote_build_client
+  ssh-key: ~/.ssh/id_ed25519 (lmilius@x1carbon)
