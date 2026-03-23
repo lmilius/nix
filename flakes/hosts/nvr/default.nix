@@ -13,9 +13,9 @@
       outputs.nixosModules.cockpit
       outputs.nixosModules.docker_daemon
       outputs.nixosModules.intel_gpu
-      (outputs.nixosModules.nix_cache {
-        ip_address = "10.10.200.93";
-      })
+      # (outputs.nixosModules.nix_cache {
+      #   ip_address = "10.10.200.93";
+      # })
       outputs.nixosModules.lmilius_user
       outputs.nixosModules.deployer_user
       outputs.nixosModules.remote_build_server
