@@ -250,6 +250,10 @@
     pkgs.weylus
     pkgs.opencode
     pkgs.curl
+    # HAM
+    pkgs.chirp
+    pkgs.sdrpp
+    pkgs.wsjtx
   ];
 
   services.udev.packages = [
