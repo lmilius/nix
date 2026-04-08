@@ -208,6 +208,16 @@
   security = {
     rtkit.enable = true;
     polkit.enable = true;
+    pam = {
+      services = {
+        ${userSettings.username} = {
+          kwallet = {
+            enable = true;
+            package = pkgs.kdePackages.kwallet-pam;
+          };
+        };
+      };
+    };
   };
 
   virtualisation = {
