@@ -194,7 +194,10 @@
     pkgs.minikube
     pkgs.kubectl
     pkgs.docker-machine-kvm2
-    pkgs.orca-slicer
+    # pkgs.orca-slicer
+    # HAM
+    pkgs.chirp
+    pkgs.sdrpp
   ];
 
   services.udev.packages = [
