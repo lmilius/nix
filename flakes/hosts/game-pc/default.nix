@@ -210,7 +210,7 @@
     polkit.enable = true;
     pam = {
       services = {
-        ${userSettings.username} = {
+        "lmilius" = {
           kwallet = {
             enable = true;
             package = pkgs.kdePackages.kwallet-pam;
