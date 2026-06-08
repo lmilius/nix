@@ -305,13 +305,17 @@
   };
   hardware.steam-hardware.enable = true;
 
-  environment.sessionVariables = {
-    XDG_CACHE_HOME = "~/.cache";
-    XDG_CONFIG_HOME = "~/.config";
-    XDG_BIN_HOME = "~/.local/bin";
-    XDG_DATA_HOME = "~/.local/share";
-    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "~/.steam/root/compatibilitytools.d";
-    PATH = [ "~/.local/bin" ];
+  environment.sessionVariables = rec {
+    XDG_CACHE_HOME  = "\${HOME}/.cache";
+    XDG_CONFIG_HOME = "\${HOME}/.config";
+    XDG_BIN_HOME    = "\${HOME}/.local/bin";
+    XDG_DATA_HOME   = "\${HOME}/.local/share";
+    # Steam needs this to find Proton-GE
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+    # note: this doesn't replace PATH, it just adds this to it
+    PATH = [ 
+      "\${XDG_BIN_HOME}"
+    ];
   };
 
   programs = {
