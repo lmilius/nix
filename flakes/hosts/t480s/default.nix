@@ -254,6 +254,12 @@
     pkgs.chirp
     pkgs.sdrpp
     pkgs.wsjtx
+    pkgs.nanovna-qt
+    pkgs.nanovna-saver
+    # pkgs.avrdudess
+    # CTC
+    # pkgs.ghidra
+    # pkgs.burpsuite
   ];
 
   services.udev.packages = [
