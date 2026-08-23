@@ -250,6 +250,7 @@
     pkgs.weylus
     pkgs.opencode
     pkgs.curl
+    pkgs.orca-slicer
     # HAM
     pkgs.chirp
     pkgs.sdrpp
