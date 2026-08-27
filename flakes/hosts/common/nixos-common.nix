@@ -93,6 +93,7 @@ ServerAliveCountMax 240
     nix-gc5d = "sudo nix-collect-garbage -d --delete-older-than 5d";
     nix-optimize = "sudo nix-store --optimize";
     # rebuild = "sudo nixos-rebuild";
+    nhbuild = "nh os build";
     rebuild = "nh os switch --ask";
     rebuild-boot = "nh os boot --ask";
     target-rebuild = "sudo nixos-rebuild -I nixos-config=./configuration.nix --use-remote-sudo --target-host";
