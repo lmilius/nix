@@ -8,7 +8,6 @@
     pkgs.ctop
     pkgs.curl
     pkgs.dig
-    pkgs.docker-compose
     pkgs.diffr
     pkgs.difftastic
     pkgs.dua

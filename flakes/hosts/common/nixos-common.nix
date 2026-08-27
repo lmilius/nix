@@ -85,7 +85,7 @@ ServerAliveCountMax 240
     l = "ls -lh";
     ll = "ls -alh";
     ls = "ls --color=tty";
-    dcp = "docker-compose ";
+    dcp = "docker compose ";
     dlog = "docker logs -f ";
     dtop = "ctop";
     nix-listgens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
