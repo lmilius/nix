@@ -74,13 +74,6 @@
   #   # synergy
   # ];
 
-  programs.ssh = {
-    extraConfig=''
-ServerAliveInterval 60
-ServerAliveCountMax 240
-    '';
-  };
-
   programs.bash.shellAliases = {
     l = "ls -lh";
     ll = "ls -alh";

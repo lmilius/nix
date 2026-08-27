@@ -167,10 +167,10 @@ in
       "ctcrouter" = {
         hostname = "192.168.8.1";
         user = "root";
-        extraOptions = {
-          HostkeyAlgorithms = "+ssh-rsa";
-          PubkeyAcceptedAlgorithms = "+ssh-rsa";
-        };
+        # extraOptions = {
+        #   HostkeyAlgorithms = "+ssh-rsa";
+        #   PubkeyAcceptedAlgorithms = "+ssh-rsa";
+        # };
       };
       "ctcserver" = {
         hostname = "192.168.8.10";
