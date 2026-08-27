@@ -275,7 +275,7 @@
 #     du-dust
 #     duf
 #     dua
-#     wineWowPackages.full # wine
+#     wineWow64Packages.full # wine
 #     kmon
 #     dig
 #     traceroute

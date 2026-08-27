@@ -225,7 +225,7 @@
     pkgs.exfatprogs
     pkgs.qemu
     pkgs.openssl
-    pkgs.wineWowPackages.full
+    pkgs.wineWow64Packages.full
     pkgs.kmon
     pkgs.freetube
     pkgs.xwayland

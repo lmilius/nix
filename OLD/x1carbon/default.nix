@@ -188,7 +188,7 @@
     virt-manager
     qemu
     openssl
-    wineWowPackages.full # wine
+    wineWow64Packages.full # wine
     kmon
     keepassxc
     freetube

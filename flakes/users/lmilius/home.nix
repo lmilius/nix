@@ -122,10 +122,7 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    extraConfig = ''
-StrictHostKeyChecking no
-    '';
-    matchBlocks = {
+    settings = {
       "*" = {
         serverAliveInterval = 60;
         serverAliveCountMax = 240;
@@ -180,6 +177,9 @@ StrictHostKeyChecking no
         user = "lmilius";
       };
     };
+    extraConfig = ''
+StrictHostKeyChecking no
+    '';
   }; 
   programs.tmux = {
     enable = true;
