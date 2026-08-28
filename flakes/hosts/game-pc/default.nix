@@ -18,7 +18,6 @@
       outputs.nixosModules.lmilius_user
 
       inputs.agenix.nixosModules.default
-      inputs.openclaw.nixosModules.default
     ];
 
   boot = {
@@ -254,32 +253,6 @@
       OLLAMA_CONTEXT_LENGTH = "64000";
     };
   };
-
-  # services.openclaw = {
-  #   enable = false;
-  #   domain = "";
-
-  #   # Model provider
-  #   modelProvider = "ollama";
-  #   modelApiKeyFile = "/dev/null";
-
-  #   # Telegram bot
-  #   telegram = {
-  #     enable = true;
-  #     tokenFile = "/home/lmilius/.config/claw_telegram_bot_token";
-  #   };
-
-  #   # Tool security (defaults shown — you don't need to set these)
-  #   toolSecurity = "allowlist";
-  #   toolAllowlist = [
-  #     "read" "write" "edit"
-  #     "web_search" "web_fetch"
-  #     "message" "tts"
-  #   ];
-  #   openFirewall = true;
-  # };
-
-  # nix.settings.sandbox = "relaxed"; # needed for openclaw to call external tools, see https://github.com/Scout-DJ/openclaw-nix/pull/2
   
   # services.open-webui = {
   #   enable = true;

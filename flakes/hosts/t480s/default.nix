@@ -294,6 +294,25 @@
   services.teamviewer.enable = true;
 
 
+  services.hermes-agent = {
+    enable = true;
+    environmentFiles = [ "/var/lib/hermes/env" ];
+    addToSystemPackages = true;
+    container = {
+      enable = true;
+      hostUsers = [ "lmilius" ];
+    };
+    settings = {
+      model.default = "nemotron-3-ultra-free";
+      toolsets = [ "all" ];
+      memory = {
+        memory_enabled = true;
+        user_profile_enabled = true;
+      };
+    };
+  };
+
+
   # Enable steam
   programs.steam = {
     enable = true;

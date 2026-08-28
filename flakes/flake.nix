@@ -35,8 +35,9 @@
       url = "github:fort-nix/nix-bitcoin/release";
     };
 
-    openclaw = {
-      url = "github:Lillecarl/openclaw-nix";
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 
@@ -50,7 +51,7 @@
     # nixos-06cb-009a-fingerprint-sensor,
     agenix,
     nix-bitcoin,
-    openclaw,
+    hermes-agent,
     ...
   } @ inputs: let
     inherit (self) outputs;
