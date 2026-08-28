@@ -46,6 +46,7 @@ in
 
   fileSystems."/mnt/backups" = {
     device = "/dev/disk/by-uuid/a6fef221-763e-46d4-88c1-212136d94125";
+    fsType = "ext4";
   };
 
   networking.hostId = "dab4ad1d";
