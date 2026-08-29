@@ -34,7 +34,7 @@
     kernelParams = [
       "modprobe.blacklist=nouveau"
       "nvidia-drm.modeset=1"
-    ]
+    ];
   };
 
   zramSwap = {
