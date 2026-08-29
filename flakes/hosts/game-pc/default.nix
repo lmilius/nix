@@ -61,7 +61,7 @@
       # FORCE the 26.05 legacy driver profile for older cards
       # This prevents NixOS from grabbing the incompatible 580+ stable series
       # package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
-      branch = "legacy_580"
+      branch = "legacy_580";
       modesetting.enable = true;
       powerManagement.enable = false;
       nvidiaSettings = true;
