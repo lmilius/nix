@@ -255,15 +255,16 @@
       "phi4-mini:3.8b"
       "phi3.5:3.8b"
       "ministral-3"
+      "nemotron-3.5-lightning:30b"
     ];
     package = pkgs.ollama-cuda.override {
       cudaArches = [ "61" ];
     };
-    acceleration = "cuda";
+    # acceleration = "cuda";
     host = "0.0.0.0";
     openFirewall = true;
     environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "64000";
+      OLLAMA_CONTEXT_LENGTH = "1000000";
     };
   };
   
