@@ -193,7 +193,7 @@
     pkgs.nvtopPackages.nvidia
     pkgs.minikube
     pkgs.kubectl
-    pkgs.docker-machine-kvm2
+    # pkgs.docker-machine-kvm2
     # pkgs.orca-slicer
     # HAM
     pkgs.chirp
