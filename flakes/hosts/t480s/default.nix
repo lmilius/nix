@@ -11,6 +11,7 @@
       ./hardware-configuration.nix
 
       inputs.home-manager.nixosModules.home-manager
+      # inputs.hermes-agent.nixosModules.default
 
       outputs.nixosModules.bluetooth
       outputs.nixosModules.docker_daemon
@@ -294,23 +295,31 @@
   services.teamviewer.enable = true;
 
 
-  services.hermes-agent = {
-    enable = true;
-    environmentFiles = [ "/var/lib/hermes/env" ];
-    addToSystemPackages = true;
-    container = {
-      enable = true;
-      hostUsers = [ "lmilius" ];
-    };
-    settings = {
-      model.default = "nemotron-3-ultra-free";
-      toolsets = [ "all" ];
-      memory = {
-        memory_enabled = true;
-        user_profile_enabled = true;
-      };
-    };
-  };
+  # services.hermes-agent = {
+  #   enable = true;
+  #   environmentFiles = [ "/var/lib/hermes/env" ];
+  #   addToSystemPackages = true;
+  #   container = {
+  #     enable = true;
+  #     hostUsers = [ "lmilius" ];
+  #   };
+  #   gateway.enable = true;
+  #   backend = {
+  #     mode = "dashboard";
+  #     port = 9119;
+  #   };
+  #   settings = {
+  #     model.default = "nemotron-3-ultra-free";
+  #     toolsets = [ "all" ];
+  #     display = {
+  #       compact = false;
+  #     };
+  #     memory = {
+  #       memory_enabled = true;
+  #       user_profile_enabled = true;
+  #     };
+  #   };
+  # };
 
 
   # Enable steam
