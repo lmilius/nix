@@ -31,6 +31,10 @@
       timeout = 3;
     };
     kernelPackages = pkgs.linuxPackages_zen;
+    kernelParams = [
+      "modprobe.blacklist=nouveau"
+      "nvidia-drm.modeset=1"
+    ]
   };
 
   zramSwap = {
