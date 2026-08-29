@@ -30,9 +30,9 @@
       };
       timeout = 3;
     };
-    # kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_zen;
     # kernelPackages = pkgs.linuxPackages;
-    kernelPackages = pkgs.linuxPackages_6_12;
+    # kernelPackages = pkgs.linuxPackages_6_12;
     kernelParams = [
       "modprobe.blacklist=nouveau"
       "nvidia-drm.modeset=1"
@@ -273,7 +273,7 @@
     host = "0.0.0.0";
     openFirewall = true;
     environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "1000000";
+      OLLAMA_CONTEXT_LENGTH = "64000";
     };
   };
   
