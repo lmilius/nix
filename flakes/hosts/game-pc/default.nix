@@ -257,7 +257,7 @@
       "ministral-3"
       "nemotron-3.5-lightning:30b"
     ];
-    package = pkgs.ollama-cuda.override {
+    package = pkgs.unstable.ollama-cuda.override {
       cudaArches = [ "61" ];
     };
     # acceleration = "cuda";
