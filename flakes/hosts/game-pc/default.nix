@@ -31,7 +31,8 @@
       timeout = 3;
     };
     # kernelPackages = pkgs.linuxPackages_zen;
-    kernelPackages = pkgs.linuxPackages;
+    # kernelPackages = pkgs.linuxPackages;
+    kernelPackages = pkgs.linuxPackages_6_12;
     kernelParams = [
       "modprobe.blacklist=nouveau"
       "nvidia-drm.modeset=1"
