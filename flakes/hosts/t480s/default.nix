@@ -169,6 +169,10 @@
   services.upower.enable = true;
   hardware.flipperzero.enable = true;
 
+  services.tlp = {
+    enable = true;
+  };
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -291,7 +295,7 @@
     spiceUSBRedirection.enable = true;
   };
 
-  services.flatpak.enable = true;
+  services.flatpak.enable = true;p
 
   services.pcscd.enable = true;
 
