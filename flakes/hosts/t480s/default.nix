@@ -70,10 +70,6 @@
       enable = true;
       enable32Bit = true;
     };
-    # intelgpu = {
-    #   computeRuntime = "legacy";
-    #   vaapiDriver = "intel-media-driver";
-    # };
   };
   services.hardware.bolt.enable = true;
 
