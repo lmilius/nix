@@ -46,6 +46,11 @@
       timeout = 3;
     };
     kernelPackages = pkgs.linuxPackages_zen;
+    kernelParams = [
+      "i915.enable_guc=2"
+      "i915.enable_fbc=1"
+      "i915.enable_psr=2"
+    ];
   };
 
   zramSwap = {
@@ -64,6 +69,10 @@
     graphics = {
       enable = true;
       enable32Bit = true;
+    };
+    intelgpu = {
+      computeRuntime = "legacy";
+      vaapiDriver = "intel-media-driver";
     };
   };
   services.hardware.bolt.enable = true;
@@ -169,9 +178,12 @@
   services.upower.enable = true;
   hardware.flipperzero.enable = true;
 
-  services.tlp = {
-    enable = true;
-  };
+  services.throttled.enable = true;
+
+  # services.power-profiles-daemon.enable = false;
+  # services.tlp = {
+  #   enable = true;
+  # };
 
   home-manager = {
     useGlobalPkgs = true;
