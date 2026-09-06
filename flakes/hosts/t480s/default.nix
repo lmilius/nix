@@ -295,7 +295,7 @@
     spiceUSBRedirection.enable = true;
   };
 
-  services.flatpak.enable = true;p
+  services.flatpak.enable = true;
 
   services.pcscd.enable = true;
 
