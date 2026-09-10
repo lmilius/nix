@@ -274,6 +274,7 @@
     openFirewall = true;
     environmentVariables = {
       OLLAMA_CONTEXT_LENGTH = "64000";
+      OLLAMA_KEEP_ALIVE = "4h";
     };
   };
   
