@@ -265,6 +265,10 @@
       "phi3.5:3.8b"
       "ministral-3"
       "nemotron-3.5-lightning:30b"
+      "ornith-1.5:35b"
+      "qwen3.6:35b-a3b"
+      "nemotron-3-nano:4b"
+      "lfm2.5:8b"
     ];
     package = pkgs.unstable.ollama-cuda.override {
       cudaArches = [ "61" ];
