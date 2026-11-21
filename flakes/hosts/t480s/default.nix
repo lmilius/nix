@@ -274,6 +274,7 @@
     # CTC
     # pkgs.ghidra
     # pkgs.burpsuite
+    pkgs.proton-vpn
   ];
 
   services.udev.packages = [
