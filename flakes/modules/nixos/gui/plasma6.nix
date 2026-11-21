@@ -50,4 +50,23 @@ in
   # KDE apps
   programs.partition-manager.enable = true;
   programs.kdeconnect.enable = true;
+
+  fonts = {
+  enableDefaultPackages = true;
+  fontDir.enable = true;
+  packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    dejavu_fonts
+    liberation_ttf
+  ];
+  fontconfig = {
+    enable = true;
+    defaultFonts = {
+      sansSerif = [ "Noto Sans" "DejaVu Sans" ];
+      monospace = [ "DejaVu Sans Mono" ];
+    };
+  };
+};
 }
